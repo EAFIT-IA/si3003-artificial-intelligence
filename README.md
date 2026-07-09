@@ -59,12 +59,6 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - [`aima-python`](https://github.com/aimacode/aima-python) — reference implementations for Weeks 1–7
 - Kochenderfer, Wheeler & Wray, [*Algorithms for Decision Making*](https://algorithmsbook.com/) — MDP/RL/imitation learning, free PDF
 
-**Reference course repositories:**
-- Berkeley CS188 — https://inst.eecs.berkeley.edu/~cs188/sp26/
-- Stanford CS221 — https://stanford-cs221.github.io/autumn2025/
-- Harvard CS50AI — https://github.com/KevinLiTian/Harvard_CS50_AI
-- ULiège INFO8006 — https://github.com/glouppe/info8006-introduction-to-ai
-- Universidad de Helsinki, Intro to AI — https://materiaalit.github.io/intro-to-ai/
 
 ---
 
