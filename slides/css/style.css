@@ -1,0 +1,202 @@
+/* ============================================================
+   style.css — identidad visual EAFIT para remark.js
+   Tipografía: Arial Bold (títulos) / Consolas (kickers) / Calibri (cuerpo)
+   Paleta: blanco / negro / gris — sin color de acento
+   El layout de columnas (.grid, .kol-X-Y) vive en grid.css, aparte.
+   ============================================================ */
+
+:root {
+  --eafit-black: #111111;
+  --eafit-gray-dark: #444444;
+  --eafit-gray: #888888;
+  --eafit-gray-light: #dddddd;
+  --eafit-white: #ffffff;
+}
+
+/* ---------- Base ---------- */
+.remark-slide-content {
+  font-family: 'Calibri', 'Candara', 'Segoe UI', sans-serif;
+  font-size: 14pt;
+  line-height: 1.4;
+  color: var(--eafit-black);
+  background-color: var(--eafit-white);
+  padding: 2.5em 3em;
+}
+
+.remark-slide-number {
+  font-family: 'Consolas', 'SFMono-Regular', monospace;
+  font-size: 10pt;
+  color: var(--eafit-gray);
+}
+
+/* ---------- Títulos ---------- */
+h1, h2, h3 {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-weight: 700;
+  color: var(--eafit-black);
+  margin-top: 0;
+}
+h1 { font-size: 38pt; }
+h2 { font-size: 30pt; }
+h3 { font-size: 22pt; }
+
+/* Kicker / subtítulo estilo Consolas, como en el deck de referencia EAFIT */
+.kicker {
+  font-family: 'Consolas', 'SFMono-Regular', monospace;
+  font-size: 16pt;
+  color: var(--eafit-gray-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Slide de título (portada) ---------- */
+.title-slide {
+  background-color: var(--eafit-white);
+}
+.title-slide h1 {
+  font-size: 44pt;
+}
+.title-slide .kicker {
+  margin-bottom: 1.5em;
+}
+
+/* ---------- Slide divisor de sección ----------
+   Fondo blanco + logo EAFIT centrado arriba, texto negro. */
+.divider-slide {
+  background-color: var(--eafit-white);
+  color: var(--eafit-black);
+  text-align: center;
+}
+.divider-slide::before {
+  content: "";
+  display: block;
+  width: 200px;
+  height: 64px;
+  margin: 0 auto 2em auto;
+  background-image: url('../assets/logo_eafit.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.divider-slide h1, .divider-slide h2 {
+  font-size: 34pt;
+}
+
+/* ---------- Slide final ---------- */
+.end-slide {
+  background-color: var(--eafit-white);
+  text-align: center;
+}
+.end-slide::before {
+  content: "";
+  display: block;
+  width: 180px;
+  height: 56px;
+  margin: 0 auto 1.5em auto;
+  background-image: url('../assets/logo_eafit.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* ---------- Utilidades de formato (paridad con el deck original) ---------- */
+.bold   { font-weight: 700; }
+.italic { font-style: italic; }
+
+.footnote {
+  position: absolute;
+  bottom: 1em;
+  left: 3em;
+  right: 3em;
+  font-family: 'Consolas', 'SFMono-Regular', monospace;
+  font-size: 9pt;
+  color: var(--eafit-gray);
+}
+
+.caption {
+  font-family: 'Consolas', 'SFMono-Regular', monospace;
+  font-size: 10pt;
+  color: var(--eafit-gray-dark);
+}
+
+/* ---------- Anchos de imagen (paridad con .width-XX del original) ---------- */
+.width-10  img { width: 10%; }
+.width-20  img { width: 20%; }
+.width-25  img { width: 25%; }
+.width-30  img { width: 30%; }
+.width-40  img { width: 40%; }
+.width-50  img { width: 50%; }
+.width-60  img { width: 60%; }
+.width-70  img { width: 70%; }
+.width-75  img { width: 75%; }
+.width-80  img { width: 80%; }
+.width-90  img { width: 90%; }
+.width-100 img { width: 100%; }
+
+.circle img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Centra un elemento suelto (imagen, bloque) sin necesitar que todo el
+   slide tenga la clase `center`. display:block es necesario porque
+   remark.js envuelve `.center[...]` en un <span> (inline), y text-align
+   no centra nada si el contenedor sigue siendo inline. */
+.center {
+  display: block;
+  text-align: center;
+}
+
+/* Si por accidente se combina .center con .grid en el mismo elemento
+   (ej. ".center.grid[...]"), .center no debe pisarle el display:flex a
+   .grid -- si no, las columnas se colapsan en una sola. */
+.center.grid {
+  display: flex;
+}
+
+/* ---------- Placeholder de video: captura + botón de enlace ----------
+   Acordado: en vez de iframe embebido, usamos una captura estática
+   más un botón/link clicable hacia el video original. */
+.video-placeholder {
+  position: relative;
+  display: inline-block;
+  max-width: 65%;
+}
+.video-placeholder img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(15%);
+}
+.video-placeholder .play-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(17,17,17,0.75);
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 24pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-link {
+  display: inline-block;
+  margin-top: 0.6em;
+  font-family: 'Consolas', 'SFMono-Regular', monospace;
+  font-size: 12pt;
+  color: var(--eafit-black);
+  text-decoration: underline;
+}
+
+/* ---------- Bloques de código ---------- */
+.remark-code, .remark-inline-code {
+  font-family: 'Consolas', 'SFMono-Regular', monospace;
+}
+
+/* ---------- Math (KaTeX) ---------- */
+.katex { font-size: 1em; }

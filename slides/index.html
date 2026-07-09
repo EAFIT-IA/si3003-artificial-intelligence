@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso de IA — EAFIT</title>
+
+<link rel="stylesheet" href="css/grid.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="assets/katex.min.css">
+</head>
+<body>
+
+<textarea id="source" style="display: none;"></textarea>
+<script src="assets/remark.min.js"></script>
+<script src="assets/katex.min.js"></script>
+<script src="assets/auto-render.min.js"></script>
+
+<script>
+  // Un solo index.html para todo el curso: la clase a mostrar se elige
+  // por query param, ej. http://localhost:8000/?p=clase0.md
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  var sourceFile = getParameterByName("p");
+
+  var fallbackContent = "class: middle, center, title-slide\n\n" +
+    "# Curso de IA\n\n<div class=\"kicker\">EAFIT</div>\n\n" +
+    "No se especificó ninguna clase.\n\n" +
+    "Usa `?p=clase0.md` en la URL para cargar una clase.";
+
+  var options = { highlightStyle: "github" };
+
+  if (sourceFile) {
+    options.sourceUrl = sourceFile;   // remark.js hace el fetch internamente
+  } else {
+    options.source = fallbackContent;
+  }
+
+  // El callback corre UNA vez, cuando remark.js ya renderizó TODOS los
+  // slides al DOM (no los va renderizando uno por uno al navegar).
+  // Por eso un solo renderMathInElement(document.body, ...) aquí basta
+  // para cubrir el deck completo — no hace falta re-renderizar por slide.
+  var slideshow = remark.create(options, function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ]
+    });
+
+    if (sourceFile) {
+      var firstSlide = document.querySelector('.remark-slide-content');
+      if (firstSlide) {
+        var match = firstSlide.textContent.match(/Clase\s+\d+[:\s]+([^\n]+)/i);
+        if (match) document.title = match[0].trim() + " | Curso de IA";
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

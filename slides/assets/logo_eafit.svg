@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="64" viewBox="0 0 200 64">
+  <!--
+    PLACEHOLDER — no es el logo oficial de EAFIT.
+    No tengo el archivo de marca real ni sus especificaciones exactas
+    (tipografía de marca, proporciones, isotipo), así que esto es solo
+    un wordmark provisional en el sistema tipográfico del deck
+    (Arial Bold, monocromo, sin color de acento) para que el layout se
+    vea terminado mientras consigues el .svg/.png oficial de Comunicaciones.
+  -->
+  <text x="100" y="34" font-family="Arial, Helvetica, sans-serif" font-weight="700"
+        font-size="26" letter-spacing="2" fill="#111111" text-anchor="middle">EAFIT</text>
+  <rect x="40" y="46" width="120" height="2" fill="#111111"/>
+  <text x="100" y="60" font-family="Consolas, 'SFMono-Regular', monospace" font-size="7"
+        letter-spacing="1.5" fill="#888888" text-anchor="middle">UNIVERSIDAD</text>
+</svg>

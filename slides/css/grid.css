@@ -1,0 +1,45 @@
+/* ============================================================
+   grid.css — sistema de columnas genérico basado en flexbox.
+   Sin nada de tipografía ni color: eso vive en style.css.
+   Reusable en cualquier deck, no depende de la identidad EAFIT.
+   ============================================================ */
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5em;
+  width: 100%;
+}
+
+.grid.grid-top    { align-items: flex-start; }
+.grid.grid-middle { align-items: center; }
+.grid.grid-bottom { align-items: flex-end; }
+
+/* Fracciones más comunes en slides (mitades, tercios, cuartos, quintos) */
+.kol-1-1 { flex: 1 1 100%; }
+
+.kol-1-2 { flex: 1 1 50%; }
+.kol-1-2:last-child { flex: 1 1 50%; }
+
+.kol-1-3 { flex: 1 1 33.333%; }
+.kol-2-3 { flex: 1 1 66.666%; }
+
+.kol-1-4 { flex: 1 1 25%; }
+.kol-3-4 { flex: 1 1 75%; }
+
+.kol-1-5 { flex: 1 1 20%; }
+.kol-2-5 { flex: 1 1 40%; }
+.kol-3-5 { flex: 1 1 60%; }
+.kol-4-5 { flex: 1 1 80%; }
+
+.kol-1-6 { flex: 1 1 16.666%; }
+.kol-5-6 { flex: 1 1 83.333%; }
+
+/* min-width: 0 evita que texto/código largo revienten el layout flex */
+[class*='kol-'] { min-width: 0; }
+
+/* Grids apiladas en vertical en vez de columnas (para content largo) */
+.grid.grid-stack {
+  flex-direction: column;
+}
