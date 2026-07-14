@@ -1,7 +1,7 @@
-# Artificial Intelligence — Undergraduate Course
+# SI3003 - Artificial Intelligence — Undergraduate Course
 ### 16 weeks · 1 session (3h) / week · Python
 
-![Course overview diagram](course_overview.png)
+![Course overview diagram](figs/AI.png)
 > Figure: course roadmap — Part 1 (classical foundations) → Part 2 (modern AI) → integrative final project. *(placeholder — replace with your own diagram)*
 
 Course repository. This course follows the **rational agent tradition** (Berkeley CS188 / Stanford CS221 lineage): a 50/50 balance between classical AI foundations (search, CSP, adversarial games, MDPs, reinforcement learning, probabilistic reasoning) and modern AI (deep learning, transformers, LLMs, RAG, fine-tuning, agents). Every algorithm covered is implemented by students, not just called from a library — see [`CONTRIBUTING.md`](#course-standard) for the rigor standard this repository follows.
