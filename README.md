@@ -4,7 +4,7 @@
 ![Course overview diagram](figs/AI.png)
 > Figure: course roadmap — Part 1 (classical foundations) → Part 2 (modern AI) → integrative final project. *(placeholder — replace with your own diagram)*
 
-Course repository. This course follows the **rational agent tradition** (Berkeley CS188 / Stanford CS221 lineage): a 50/50 balance between classical AI foundations (search, CSP, adversarial games, MDPs, reinforcement learning, probabilistic reasoning) and modern AI (deep learning, transformers, LLMs, RAG, fine-tuning, agents). Every algorithm covered is implemented by students, not just called from a library — see [`CONTRIBUTING.md`](#course-standard) for the rigor standard this repository follows.
+Course repository. This course follows the **rational agent tradition** (Berkeley CS188 / Stanford CS221 lineage): a 50/50 balance between classical AI foundations (search, CSP, adversarial games, MDPs, reinforcement learning, probabilistic reasoning) and modern AI (deep learning, transformers, LLMs, RAG, fine-tuning, agents).
 
 > This is a hard-engineering course, not an introductory/"lite" one. Audience: advanced undergraduates with a background in algebra/calculus/probability and Python. Reference courses: [Berkeley CS188](https://inst.eecs.berkeley.edu/~cs188/sp26/), [Stanford CS221](https://stanford-cs221.github.io/autumn2025/), [Harvard CS50AI](https://github.com/KevinLiTian/Harvard_CS50_AI), [ULiège INFO8006](https://github.com/glouppe/info8006-introduction-to-ai), [Universidad de Helsinki Intro to AI](https://materiaalit.github.io/intro-to-ai/).
 
@@ -170,13 +170,6 @@ Full checklist: [`instrucciones_hard_engineering_course.md`](instrucciones_hard_
 - Russell & Norvig, [*Artificial Intelligence: A Modern Approach*](https://aima.cs.berkeley.edu/) (4th ed.) — primary text, Part 1
 - [`aima-python`](https://github.com/aimacode/aima-python) — reference implementations for Weeks 1–7
 - Kochenderfer, Wheeler & Wray, [*Algorithms for Decision Making*](https://algorithmsbook.com/) — MDP/RL/imitation learning, free PDF
-
-**Reference course repositories:**
-- Berkeley CS188 — https://inst.eecs.berkeley.edu/~cs188/sp26/
-- Stanford CS221 — https://stanford-cs221.github.io/autumn2025/
-- Harvard CS50AI — https://github.com/KevinLiTian/Harvard_CS50_AI
-- ULiège INFO8006 — https://github.com/glouppe/info8006-introduction-to-ai
-- Universidad de Helsinki, Intro to AI — https://materiaalit.github.io/intro-to-ai/
 
 ---
 
