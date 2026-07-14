@@ -108,12 +108,13 @@ Justifique su respuesta.
 
 # Rúbrica (10 puntos)
 
-  Criterio                             Puntos
-  ---------------------------------- --------
-  Descripción correcta del Space            2
-  Identificación de PEAS                    3
-  Clasificación del entorno                 3
-  Justificación del tipo de agente          2
+| Criterio | Puntos |
+|-----------|:------:|
+| Descripción correcta del Space | 2 |
+| Identificación de PEAS | 3 |
+| Clasificación del entorno | 3 |
+| Justificación del tipo de agente | 2 |
+| **Total** | **10** |
 
 ------------------------------------------------------------------------
 
