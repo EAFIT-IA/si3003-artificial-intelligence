@@ -1,68 +1,100 @@
-# Artificial Intelligence — Undergraduate Course
-### 16 weeks · 1 session (3h) / week · Python
+# SI3003 — Introducción a la Inteligencia Artificial
 
-![Course overview diagram](figs/AI.png)
-> Figure: course roadmap — Part 1 (classical foundations) → Part 2 (modern AI) → integrative final project. *(placeholder — replace with your own diagram)*
+Cero dependencias de Node/npm ni de CDN — remark.js, KaTeX y sus fuentes
+están vendorizados en `assets/`. Solo necesitas Python (o cualquier server
+HTTP estático) para verlo.
 
-Course repository. This course follows the **rational agent tradition** (Berkeley CS188 / Stanford CS221 lineage): a 50/50 balance between classical AI foundations (search, CSP, adversarial games, MDPs, reinforcement learning, probabilistic reasoning) and modern AI (deep learning, transformers, LLMs, RAG, fine-tuning, agents). Every algorithm covered is implemented by students, not just called from a library — see [`CONTRIBUTING.md`](#course-standard) for the rigor standard this repository follows.
+## Clases
 
-> Audience: advanced undergraduates with a background in algebra/calculus/probability and Python. 
+| # | Tema | Link |
+|---|---|---|
+| 0 | Introducción a la IA (motivacional) | [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase0.md) |
+| 1 | Agentes racionales y PEAS | [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase1.md) |
 
----
+> Local: `http://localhost:8000/?p=clase0.md` (con `serve.py` corriendo).
 
-## What you will learn in this course
+## Cómo verlo
 
-- **Part 1 — Classical foundations (Weeks 1–7):** rational agents, uninformed and informed search, constraint satisfaction, adversarial search, Markov Decision Processes, reinforcement learning, imitation learning, probabilistic reasoning (Bayes nets), hidden Markov models, and classical ML (Naive Bayes, perceptron).
-- **Part 2 — Modern AI (Weeks 9–14):** neural network fundamentals, the Transformer architecture, large language models (training, prompting, reasoning/test-time compute), retrieval-augmented generation, fine-tuning (LoRA/PEFT, RLHF/RLVR), and LLM-based agents (tool use, ReAct, planning).
-- **Two written/practical evaluations** (Week 8 and Week 15) combining derivations and code reading/debugging — not multiple choice only.
-- **An end-to-end integrative final project** that must combine at least one Part 1 technique with at least one Part 2 technique, with two checkpoints (Weeks 11 and 14).
+`index.html` carga `clase0.md` con el mecanismo interno de remark.js
+(`sourceUrl`), y eso está bloqueado por CORS si simplemente haces
+doble-clic en el HTML (protocolo `file://`). Por eso necesitas un
+servidor HTTP local — pero **no uses `python3 -m http.server` a secas**:
+Python le manda a los `.md` el header `Content-Type: text/markdown` sin
+`charset=utf-8`, y el navegador adivina mal la codificación → tildes/ñ/¿¡
+rotos. Usa el `serve.py` incluido, que fuerza UTF-8 en todo:
 
----
+```bash
+cd curso-ia-slides
+python3 serve.py
+```
 
-## Evaluation
+Abre `http://localhost:8000/?p=clase0.md` en el navegador (el `?p=` es
+obligatorio ahora — un solo `index.html` sirve para todo el curso, y eliges
+qué clase cargar por la URL). Cada vez que guardes cambios en `clase0.md`,
+solo tienes que refrescar la pestaña (F5).
 
-| Component | Weight |
-|---|---|
-| Per-topic projects (P1–P11, ~11 deliverables) | 40% |
-| Evaluation 1 — Week 8 (Part 1 midterm) | 15% |
-| Evaluation 2 — Week 15 (Part 2 final exam) | 15% |
-| Integrative final project | 25% |
-| Participation / weekly short quizzes | 5% |
+Para la próxima clase: duplicas `clase0.md` → `clase1.md`, y la abres con
+`http://localhost:8000/?p=clase1.md`. No hay que tocar `index.html`.
 
-Every project has **explicit, verifiable correctness criteria**: public test cases + hidden test cases, and a quantitative performance bar when applicable (e.g. "agent must win >80% of games against the random ghost", "classifier must exceed 90% accuracy on the held-out test set"). See the [course standard](#course-standard) below — no project is approved with "instructor's subjective review" as the only criterion.
+## Atajos de teclado (nativos de remark.js)
 
----
+- `→` / `Space` — siguiente slide
+- `←` — slide anterior
+- `P` — **modo presentador**: muestra tus notas (`???`) y el slide actual +
+  siguiente lado a lado, con temporizador
+- `C` — clona la ventana (útil para presentador + proyección en pantallas separadas)
+- Escribe un número + `Enter` — salta a ese slide
 
-## PART 1 — Classical Foundations
+## Estructura de archivos
 
-### Lecture 01 — Introduction: Rational Agents
-- `Lecture01/Lecture_01.pdf` — History of AI, rational agents (PEAS), environment types, course roadmap.
-- Notebooks:
-  - `Lecture01/notebooks/tools_numpy.ipynb`
-  - `Lecture01/notebooks/vacuum_agent.ipynb`
-- Homework: implement a simple reflex agent in a vacuum-world environment (**P0**, ungraded).
+```
+curso-ia-slides/
+├── index.html            ← motor: carga remark.js, KaTeX y la clase por ?p=
+├── css/
+│   ├── grid.css            ← columnas genéricas (flexbox), sin nada de marca
+│   └── style.css           ← identidad EAFIT: tipografía, colores, tipos de slide
+├── clase0.md              ← el contenido de la clase (esto es lo que editas semana a semana)
+├── assets/
+│   ├── remark.min.js       ← vendorizado (no depende de CDN ni de internet)
+│   ├── katex.min.js
+│   ├── katex.min.css
+│   ├── auto-render.min.js
+│   ├── fonts/               ← fuentes de KaTeX (requeridas por katex.min.css)
+│   └── logo_eafit.svg       ← PLACEHOLDER — reemplázalo por el logo real
+└── figures/                ← imágenes de la clase (capturas, diagramas, etc.)
+```
 
----
+Todo corre 100% local y offline después de la primera carga — no depende de
+que `jsdelivr` o `remarkjs.com` estén arriba el día de tu clase.
 
+## Mapeo con la sintaxis del deck original de Louppe
 
-## Resources
+| Original (Louppe) | Aquí | Nota |
+|---|---|---|
+| `class: middle, center` | igual | nativo de remark.js, no lo tocamos |
+| `.grid[ .kol-1-2[...] ]` | igual | ya definido en `style.css` |
+| `.width-70[![](...)]`  | igual | ya definido en `style.css` |
+| `class: ..., black-slide` | `class: ..., divider-slide` | **cambio de diseño**: ahora fondo blanco + logo EAFIT, no fondo oscuro |
+| `<iframe ...youtube...>` | `.video-placeholder[ ![](thumb.jpg) ... ]` + link | acordado: captura + hipervínculo, sin iframe embebido |
+| `???` notas | igual | nativo de remark.js |
+| ecuaciones LaTeX | `$...$` / `$$...$$` | vía KaTeX (cargado en `index.html`) |
 
-**Compute:**
-- [Lightning AI Studio](https://lightning.ai/) — free CPU-only, persistent dev environment (default for the course)
-- [Kaggle](https://www.kaggle.com/) — GPU notebooks (via SSH tunneling) for Weeks 9–13
-- [Google Colab](https://colab.research.google.com/)
-- [Weights & Biases](https://wandb.ai/site) — experiment tracking for Part 2 projects
-- [Hugging Face](https://huggingface.co/) — models/datasets for Part 2
+## Cómo agregar una clase nueva
 
-**Books:**
-- Russell & Norvig, [*Artificial Intelligence: A Modern Approach*](https://aima.cs.berkeley.edu/) (4th ed.) — primary text, Part 1
-- [`aima-python`](https://github.com/aimacode/aima-python) — reference implementations for Weeks 1–7
-- Kochenderfer, Wheeler & Wray, [*Algorithms for Decision Making*](https://algorithmsbook.com/) — MDP/RL/imitation learning, free PDF
+1. Duplica `clase0.md` → `clase1.md`
+2. Crea `figures/clase1/` para las imágenes de esa clase (cada clase tiene
+   su propia subcarpeta — nunca mezcles imágenes de distintas clases en
+   la misma carpeta, es el mismo patrón que usa Louppe con `figures/lecN/`)
+3. Ábrela con `http://localhost:8000/?p=clase1.md` — no tocas `index.html`,
+   `css/`, ni `assets/`: eso es compartido por todas las clases del curso
+4. Escribe el contenido — reutiliza los patrones del archivo de ejemplo
+   (grid de columnas, divisor de sección, ecuación, código, video)
+5. Agrega la fila correspondiente en la tabla **Clases** arriba de este
+   README, con el link a `.../slides/?p=clase1.md`
 
+## Pendiente de tu lado
 
----
-
-### Notes for students
-- Reports emphasize **both conceptual understanding and implementation**.
-- The final project integrates a classical technique, a modern technique, and system-level design.
-- The use of generative AI tools is permitted, subject to transparency and academic integrity, as stated in the course policies.
+- Reemplazar `assets/logo_eafit.svg` con el logo real de EAFIT (SVG o PNG)
+- Subir las figuras de `figures/lec0/` que ya tienes, para la Clase 0 real
+- Decirme qué partes del `lecture0.md` original quieres conservar/cortar
+  (quedó pendiente de la conversación anterior)
