@@ -962,7 +962,7 @@ class: middle
 - Empezamos en $S$ y $G$ es un estado objetivo.
 - ¿Qué camino encuentra la búsqueda en grafo?
 
-.kol-1-2.center.width-60[![A* en grafo sale mal](figures/clase2/astar-gone-wrong.png)]
+.kol-1-2.center.width-50[![A* en grafo sale mal](figures/clase2/astar-gone-wrong.png)]
 
 
 ???
