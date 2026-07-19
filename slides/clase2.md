@@ -1006,15 +1006,14 @@ https://www.ics.uci.edu/~kkask/Fall-2016%20CS271/slides/03-InformedHeuristicSear
 
 # Ejemplo de repaso: Super Mario
 
-.center.width-50[![Super Mario](figures/clase2/mario.jpg)]
-
+.center.width-30[![Super Mario](figures/clase2/mario.jpg)]
 - ¿.italic[Entorno de tarea]?
     - ¿medida de desempeño, entorno, actuadores, sensores?
 - ¿.italic[Tipo] de entorno?
 - ¿.italic[Problema de búsqueda]?
-    - ¿estado inicial, acciones, modelo de transición, prueba de
-      objetivo, costo del camino?
+    - ¿estado inicial, acciones, modelo de transición, prueba de objetivo, costo del camino?
 - ¿.italic[Buena heurística]?
+
 
 .footnote[Captura de *Super Mario Bros.*, © Nintendo — uso educativo en
 clase.]
@@ -1045,11 +1044,8 @@ class: middle, center, divider-slide
 
 ## A* en acción (recorrido de Mario)
 
-.video-placeholder[
-![A* jugando Mario](figures/clase2/mario.jpg)
-<div class="play-badge">&#9658;</div>
-]
-
+.video-placeholder[![A* jugando Mario](figures/clase2/mario.jpg)
+<div class="play-badge">&#9658;</div>]
 [Ver video &#8594;](https://www.youtube.com/watch?v=DlkMs4ZHHr8)
 
 ???
