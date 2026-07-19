@@ -958,13 +958,13 @@ class: middle
 .kol-1-2[<br><br>
 ## ¿A* en grafo sale mal?
 
-
-<br>
-.center.width-55[![A* en grafo sale mal](figures/clase2/astar-gone-wrong.png)]
-<br>
-
-Empezamos en $S$ y $G$ es un estado objetivo.
-¿Qué camino encuentra la búsqueda en grafo?
+.grid[
+.kol-1-2[
+- Empezamos en $S$ y $G$ es un estado objetivo.
+- ¿Qué camino encuentra la búsqueda en grafo?
+]
+.kol-1-2.center.width-55[![A* en grafo sale mal](figures/clase2/astar-gone-wrong.png)]
+]
 
 ???
 
