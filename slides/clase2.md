@@ -957,10 +957,13 @@ class: middle
 .grid[
 .kol-1-2[<br><br>
 ## ¿A* en grafo sale mal?
+
+.grid[
+.kol-1-2[
 - Empezamos en $S$ y $G$ es un estado objetivo.
 - ¿Qué camino encuentra la búsqueda en grafo?
 ]
-.kol-1-2[.width-55[![A* en grafo sale mal](figures/clase2/astar-gone-wrong.png)]]
+.kol-1-2.center.width-55[![A* en grafo sale mal](figures/clase2/astar-gone-wrong.png)]
 ]
 
 ???
@@ -975,13 +978,15 @@ Simular la ejecución de búsqueda en grafo usando esta $h$.
 
 class: middle
 
+## Heurísticas consistentes
+
 .grid[
-.kol-2-3[## Heurísticas consistentes
+.kol-2-3[
 Una heurística $h$ es consistente si para todo $n$ y todo sucesor $n'$
 generado por cualquier acción $a$,
 $$h(n) \leq c(n,a,n') + h(n').$$
 ]
-.kol-1-3[.width-55[![Heurística consistente](figures/clase2/consistent-heuristic.png)]]
+.kol-1-3.center.width-70[![Heurística consistente](figures/clase2/consistent-heuristic.png)]
 ]
 
 Consecuencias de las heurísticas consistentes:
@@ -997,6 +1002,7 @@ https://www.ics.uci.edu/~kkask/Fall-2016%20CS271/slides/03-InformedHeuristicSear
 => si se permite reabrir nodos, con admisibilidad alcanza
 
 ---
+
 
 # Ejemplo de repaso: Super Mario
 
