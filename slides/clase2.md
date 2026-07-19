@@ -1083,4 +1083,4 @@ count: false
 
 ## Fin de la Clase 2
 
-Próxima clase: Juegos adversariales — minimax y poda alfa-beta
+Próxima clase: CSP
