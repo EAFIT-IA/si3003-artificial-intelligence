@@ -960,7 +960,7 @@ class: middle
 - Empezamos en $S$ y $G$ es un estado objetivo.
 - ¿Qué camino encuentra la búsqueda en grafo?
 ]
-.kol-1-2[.width-95[![A* en grafo sale mal](figures/clase2/astar-gone-wrong.png)]]
+.kol-1-2[.width-55[![A* en grafo sale mal](figures/clase2/astar-gone-wrong.png)]]
 ]
 
 ???
@@ -981,7 +981,7 @@ Una heurística $h$ es consistente si para todo $n$ y todo sucesor $n'$
 generado por cualquier acción $a$,
 $$h(n) \leq c(n,a,n') + h(n').$$
 ]
-.kol-1-3[.width-95[![Heurística consistente](figures/clase2/consistent-heuristic.png)]]
+.kol-1-3[.width-55[![Heurística consistente](figures/clase2/consistent-heuristic.png)]]
 ]
 
 Consecuencias de las heurísticas consistentes:
