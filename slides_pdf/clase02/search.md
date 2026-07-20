@@ -514,7 +514,7 @@ Placeholder:
 
 ## 9.1 Idea
 
-DLS es una variante de DFS que no permite expandir nodos más allá de un límite \(\ell\).
+DLS es una variante de DFS que no permite expandir nodos más allá de un límite $\ell$.
 
 ## 9.2 Ventaja
 
@@ -522,23 +522,23 @@ Evita que DFS descienda indefinidamente por ramas infinitas.
 
 ## 9.3 Problema
 
-Si la solución está a profundidad mayor que \(\ell\), no será encontrada.
+Si la solución está a profundidad mayor que $\ell$, no será encontrada.
 
 ## 9.4 Tiempo
 
-\[
+$$
 O(b^\ell)
-\]
+$$
 
 ## 9.5 Memoria
 
-\[
+$$
 O(b\ell)
-\]
+$$
 
 ## 9.6 Completitud y optimalidad
 
-- **Completo:** no, si \(\ell<d\).
+- **Completo:** no, si $\ell<d$.
 - **Óptimo:** no.
 
 ## 9.7 Resumen
@@ -546,9 +546,9 @@ O(b\ell)
 | Propiedad | DLS |
 |---|---|
 | Frontera | Pila LIFO con límite |
-| Selecciona | Nodo más reciente sin superar \(\ell\) |
-| Tiempo | \(O(b^\ell)\) |
-| Memoria | \(O(b\ell)\) |
+| Selecciona | Nodo más reciente sin superar $\ell$ |
+| Tiempo | $O(b^\ell)$ |
+| Memoria | $O(b\ell)$ |
 | Completo | Solo si el límite alcanza una solución |
 | Óptimo | No |
 
@@ -575,9 +575,9 @@ Combina:
 
 ## 10.2 ¿No desperdicia tiempo al repetir?
 
-Sí, vuelve a expandir nodos de niveles superiores. Sin embargo, en árboles con factor de ramificación \(b>1\), la mayoría de los nodos están en el nivel más profundo.
+Sí, vuelve a expandir nodos de niveles superiores. Sin embargo, en árboles con factor de ramificación $b>1$, la mayoría de los nodos están en el nivel más profundo.
 
-Ejemplo con \(b=10\) y \(d=5\):
+Ejemplo con $b=10$ y \$d=5$:
 
 ```text
 Nivel 0:       1
@@ -592,19 +592,19 @@ Reexpandir los niveles pequeños cuesta relativamente poco frente a expandir el 
 
 ## 10.3 Tiempo
 
-\[
+$$
 O(b^d)
-\]
+$$
 
 ## 10.4 Memoria
 
-\[
+$$
 O(bd)
-\]
+$$
 
 ## 10.5 Completitud y optimalidad
 
-- **Completo:** sí, si \(b\) es finito.
+- **Completo:** sí, si $b$ es finito.
 - **Óptimo:** sí, cuando todas las acciones tienen el mismo costo.
 
 ## 10.6 Resumen
@@ -612,16 +612,14 @@ O(bd)
 | Propiedad | IDS |
 |---|---|
 | Estrategia | DLS con límites crecientes |
-| Tiempo | \(O(b^d)\) |
-| Memoria | \(O(bd)\) |
+| Tiempo | $O(b^d)$ |
+| Memoria | $O(bd)$ |
 | Completo | Sí |
 | Óptimo | Sí, con costos iguales |
 
-Placeholder:
 
-```markdown
-![Figura 6. IDS repite DFS con límites crecientes](figures/ids-limits.png)
-```
+![Figura 6. IDS repite DFS con límites crecientes](figs/fig6.png)
+
 
 ---
 
