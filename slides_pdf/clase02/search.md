@@ -302,7 +302,7 @@ La memoria es su principal limitación.
 Placeholder:
 
 ```markdown
-![Figura 3. Evolución de la frontera en BFS](figures/fig3.png)
+![Figura 3. Evolución de la frontera en BFS](figs/fig3.png)
 ```
 
 ---
@@ -405,7 +405,7 @@ Esta es una ventaja importante frente a BFS.
 Placeholder:
 
 ```markdown
-![Figura 4. Evolución de la frontera en DFS](figures/fig4.png)
+![Figura 4. Evolución de la frontera en DFS](figs/fig4.png)
 ```
 
 ---
@@ -478,7 +478,7 @@ Estas expresiones pueden ser grandes cuando $\varepsilon\$ es pequeño.
 
 ## 8.5 Completitud y optimalidad
 
-- **Completo:** sí, si los costos son mayores o iguales que un \(\varepsilon>0\).
+- **Completo:** sí, si los costos son mayores o iguales que un $\varepsilon>0$.
 - **Óptimo:** sí.
 
 ## 8.6 Relación con BFS
@@ -505,7 +505,7 @@ En ese caso, UCS se comporta como BFS, salvo posibles diferencias de desempate.
 Placeholder:
 
 ```markdown
-![Figura 5. UCS ordena la frontera por costo acumulado](figures/fig5.png)
+![Figura 5. UCS ordena la frontera por costo acumulado](figs/fig5.png)
 ```
 
 ---
@@ -631,17 +631,17 @@ Greedy selecciona el nodo que parece estar más cerca del objetivo.
 
 Usa una heurística:
 
-\[
+$$
 h(n)
-\]
+$$
 
-La heurística estima el costo restante desde \(n\) hasta una meta.
+La heurística estima el costo restante desde $n$ hasta una meta.
 
 La prioridad es:
 
-\[
+$$
 f(n)=h(n)
-\]
+$$
 
 ## 11.2 Qué ignora
 
@@ -661,21 +661,21 @@ g(n)=2
 h(n)=3
 ```
 
-porque solo compara \(h(n)\).
+porque solo compara $h(n)$.
 
 ## 11.3 Tiempo y memoria
 
 En el peor caso:
 
-\[
+$$
 O(b^m)
-\]
+$$
 
 La memoria también puede crecer como:
 
-\[
+$$
 O(b^m)
-\]
+$$
 
 En la práctica puede ser mucho más rápido si la heurística es informativa, pero la cota de peor caso sigue siendo exponencial.
 
@@ -686,23 +686,23 @@ En la práctica puede ser mucho más rápido si la heurística es informativa, p
 
 ## 11.5 Empates
 
-Cuando dos nodos tienen el mismo \(h(n)\), la política de desempate puede modificar considerablemente el recorrido.
+Cuando dos nodos tienen el mismo $h(n)$, la política de desempate puede modificar considerablemente el recorrido.
 
 ## 11.6 Resumen
 
 | Propiedad | Greedy |
 |---|---|
 | Frontera | Cola con prioridad |
-| Prioridad | Menor \(h(n)\) |
-| Tiempo | \(O(b^m)\) |
-| Memoria | \(O(b^m)\) |
+| Prioridad | Menor $h(n)$ |
+| Tiempo | $O(b^m)$ |
+| Memoria | $O(b^m)$ |
 | Completo | No, en general |
 | Óptimo | No |
 
 Placeholder:
 
 ```markdown
-![Figura 7. Greedy prioriza la estimación heurística](figures/greedy-priority.png)
+![Figura 7. Greedy prioriza la estimación heurística](figs/greedy-priority.png)
 ```
 
 ---
@@ -718,9 +718,9 @@ A* combina:
 
 Su función de evaluación es:
 
-\[
+$$
 f(n)=g(n)+h(n)
-\]
+$$
 
 ## 12.2 Interpretación
 
@@ -732,25 +732,25 @@ f(n): costo total estimado de una solución que pasa por n
 
 ## 12.3 Orden de expansión
 
-A* expande el nodo con menor \(f(n)\).
+A* expande el nodo con menor $f(n)$.
 
 El orden de los sucesores importa únicamente cuando afecta los empates o el momento en que los nodos entran a la cola.
 
 ## 12.4 Optimalidad
 
-Para búsqueda en árboles, A* es óptimo si \(h(n)\) es admisible:
+Para búsqueda en árboles, A* es óptimo si $h(n)$ es admisible:
 
-\[
+$$
 0 \leq h(n) \leq h^*(n)
-\]
+$$
 
-donde \(h^*(n)\) es el costo real mínimo restante.
+donde $h^*(n)$ es el costo real mínimo restante.
 
 Para búsqueda en grafos sin reaperturas, normalmente se exige además consistencia:
 
-\[
+$$
 h(n)\leq c(n,n')+h(n')
-\]
+$$
 
 ## 12.5 Tiempo
 
@@ -758,11 +758,11 @@ La complejidad depende fuertemente de la calidad de la heurística.
 
 En el peor caso, A* sigue siendo exponencial:
 
-\[
+$$
 O(b^d)
-\]
+$$
 
-Esta cota es una simplificación útil. Un análisis más preciso depende del error de la heurística y del número de nodos con \(f(n)\leq C^*\).
+Esta cota es una simplificación útil. Un análisis más preciso depende del error de la heurística y del número de nodos con $f(n)\leq C^*$.
 
 ## 12.6 Memoria
 
@@ -770,9 +770,9 @@ A* conserva todos los nodos generados relevantes en la frontera y, en búsqueda 
 
 En el peor caso:
 
-\[
+$$
 O(b^d)
-\]
+$$
 
 La memoria suele ser la principal limitación práctica de A*.
 
@@ -780,26 +780,26 @@ La memoria suele ser la principal limitación práctica de A*.
 
 Si:
 
-\[
+$$
 h(n)=0
-\]
+$$
 
 entonces:
 
-\[
+$$
 f(n)=g(n)
-\]
+$$
 
 y A* se comporta como UCS.
 
-Si \(g(n)\) se ignora, el comportamiento se aproxima a Greedy.
+Si $g(n)$ se ignora, el comportamiento se aproxima a Greedy.
 
 ## 12.8 Resumen
 
 | Propiedad | A* |
 |---|---|
 | Frontera | Cola con prioridad |
-| Prioridad | Menor \(g(n)+h(n)\) |
+| Prioridad | Menor $g(n)+h(n)$ |
 | Tiempo | Exponencial en el peor caso |
 | Memoria | Exponencial en el peor caso |
 | Completo | Sí, bajo condiciones estándar |
@@ -808,7 +808,7 @@ Si \(g(n)\) se ignora, el comportamiento se aproxima a Greedy.
 Placeholder:
 
 ```markdown
-![Figura 8. A* combina costo acumulado y heurística](figures/astar-priority.png)
+![Figura 8. A* combina costo acumulado y heurística](figs/astar-priority.png)
 ```
 
 ---
@@ -817,13 +817,13 @@ Placeholder:
 
 | Algoritmo | Frontera | Criterio | Tiempo | Memoria | Completo | Óptimo |
 |---|---|---|---|---|---|---|
-| BFS | Cola FIFO | Menor profundidad | \(O(b^{d+1})\) | \(O(b^{d+1})\) | Sí | Sí, costos iguales |
-| DFS | Pila LIFO | Más reciente | \(O(b^m)\) | \(O(bm)\) | No | No |
-| UCS | Cola de prioridad | Menor \(g(n)\) | \(O(b^{1+\lfloor C^*/\varepsilon\rfloor})\) | Igual orden | Sí | Sí |
-| DLS | Pila con límite | Más reciente hasta \(\ell\) | \(O(b^\ell)\) | \(O(b\ell)\) | Condicional | No |
-| IDS | DLS repetido | Menor límite suficiente | \(O(b^d)\) | \(O(bd)\) | Sí | Sí, costos iguales |
-| Greedy | Cola de prioridad | Menor \(h(n)\) | \(O(b^m)\) | \(O(b^m)\) | No, en general | No |
-| A* | Cola de prioridad | Menor \(g(n)+h(n)\) | Exponencial, peor caso | Exponencial, peor caso | Sí, bajo condiciones | Sí, bajo condiciones |
+| BFS | Cola FIFO | Menor profundidad | $O(b^{d+1})$ | $O(b^{d+1})$ | Sí | Sí, costos iguales |
+| DFS | Pila LIFO | Más reciente | $O(b^m)$ | $O(bm)$ | No | No |
+| UCS | Cola de prioridad | Menor $g(n)$ | $O(b^{1+\lfloor C^*/\varepsilon\rfloor})$ | Igual orden | Sí | Sí |
+| DLS | Pila con límite | Más reciente hasta $\ell$ | $O(b^\ell)$ | $O(b\ell)$ | Condicional | No |
+| IDS | DLS repetido | Menor límite suficiente | $O(b^d)$ | $O(bd)$ | Sí | Sí, costos iguales |
+| Greedy | Cola de prioridad | Menor $h(n)$ | $O(b^m)$ | $O(b^m)$ | No, en general | No |
+| A* | Cola de prioridad | Menor $g(n)+h(n)$ | Exponencial, peor caso | Exponencial, peor caso | Sí, bajo condiciones | Sí, bajo condiciones |
 
 ---
 
@@ -869,7 +869,7 @@ Memoria crece según la cantidad de nodos generados y aún relevantes.
 Placeholder:
 
 ```markdown
-![Figura 9. Comparación visual del crecimiento de memoria](figures/memory-growth.png)
+![Figura 9. Comparación visual del crecimiento de memoria](figs/fig9.png)
 ```
 
 ---
@@ -917,8 +917,8 @@ f(n2)=5
 
 Posibles desempates:
 
-1. Menor \(h(n)\).
-2. Mayor \(g(n)\).
+1. Menor $h(n)$.
+2. Mayor $g(n)$.
 3. Menor profundidad.
 4. Primero en entrar.
 5. Orden lexicográfico.
@@ -979,11 +979,11 @@ A*: g(n)+h(n)
 
 ## Error 5
 
-> Si un algoritmo tarda \(O(b^d)\), siempre explora exactamente \(b^d\) nodos.
+> Si un algoritmo tarda $O(b^d)$, siempre explora exactamente $b^d$ nodos.
 
 Incorrecto.
 
-La notación \(O\) describe una cota de crecimiento, no un conteo exacto.
+La notación $O$ describe una cota de crecimiento, no un conteo exacto.
 
 ## Error 6
 
