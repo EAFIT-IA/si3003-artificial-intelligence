@@ -123,7 +123,7 @@ C genera: F, G
 
 ```
 
-![Figura 1. Árbol de búsqueda utilizado en los ejemplos](figures/fig1.png)
+![Figura 1. Árbol de búsqueda utilizado en los ejemplos](figs/fig1.png)
 
 
 ---
@@ -164,7 +164,7 @@ Esto no modifica la definición de DFS. Solo determina qué hermano se visita pr
 
 El mismo fenómeno aparece en las colas con prioridad. Cuando dos nodos tienen la misma prioridad, el resultado depende de la regla de desempate.
 
-![Figura 2. Efecto del orden de inserción en una pila](figures/fig2.png)
+![Figura 2. Efecto del orden de inserción en una pila](figs/fig2.png)
 
 
 
