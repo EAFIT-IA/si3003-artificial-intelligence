@@ -299,11 +299,9 @@ La memoria es su principal limitación.
 | Completo | Sí, si $b$ es finito |
 | Óptimo | Sí, con costos iguales |
 
-Placeholder:
 
-```markdown
 ![Figura 3. Evolución de la frontera en BFS](figs/fig3.png)
-```
+
 
 ---
 
@@ -402,11 +400,8 @@ Esta es una ventaja importante frente a BFS.
 | Completo | No, en general |
 | Óptimo | No |
 
-Placeholder:
-
-```markdown
 ![Figura 4. Evolución de la frontera en DFS](figs/fig4.png)
-```
+
 
 ---
 
@@ -502,11 +497,9 @@ En ese caso, UCS se comporta como BFS, salvo posibles diferencias de desempate.
 | Completo | Sí, si el costo mínimo es positivo |
 | Óptimo | Sí |
 
-Placeholder:
 
-```markdown
 ![Figura 5. UCS ordena la frontera por costo acumulado](figs/fig5.png)
-```
+
 
 ---
 
@@ -699,11 +692,9 @@ Cuando dos nodos tienen el mismo $h(n)$, la política de desempate puede modific
 | Completo | No, en general |
 | Óptimo | No |
 
-Placeholder:
 
-```markdown
-![Figura 7. Greedy prioriza la estimación heurística](figs/greedy-priority.png)
-```
+![Figura 7. Greedy prioriza la estimación heurística](figs/fig7.png)
+
 
 ---
 
@@ -805,11 +796,9 @@ Si $g(n)$ se ignora, el comportamiento se aproxima a Greedy.
 | Completo | Sí, bajo condiciones estándar |
 | Óptimo | Sí, con heurística adecuada |
 
-Placeholder:
 
-```markdown
-![Figura 8. A* combina costo acumulado y heurística](figs/astar-priority.png)
-```
+![Figura 8. A* combina costo acumulado y heurística](figs/fig8.png)
+
 
 ---
 
@@ -866,11 +855,9 @@ Pueden acumular muchos candidatos con distintas prioridades.
 Memoria crece según la cantidad de nodos generados y aún relevantes.
 ```
 
-Placeholder:
 
-```markdown
 ![Figura 9. Comparación visual del crecimiento de memoria](figs/fig9.png)
-```
+
 
 ---
 
