@@ -96,9 +96,9 @@ La función `extraer_siguiente` determina la estrategia:
 |---|---|
 | BFS | El nodo más antiguo |
 | DFS | El nodo más reciente |
-| UCS | El nodo con menor \(g(n)\) |
-| Greedy | El nodo con menor \(h(n)\) |
-| A* | El nodo con menor \(f(n)=g(n)+h(n)\) |
+| UCS | El nodo con menor $g(n)$ |
+| Greedy | El nodo con menor $h(n)$ |
+| A* | El nodo con menor $f(n)=g(n)+h(n)$ |
 
 ---
 
@@ -120,13 +120,11 @@ Supondremos que los sucesores se generan visualmente de izquierda a derecha:
 A genera: B, C
 B genera: D, E
 C genera: F, G
+
 ```
 
-Placeholder de figura:
-
-```markdown
 ![Figura 1. Árbol de búsqueda utilizado en los ejemplos](figures/fig1.png)
-```
+
 
 ---
 
@@ -166,11 +164,9 @@ Esto no modifica la definición de DFS. Solo determina qué hermano se visita pr
 
 El mismo fenómeno aparece en las colas con prioridad. Cuando dos nodos tienen la misma prioridad, el resultado depende de la regla de desempate.
 
-Placeholder:
-
-```markdown
 ![Figura 2. Efecto del orden de inserción en una pila](figures/fig2.png)
-```
+
+
 
 ---
 
