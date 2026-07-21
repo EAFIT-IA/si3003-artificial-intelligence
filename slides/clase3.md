@@ -145,7 +145,7 @@ class: middle
 
 # (Hiper)grafo de restricciones
 
-.center.width-50[![Grafo de restricciones](figures/clase3/csp-graph.png)]
+.center.width-40[![Grafo de restricciones](figures/clase3/csp-graph.png)]
 
 - .italic[Nodos] = variables del problema
 - .italic[Aristas] = restricciones del problema que involucran a las
@@ -189,7 +189,7 @@ class: middle
 
 class: middle
 
-.center.width-50[![Dibujo de líneas interpretado por el algoritmo de Waltz](figures/clase3/waltz.png)]
+.center.width-10[![Dibujo de líneas interpretado por el algoritmo de Waltz](figures/clase3/waltz.png)]
 
 ## Ejemplo: el algoritmo de Waltz
 
@@ -197,7 +197,7 @@ Procedimiento para interpretar dibujos 2D de líneas de poliedros sólidos
 como objetos 3D. Ejemplo temprano de un cómputo de IA planteado como un
 CSP.
 
-.pull-right.width-70[![Intersecciones del algoritmo de Waltz](figures/clase3/waltz-inter.png)]
+.pull-right.width-30[![Intersecciones del algoritmo de Waltz](figures/clase3/waltz-inter.png)]
 Formulación como CSP:
 - Cada intersección es una variable.
 - Las intersecciones adyacentes se imponen restricciones entre sí.
@@ -522,9 +522,9 @@ class: middle
 
 ## CSP con estructura de árbol
 
-.center.width-90[![Grafo de restricciones en árbol](figures/clase3/tree-csp.png)]
+.center.width-60[![Grafo de restricciones en árbol](figures/clase3/tree-csp.png)]
 
-.center.width-90[![Transformación del CSP en árbol](figures/clase3/tree-csp-trans.png)]
+.center.width-60[![Transformación del CSP en árbol](figures/clase3/tree-csp-trans.png)]
 
 - Algoritmo para CSP con estructura de árbol:
     - Ordenar: elegir una variable raíz, ordenar las variables de modo
