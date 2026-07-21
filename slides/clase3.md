@@ -189,15 +189,14 @@ class: middle
 
 class: middle
 
-.center.width-10[![Dibujo de líneas interpretado por el algoritmo de Waltz](figures/clase3/waltz.png)]
+.center.width-20[![Dibujo de líneas interpretado por el algoritmo de Waltz](figures/clase3/waltz.png)]
 
 ## Ejemplo: el algoritmo de Waltz
 
-Procedimiento para interpretar dibujos 2D de líneas de poliedros sólidos
-como objetos 3D. Ejemplo temprano de un cómputo de IA planteado como un
-CSP.
+Procedimiento para interpretar dibujos 2D de líneas de poliedros sólidos como objetos 3D.
+Ejemplo temprano de un cómputo de IA planteado como un CSP.
 
-.pull-right.width-30[![Intersecciones del algoritmo de Waltz](figures/clase3/waltz-inter.png)]
+.pull-right.width-10[![Intersecciones del algoritmo de Waltz](figures/clase3/waltz-inter.png)]
 Formulación como CSP:
 - Cada intersección es una variable.
 - Las intersecciones adyacentes se imponen restricciones entre sí.
@@ -522,7 +521,7 @@ class: middle
 
 ## CSP con estructura de árbol
 
-.center.width-60[![Grafo de restricciones en árbol](figures/clase3/tree-csp.png)]
+.center.width-30[![Grafo de restricciones en árbol](figures/clase3/tree-csp.png)]
 
 .center.width-60[![Transformación del CSP en árbol](figures/clase3/tree-csp-trans.png)]
 
