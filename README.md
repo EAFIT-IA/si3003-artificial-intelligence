@@ -39,9 +39,12 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - `slides_pdf/clase0.pdf` — History of AI, course roadmap [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase0.md).
 - `slides_pdf/clase1.pdf` — Rational agents (PEAS), environment types. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase1.md)
 - `slides_pdf/clase2.pdf` — Solving problems by searching. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase2.md)
-- `slides_pdf/clase3.pdf` — CSP. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase3.md) 
 
----
+
+### Lecture 02 — Search 
+- `slides_pdf/clase2.pdf` — Solving problems by searching. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase2.md)
+- [notebooks](notebooks/Clase02)
+
 
 ## Resources
 
