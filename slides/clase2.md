@@ -702,11 +702,6 @@ class: middle, center, divider-slide
 
 ## Shakey el robot (SRI International, 1969)
 
-.video-placeholder[
-.center.width-30[![Shakey](figures/clase2/shakey.jpg)]
-<div class="play-badge">&#9658;</div>
-]
-
 [Ver video &#8594;](https://www.youtube.com/watch?v=7bsEN8mwUB8)
 
 ---
