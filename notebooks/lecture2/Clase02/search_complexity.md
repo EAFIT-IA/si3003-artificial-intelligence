@@ -43,9 +43,7 @@ Sean
 Antes de encontrar la solución, BFS expande aproximadamente
  
 $$
-
 1+b+b^2+\cdots+b^d
-
 $$
  
 nodos.
@@ -53,9 +51,7 @@ nodos.
 Como el último término domina la suma,
  
 $$
-
 T(n)=O(b^d).
-
 $$
  
 ### Intuición
@@ -73,9 +69,7 @@ Cuando BFS termina de explorar el nivel $d-1$, la frontera contiene prácticamen
 Por tanto,
  
 $$
-
 M(n)=O(b^d).
-
 $$
  
 ### Intuición
@@ -117,9 +111,7 @@ En el peor caso, DFS recorre prácticamente todo el árbol.
 Expande
  
 $$
-
 1+b+b^2+\cdots+b^m
-
 $$
  
 nodos.
@@ -127,9 +119,7 @@ nodos.
 Por tanto,
  
 $$
-
 T(n)=O(b^m).
-
 $$
  
 ### Intuición
@@ -149,9 +139,7 @@ DFS únicamente almacena:
 Como existen aproximadamente $b$ nodos pendientes por nivel y la profundidad es $m$,
  
 $$
-
 M(n)=O(bm).
-
 $$
  
 ### Intuición
@@ -167,9 +155,7 @@ Solo recuerda el camino actual y las alternativas pendientes.
 UCS utiliza una cola de prioridad ordenada por el costo acumulado
  
 $$
-
 g(n).
-
 $$
  
 Siempre expande primero el nodo con menor costo recorrido.
@@ -199,9 +185,7 @@ Sean
 Si cada movimiento cuesta al menos $\varepsilon$, antes de encontrar la solución óptima ningún camino puede tener más de
  
 $$
-
 \frac{C^*}{\varepsilon}
-
 $$
  
 acciones.
@@ -211,9 +195,7 @@ Ese valor actúa como una profundidad efectiva.
 Por tanto,
  
 $$
-
 T(n)=O\left(b^{C^*/\varepsilon}\right).
-
 $$
  
 ### Intuición
@@ -237,9 +219,7 @@ Muchos de esos nodos permanecen simultáneamente en la frontera.
 Por tanto,
  
 $$
-
 M(n)=O\left(b^{C^*/\varepsilon}\right).
-
 $$
  
 ### Intuición
@@ -255,9 +235,7 @@ Es la misma idea de BFS, pero reemplazando la profundidad por el costo acumulado
 Greedy utiliza una cola de prioridad ordenada únicamente por
  
 $$
-
 h(n),
-
 $$
  
 donde $h(n)$ estima la distancia restante al objetivo.
@@ -287,9 +265,7 @@ En el peor caso, Greedy puede terminar explorando prácticamente todo el árbol.
 Por tanto,
  
 $$
-
 T(n)=O(b^m).
-
 $$
  
 ### Intuición
@@ -305,9 +281,7 @@ Todos los nodos generados permanecen almacenados dentro de la cola de prioridad 
 En el peor caso,
  
 $$
-
 M(n)=O(b^m).
-
 $$
  
 ### Intuición
@@ -321,9 +295,7 @@ Aunque normalmente expande menos nodos que UCS, la frontera también puede crece
 A* combina el costo recorrido con una heurística mediante
  
 $$
-
 f(n)=g(n)+h(n).
-
 $$
  
 ## Completitud
@@ -349,17 +321,13 @@ Sin embargo, en el peor caso (por ejemplo cuando $h(n)=0$), A* se comporta igual
 Por tanto,
  
 $$
-
 T(n)=O(b^m).
-
 $$
  
 También suele expresarse como
  
 $$
-
 T(n)=O(b^d),
-
 $$
  
 cuando se conoce la profundidad de la solución.
@@ -377,9 +345,7 @@ A* mantiene todos los nodos generados dentro de la cola de prioridad.
 En consecuencia,
  
 $$
-
 M(n)=O(b^m).
-
 $$
  
 ### Intuición
