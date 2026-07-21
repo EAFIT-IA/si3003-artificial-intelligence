@@ -62,7 +62,7 @@ En este ejercicio implementarán un algoritmo BFS para encontrar la cadena más 
 
 # Análisis de complejidad
 
-Para complementar la clase, el archivo [**complexity.md**](complexity.md) explica de manera intuitiva cómo se derivan las complejidades de tiempo y memoria de BFS, DFS, UCS, Greedy y A*.
+Para complementar la clase, el archivo [**complexity.md**](search_complexity.md) explica de manera intuitiva cómo se derivan las complejidades de tiempo y memoria de BFS, DFS, UCS, Greedy y A*.
 
 ---
 
