@@ -13,9 +13,9 @@ En esta nota se analizan cuatro propiedades fundamentales de los algoritmos de b
 
 Para ilustrar cada algoritmo usaremos el siguiente grafo dirigido con 7 nodos:
 
-```
+
 ![Grafo ejemplo](grafo.png)
-```
+
 
 **Aristas y costos:**
 
