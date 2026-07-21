@@ -703,7 +703,7 @@ class: middle, center, divider-slide
 ## Shakey el robot (SRI International, 1969)
 
 .video-placeholder[
-![Shakey](figures/clase2/shakey.jpg)
+.center.width-30[![Shakey](figures/clase2/shakey.jpg)]
 <div class="play-badge">&#9658;</div>
 ]
 
@@ -749,7 +749,7 @@ Una heurística $h$ es .bold[admisible] si
 $$0 \leq h(n) \leq h^\*(n)$$
 donde $h^\*(n)$ es el costo real hasta el objetivo más cercano.
 
-.center.width-80[![Heurística admisible](figures/clase2/admissible.png)]
+.center.width-60[![Heurística admisible](figures/clase2/admissible.png)]
 .caption[La distancia Manhattan es admisible]
 
 ???
@@ -885,7 +885,7 @@ Las heurísticas admisibles se pueden derivar de las soluciones exactas
 de .italic[problemas relajados], donde hay nuevas acciones disponibles.
 
 <br><br>
-.center.width-80[![Heurística admisible por relajación](figures/clase2/admissible-relax.png)]
+.center.width-60[![Heurística admisible por relajación](figures/clase2/admissible-relax.png)]
 
 ---
 
@@ -921,7 +921,7 @@ class: middle
 # Búsqueda en grafo
 
 <br>
-.center.width-90[![Caminos redundantes](figures/clase2/redundant.png)]
+.center.width-80[![Caminos redundantes](figures/clase2/redundant.png)]
 <br>
 
 La falla al no detectar .bold[estados repetidos] puede convertir un
