@@ -1,4 +1,425 @@
 # Complejidad de los Algoritmos de Búsqueda
+ 
+En esta nota se analizan cuatro propiedades fundamentales de los algoritmos de búsqueda:
+ 
+1. **Completitud:** ¿Garantiza encontrar una solución si existe?
+
+2. **Optimalidad:** ¿Garantiza encontrar la mejor solución?
+
+3. **Complejidad temporal:** ¿Cuántos nodos expande en el peor caso?
+
+4. **Complejidad espacial:** ¿Cuántos nodos mantiene simultáneamente en memoria?
+ 
+---
+ 
+# Breadth-First Search (BFS)
+ 
+BFS explora el espacio de búsqueda **por niveles** utilizando una cola FIFO (*First In, First Out*).
+ 
+## Completitud
+ 
+✅ **Sí.**
+ 
+Si existe una solución y el factor de ramificación es finito, BFS siempre terminará encontrándola.
+ 
+---
+ 
+## Optimalidad
+ 
+✅ **Sí**, cuando todas las acciones tienen el mismo costo.
+ 
+Como explora todos los nodos de una profundidad antes de pasar a la siguiente, la primera solución encontrada corresponde al camino con menor número de acciones.
+ 
+---
+ 
+## Complejidad temporal
+ 
+Sean
+ 
+- $b$: factor de ramificación.
+
+- $d$: profundidad de la solución.
+ 
+Antes de encontrar la solución, BFS expande aproximadamente
+ 
+$$
+
+1+b+b^2+\cdots+b^d
+
+$$
+ 
+nodos.
+ 
+Como el último término domina la suma,
+ 
+$$
+
+T(n)=O(b^d).
+
+$$
+ 
+### Intuición
+ 
+Cada nivel contiene aproximadamente $b$ veces más nodos que el anterior.
+ 
+La cantidad total de nodos crece exponencialmente con la profundidad.
+ 
+---
+ 
+## Complejidad espacial
+ 
+Cuando BFS termina de explorar el nivel $d-1$, la frontera contiene prácticamente todos los nodos del nivel $d$.
+ 
+Por tanto,
+ 
+$$
+
+M(n)=O(b^d).
+
+$$
+ 
+### Intuición
+ 
+La mayor parte de la memoria corresponde al último nivel almacenado en la frontera.
+ 
+---
+ 
+# Depth-First Search (DFS)
+ 
+DFS explora primero el camino más profundo utilizando una pila (*LIFO*).
+ 
+## Completitud
+ 
+❌ **No.**
+ 
+Si existen caminos infinitos o ciclos, DFS puede quedar explorando indefinidamente una rama sin encontrar una solución existente.
+ 
+---
+ 
+## Optimalidad
+ 
+❌ **No.**
+ 
+La primera solución encontrada depende completamente del orden de exploración.
+ 
+Puede existir una solución mucho mejor en otra rama.
+ 
+---
+ 
+## Complejidad temporal
+ 
+Sea
+ 
+- $m$: profundidad máxima del espacio de búsqueda.
+ 
+En el peor caso, DFS recorre prácticamente todo el árbol.
+ 
+Expande
+ 
+$$
+
+1+b+b^2+\cdots+b^m
+
+$$
+ 
+nodos.
+ 
+Por tanto,
+ 
+$$
+
+T(n)=O(b^m).
+
+$$
+ 
+### Intuición
+ 
+Si la solución está en la última rama explorada, DFS terminará visitando casi todo el árbol.
+ 
+---
+ 
+## Complejidad espacial
+ 
+DFS únicamente almacena:
+ 
+- el camino actual;
+
+- algunos hermanos pendientes en cada nivel.
+ 
+Como existen aproximadamente $b$ nodos pendientes por nivel y la profundidad es $m$,
+ 
+$$
+
+M(n)=O(bm).
+
+$$
+ 
+### Intuición
+ 
+DFS nunca necesita almacenar el árbol completo.
+ 
+Solo recuerda el camino actual y las alternativas pendientes.
+ 
+---
+ 
+# Uniform Cost Search (UCS)
+ 
+UCS utiliza una cola de prioridad ordenada por el costo acumulado
+ 
+$$
+
+g(n).
+
+$$
+ 
+Siempre expande primero el nodo con menor costo recorrido.
+ 
+## Completitud
+ 
+✅ **Sí**, siempre que todas las acciones tengan costo positivo.
+ 
+---
+ 
+## Optimalidad
+ 
+✅ **Sí**, siempre que todas las acciones tengan costo positivo.
+ 
+Como los nodos se expanden en orden creciente de costo acumulado, la primera solución encontrada siempre es la de menor costo.
+ 
+---
+ 
+## Complejidad temporal
+ 
+Sean
+ 
+- $C^*$: costo de la solución óptima.
+
+- $\varepsilon$: costo mínimo positivo de cualquier acción.
+ 
+Si cada movimiento cuesta al menos $\varepsilon$, antes de encontrar la solución óptima ningún camino puede tener más de
+ 
+$$
+
+\frac{C^*}{\varepsilon}
+
+$$
+ 
+acciones.
+ 
+Ese valor actúa como una profundidad efectiva.
+ 
+Por tanto,
+ 
+$$
+
+T(n)=O\left(b^{C^*/\varepsilon}\right).
+
+$$
+ 
+### Intuición
+ 
+UCS no explora por profundidad.
+ 
+Explora por costo acumulado.
+ 
+La búsqueda continúa hasta que el costo acumulado alcanza el costo de la solución óptima.
+ 
+---
+ 
+## Complejidad espacial
+ 
+La memoria corresponde al tamaño máximo de la cola de prioridad.
+ 
+Antes de encontrar la solución, UCS ha generado prácticamente todos los nodos cuyo costo es menor que $C^*$.
+ 
+Muchos de esos nodos permanecen simultáneamente en la frontera.
+ 
+Por tanto,
+ 
+$$
+
+M(n)=O\left(b^{C^*/\varepsilon}\right).
+
+$$
+ 
+### Intuición
+ 
+La frontera termina llena de nodos cuyo costo está cerca de $C^*$.
+ 
+Es la misma idea de BFS, pero reemplazando la profundidad por el costo acumulado.
+ 
+---
+ 
+# Greedy Best-First Search
+ 
+Greedy utiliza una cola de prioridad ordenada únicamente por
+ 
+$$
+
+h(n),
+
+$$
+ 
+donde $h(n)$ estima la distancia restante al objetivo.
+ 
+## Completitud
+ 
+❌ **No**, en general.
+ 
+Una mala heurística puede hacer que el algoritmo explore indefinidamente ciertas regiones del espacio de búsqueda.
+ 
+---
+ 
+## Optimalidad
+ 
+❌ **No.**
+ 
+Greedy ignora completamente el costo recorrido.
+ 
+Puede elegir un camino que parece cercano al objetivo pero cuyo costo real sea muy alto.
+ 
+---
+ 
+## Complejidad temporal
+ 
+En el peor caso, Greedy puede terminar explorando prácticamente todo el árbol.
+ 
+Por tanto,
+ 
+$$
+
+T(n)=O(b^m).
+
+$$
+ 
+### Intuición
+ 
+Si la heurística no proporciona información útil, Greedy se comporta como una búsqueda casi ciega.
+ 
+---
+ 
+## Complejidad espacial
+ 
+Todos los nodos generados permanecen almacenados dentro de la cola de prioridad hasta ser expandidos.
+ 
+En el peor caso,
+ 
+$$
+
+M(n)=O(b^m).
+
+$$
+ 
+### Intuición
+ 
+Aunque normalmente expande menos nodos que UCS, la frontera también puede crecer exponencialmente.
+ 
+---
+ 
+# A*
+ 
+A* combina el costo recorrido con una heurística mediante
+ 
+$$
+
+f(n)=g(n)+h(n).
+
+$$
+ 
+## Completitud
+ 
+✅ **Sí**, siempre que la heurística sea admisible y los costos sean positivos.
+ 
+---
+ 
+## Optimalidad
+ 
+✅ **Sí**, siempre que la heurística sea admisible (y consistente para la implementación estándar con lista cerrada).
+ 
+A* encuentra siempre la solución de menor costo.
+ 
+---
+ 
+## Complejidad temporal
+ 
+Si la heurística fuera perfecta, A* expandiría muy pocos nodos.
+ 
+Sin embargo, en el peor caso (por ejemplo cuando $h(n)=0$), A* se comporta igual que UCS.
+ 
+Por tanto,
+ 
+$$
+
+T(n)=O(b^m).
+
+$$
+ 
+También suele expresarse como
+ 
+$$
+
+T(n)=O(b^d),
+
+$$
+ 
+cuando se conoce la profundidad de la solución.
+ 
+### Intuición
+ 
+Una buena heurística puede reducir drásticamente el número de nodos explorados, aunque el peor caso sigue siendo exponencial.
+ 
+---
+ 
+## Complejidad espacial
+ 
+A* mantiene todos los nodos generados dentro de la cola de prioridad.
+ 
+En consecuencia,
+ 
+$$
+
+M(n)=O(b^m).
+
+$$
+ 
+### Intuición
+ 
+A* suele explorar muchos menos nodos que UCS, pero continúa necesitando almacenar una frontera potencialmente muy grande.
+ 
+---
+ 
+# Resumen
+ 
+| Algoritmo | Completo | Óptimo | Tiempo | Memoria |
+
+|-----------|:--------:|:------:|:-------:|:--------:|
+
+| BFS | ✅ | ✅* | $O(b^d)$ | $O(b^d)$ |
+
+| DFS | ❌ | ❌ | $O(b^m)$ | $O(bm)$ |
+
+| UCS | ✅ | ✅ | $O(b^{C^*/\varepsilon})$ | $O(b^{C^*/\varepsilon})$ |
+
+| Greedy | ❌ | ❌ | $O(b^m)$ | $O(b^m)$ |
+
+| A* | ✅ | ✅ | $O(b^m)$ (peor caso) | $O(b^m)$ |
+ 
+\* Siempre que todas las acciones tengan el mismo costo.
+ 
+---
+ 
+# Ideas clave
+ 
+- **Completitud:** ¿Encontrará una solución si existe?
+
+- **Optimalidad:** ¿Encontrará la mejor solución?
+
+- **Tiempo:** ¿Cuántos nodos expande?
+
+- **Memoria:** ¿Cuál es el tamaño máximo de la frontera?
+ 
+En todos los algoritmos, el análisis de tiempo corresponde al número de nodos expandidos, mientras que el análisis de memoria corresponde al mayor número de nodos almacenados simultáneamente en la **frontier**.
+ # Complejidad de los Algoritmos de Búsqueda
 
 Uno de los aspectos más importantes de un algoritmo de búsqueda es entender **cuánto tiempo tarda** y **cuánta memoria consume**. Aunque las fórmulas pueden parecer complicadas, todas se entienden a partir de una misma idea:
 
