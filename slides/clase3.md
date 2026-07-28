@@ -2,51 +2,20 @@ class: middle, center, title-slide
 
 # SI3003 - Inteligencia Artificial
 
-<div class="kicker">Clase 3 — Satisfacción de restricciones (CSP)</div>
+<div class="kicker">Clase 4 — Optimización: búsqueda local y programación lineal</div>
 
 <br><br>
 
 ???
 
-Clase 3 formaliza algo que ya usamos en la Clase 2 sin nombrarlo:
-backtracking es DFS aplicado a un problema con estructura interna
-(variables/dominios/restricciones) en vez de estados atómicos. Explotar
-esa estructura es la idea central de CSP.
-
----
-
-class: divider-slide, center, middle
-
-.width-60[![Pac-Man pensando](figures/clase3/pacman-thinking.png)]
-
-Mmm, déjame pensar...
-
----
-
-count: false
-class: divider-slide, center, middle
-
-.width-60[![Pac-Man pensando](figures/clase3/pacman-thinking.png)]
-
-(...)
-
----
-
-count: false
-class: divider-slide, center, middle
-
-.width-60[![Pac-Man pensando](figures/clase3/pacman-thinking.png)]
-
-(un rato después)
-
----
-
-count: false
-class: divider-slide, center, middle
-
-.width-60[![Pac-Man encontró la solución](figures/clase3/pacman-thinking2.png)]
-
-¡Solución encontrada! ¿Podemos hacerlo mejor?
+Clase 4 rompe con el esquema de las clases 2 y 3: hasta ahora nos
+importaba el *camino* (secuencia de acciones) hasta el objetivo. Hoy
+el camino deja de importar por completo — solo el estado final. Esto
+nos permite atacar espacios de estados enormes o incluso continuos que
+DFS/BFS/A*/backtracking no pueden manejar. Cubrimos búsqueda local
+(hill climbing, simulated annealing), una mención breve de algoritmos
+genéticos, y programación lineal. Cerramos comparando los tres
+paradigmas de las clases 2, 3 y 4.
 
 ---
 
@@ -54,533 +23,397 @@ class: divider-slide, center, middle
 
 .grid[
 .kol-1-2[
-- .italic[Problemas de satisfacción de restricciones (CSP)]:
-    - Explotar la representación de un estado para acelerar la búsqueda.
-    - Backtracking.
-    - Heurísticas genéricas: ordenamiento, filtrado, estructura.
+- Optimización: un paradigma distinto a la búsqueda clásica
+- Búsqueda local
+    - Hill climbing y sus variantes
+    - Simulated annealing
+    - (breve) Algoritmos genéticos
+- Programación lineal
+- Comparación: búsqueda vs. CSP vs. optimización
 ]
 .kol-1-2[
-.center.width-90[![Mapa cartoon](figures/clase3/map-cartoon.png)]
+.center.width-100[![Paisaje de optimización](figures/clase4/landscape-hero.png)]
 ]
 ]
+
+.footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley; [CS50 AI](https://cs50.harvard.edu/ai/), Harvard.]
+
+---
+
+class: middle
+
+# De "encontrar un camino" a "encontrar el mejor estado"
+
+.alert[En las Clases 2 y 3 el objetivo era llegar a un estado meta
+mediante una **secuencia de acciones válida** — el camino importaba
+(costo, orden, factibilidad paso a paso). Hoy consideramos problemas
+donde el camino .bold[no importa en absoluto]: solo nos interesa la
+calidad del estado final.]
+
+???
+
+Ejemplos para abrir la discusión en vivo: acomodar N reinas sin
+ataques, diseñar el horario de clases de un semestre, decidir cuántas
+unidades producir de dos artículos para maximizar ganancia. En ninguno
+de estos nos importa "cómo llegamos" a la solución — solo si la
+solución es buena (o la mejor posible).
+
+---
+
+# Optimización
+
+Un **problema de optimización** consiste de:
+
+- Un conjunto de **estados** candidatos, cada uno una *configuración
+  completa* (todas las variables asignadas).
+- Una **función objetivo** $\text{valor}(s)$ que evalúa qué tan buena
+  es una configuración (a maximizar o minimizar).
+- Una noción de **vecindario**: qué otras configuraciones son
+  alcanzables con un solo "movimiento" desde $s$.
+
+A diferencia de un problema de búsqueda (Clase 2), aquí no hay estado
+inicial fijo ni prueba de objetivo binaria — hay un espectro de
+calidad, y buscamos el máximo (o mínimo).
+
+---
+
+class: middle, center, divider-slide
+
+## Búsqueda local
+
+.width-70[![Robot minero explorando una montaña](figures/clase4/mining-landscape.png)]
 
 .footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley.]
 
 ---
 
-class: middle
+# Búsqueda local
 
-# Problemas de satisfacción de restricciones
+- *Estrategia*: mantener **un solo estado actual** (o un conjunto
+  pequeño) y moverse a un estado vecino que mejore la función
+  objetivo — nunca se construye un árbol de búsqueda.
+- *Ventaja*: memoria **constante**, funciona en espacios de estados
+  enormes o infinitos donde BFS/A\* son inviables.
+- *Costo*: se pierde la garantía de completitud/optimalidad que
+  teníamos con búsqueda en árbol/grafo.
 
----
-
-# Motivación
-
-En los problemas de búsqueda estándar:
-- Los estados se evalúan con heurísticas específicas del dominio.
-- Los estados se prueban con una función específica del dominio para
-  determinar si se alcanzó el objetivo.
-- Sin embargo, desde el punto de vista de los algoritmos de búsqueda,
-  **los estados son atómicos**.
-
-En cambio, si los estados tienen una .italic[representación factored],
-entonces se puede explotar la estructura de los estados para mejorar la
-.bold[eficiencia de la búsqueda].
-
-.center.width-40[![Representación atómica vs. factored](figures/clase3/atomic-factored.png)]
-
-.footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley.]
+El espacio de estados se puede imaginar como un **paisaje**: el eje
+horizontal recorre los estados posibles y el eje vertical es el valor
+de la función objetivo (elevación = "qué tan bueno" es ese estado).
 
 ---
 
-# Problemas de satisfacción de restricciones
+# Hill climbing
 
-- Los solucionadores de .bold[problemas de satisfacción de
-  restricciones] (CSP) aprovechan las representaciones factored de
-  estados y usan heurísticas de .italic[propósito general] para resolver
-  problemas complejos.
-- Los CSP son una familia especializada de subproblemas de búsqueda.
-- Idea principal: eliminar porciones grandes del espacio de búsqueda de
-  una sola vez, identificando combinaciones de variable/valor que violan
-  restricciones.
+*Estrategia*: desde el estado actual, moverse al vecino con **mayor**
+valor de la función objetivo. Repetir hasta que ningún vecino mejore.
 
----
+```
+function HILL-CLIMBING(problema) returns un estado que es un máximo local
+    actual ← ESTADO-INICIAL(problema)
+    loop do
+        vecino ← el sucesor de actual con mayor valor
+        if VALOR(vecino) ≤ VALOR(actual) then return actual
+        actual ← vecino
+```
 
-class: middle
-
-Formalmente, un .bold[problema de satisfacción de restricciones] (CSP)
-consiste de tres componentes $X$, $D$ y $C$:
-
-- $X$ es un conjunto de .italic[variables], $\\{X_1, ..., X_n\\}$,
-- $D$ es un conjunto de .italic[dominios], $\\{D_1, ..., D_n\\}$, uno
-  para cada variable,
-- $C$ es un conjunto de .italic[restricciones] que especifican las
-  combinaciones de valores permitidas.
+Es literalmente "búsqueda voraz sin memoria de lo recorrido": en cada
+paso toma la decisión localmente óptima, sin mirar atrás ni adelante.
 
 ---
 
-class: middle
+# Ejemplo: 8-reinas con hill climbing
 
-## Ejemplo: coloreo de mapas
+- **Estado**: una configuración con las 8 reinas puestas, una por
+  columna (siempre 8 reinas, en cualquier fila).
+- **Función de costo** (a *minimizar*): número de pares de reinas
+  que se atacan entre sí.
+- **Vecinos**: mover una reina a otra fila de su misma columna.
+- **Objetivo**: costo = 0 (ninguna reina se ataca).
 
-.center.width-70[![Coloreo del mapa de Australia](figures/clase3/map-coloring.png)]
-
----
-
-class: middle
-
-.center.width-30[![Coloreo del mapa de Australia](figures/clase3/map-coloring.png)]
-
-- Variables: $X = \\{ \text{WA}, \text{NT}, \text{Q}, \text{NSW}, \text{V}, \text{SA}, \text{T} \\}$
-- Dominios: $D_i = \\{ \text{rojo}, \text{verde}, \text{azul} \\}$ para
-  cada variable.
-- Restricciones: $C = \\{ \text{SA} \neq \text{WA}, \text{SA} \neq \text{NT}, \text{SA} \neq \text{Q}, ... \\}$
-    - Implícita: $\text{WA} \neq \text{NT}$
-    - Explícita: $(\text{WA}, \text{NT}) \in \\{ \\{\text{rojo}, \text{verde}\\}, \\{\text{rojo}, \text{azul}\\}, ... \\}$
-- Las soluciones son .bold[asignaciones] de valores a las variables tales
-  que se satisfacen todas las restricciones.
-    - ej., $\\{ \text{WA}=\text{rojo}, \text{NT}=\text{verde}, \text{Q}=\text{rojo}, \text{SA}=\text{azul},$ $\quad\quad \text{NSW}=\text{verde}, \text{V}=\text{rojo}, \text{T}=\text{verde} \\}$
+.center.width-60[![8 reinas con conflictos marcados](figures/clase4/8queens-conflicts.png)]
 
 ---
 
-# (Hiper)grafo de restricciones
+# Problemas de hill climbing
 
-.center.width-40[![Grafo de restricciones](figures/clase3/csp-graph.png)]
+Hill climbing es **incompleto**: puede quedar atrapado sin llegar
+nunca al óptimo global.
 
-- .italic[Nodos] = variables del problema
-- .italic[Aristas] = restricciones del problema que involucran a las
-  variables asociadas a los nodos extremos.
-- Los algoritmos de CSP de propósito general .bold[usan la estructura
-  del grafo] para acelerar la búsqueda.
-    - ej., Tasmania es un subproblema independiente.
+.center.width-90[![Paisaje con máximo local, meseta y cresta](figures/clase4/hill-climbing-problems.png)]
 
----
-
-class: middle
-
-## Ejemplo: criptoaritmética
-
-.center.width-60[![Criptoaritmética TWO+TWO=FOUR](figures/clase3/cryptarithmetic.png)]
-
-- Variables: $\\{ T, W, O, F, U, R, C_1, C_2, C_3\\}$
-- Dominios: $D_i = \\{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 \\}$
-- Restricciones:
-    - $\text{alldiff}(T, W, O, F, U, R)$
-    - $O+O=R+10\times C_1$
-    - $C_1 + W + W = U + 10\times C_2$
-    - ...
+- **Máximo local**: mejor que todos sus vecinos, pero no el mejor global.
+- **Meseta (plateau)**: una zona plana; puede ser un "máximo local
+  plano" (sin salida) o un "hombro" (*shoulder*, con salida pero sin
+  pistas de dirección).
+- **Cresta (ridge)**: una secuencia de máximos locales difícil de
+  navegar si los movimientos permitidos son limitados (ej. solo N/S/E/O).
 
 ---
 
-class: middle
+# Variantes de hill climbing
 
-## Ejemplo: Sudoku
-
-.center.width-30[![Tablero de Sudoku](figures/clase3/sudoku.png)]
-
-- Variables: cada casilla (abierta)
-- Dominios: $D_i = \\{ 1, 2, 3, 4, 5, 6, 7, 8, 9 \\}$
-- Restricciones:
-    - $\text{alldiff}$ de 9 vías para cada columna
-    - $\text{alldiff}$ de 9 vías para cada fila
-    - $\text{alldiff}$ de 9 vías para cada región
-
----
-
-class: middle
-
-.center.width-20[![Dibujo de líneas interpretado por el algoritmo de Waltz](figures/clase3/waltz.png)]
-
-## Ejemplo: el algoritmo de Waltz
-
-Procedimiento para interpretar dibujos 2D de líneas de poliedros sólidos como objetos 3D.
-Ejemplo temprano de un cómputo de IA planteado como un CSP.
-
-.pull-right.width-10[![Intersecciones del algoritmo de Waltz](figures/clase3/waltz-inter.png)]
-Formulación como CSP:
-- Cada intersección es una variable.
-- Las intersecciones adyacentes se imponen restricciones entre sí.
-- Las soluciones son objetos 3D físicamente realizables.
-
-.footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley.]
-
----
-
-# Variaciones sobre el formalismo CSP
-
-- .italic[Variables discretas]
-    - Dominios finitos
-        - Tamaño $d$ implica $O(d^n)$ asignaciones completas.
-        - ej., CSP booleanos, incluyendo el problema de satisfacibilidad
-          booleana SAT (NP-completo).
-    - Dominios infinitos
-        - ej., programación de tareas, las variables son días de
-          inicio/fin de cada tarea.
-        - hace falta un lenguaje de restricciones, ej.
-          $inicio_1 + 5 \leq inicio_2$.
-        - Resoluble para restricciones lineales, indecidible en otro
-          caso.
-- .italic[Variables continuas]
-    - ej., tiempos precisos de inicio/fin de experimentos.
-    - Las restricciones lineales son resolubles en tiempo polinomial con
-      métodos de programación lineal.
-
----
-
-class: middle
-
-- .italic[Variedades de restricciones]
-    - Las restricciones unarias involucran una sola variable.
-        - Equivalente a reducir el dominio, ej. $\text{SA} \neq \text{verde}$.
-    - Las restricciones binarias involucran pares de variables, ej.
-      $\text{SA} \neq \text{WA}$.
-    - Las restricciones de orden superior involucran 3 o más variables.
-- .italic[Preferencias] (restricciones suaves)
-    - ej., rojo es mejor que verde.
-    - Frecuentemente representables como un costo por cada asignación de
-      variable.
-    - Da lugar a problemas de optimización con restricciones.
-    - (Las ignoramos en este curso.)
-
----
-
-# Ejemplos del mundo real
-
-.grid[
-.kol-1-2[
-- Problemas de asignación
-    - ej., quién enseña qué clase
-- Problemas de programación de horarios
-    - ej., ¿qué clase se ofrece cuándo y dónde?
-- Configuración de hardware
-- Hojas de cálculo
-- Programación de transporte
-- Programación de fábricas
-- Diseño de circuitos
-- ... y muchos más
-]
-.kol-1-2[
-.width-100[![Ejemplos de asignación](figures/clase3/assignments.png)]
-]
-]
-
-Nota que muchos problemas del mundo real involucran variables de valor
-real.
-
-.footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley.]
-
----
-
-# Programación con restricciones
-
-.grid[
-.kol-2-3[
-<br>
-.caption[La programación con restricciones representa uno de los
-acercamientos más cercanos que la ciencia de la computación ha logrado
-al Santo Grial de la programación: el usuario plantea el problema, la
-computadora lo resuelve.
-<br>(Eugene Freuder)]
-]
-.kol-1-3[.center.circle.width-100[![Eugene Freuder](figures/clase3/eugene-freuder.jpg)]]
-]
-
-La programación con restricciones es un paradigma de programación en el
-que el usuario especifica el programa como un CSP. La resolución del
-problema queda a cargo de la computadora.
-
-Ejemplos:
-- Prolog
-- ECLiPSe
-
----
-
-class: middle
-
-# Resolviendo CSP
-
----
-
-# Formulación como búsqueda estándar
-
-- Los CSP se pueden plantear como problemas de búsqueda estándar.
-    - Para los que ya tenemos solucionadores, incluyendo DFS, BFS o A*.
-- Los estados son .italic[asignaciones parciales]:
-    - El estado inicial es la asignación vacía $\\{ \\}$.
-    - Acciones: asignar un valor a una variable sin asignar.
-    - Prueba de objetivo: la asignación actual está completa y satisface
-      todas las restricciones.
-- ¡Este algoritmo es .bold[el mismo] para todos los CSP!
-
----
-
-class: middle
-
-.center.width-50[![Grafo de restricciones](figures/clase3/csp-graph.png)]
-
-¿Qué haría BFS o DFS? ¿Qué problemas tiene la búsqueda ingenua?
-
-Para $n$ variables de dominio de tamaño $d$:
-- $b=(n-l)d$ en la profundidad $l$;
-- ¡generamos un árbol con $n!d^n$ hojas aunque solo haya $d^n$
-  asignaciones posibles!
+- **Steepest-ascent**: evalúa *todos* los vecinos y toma el mejor (la versión de la slide anterior).
+- **First-choice hill climbing**: genera vecinos al azar uno por uno
+  y toma el primero que mejore — útil cuando hay demasiados vecinos
+  para evaluarlos todos.
+- **Sideways moves**: permite moverse a un vecino de **igual** valor
+  (hasta un límite de pasos) para poder atravesar mesetas.
+- **Random-restart hill climbing**: si queda atrapado, reinicia desde
+  un estado aleatorio distinto. Trivialmente **completo** si se
+  permiten reinicios ilimitados (eventualmente el punto de partida
+  aleatorio coincide con el óptimo global).
+- **Stochastic hill climbing**: elige al azar entre los vecinos que
+  mejoran (no necesariamente el mejor), lo que en la práctica ayuda a
+  escapar de ciertos máximos locales a costa de más iteraciones.
 
 ???
 
-Simular la ejecución en el tablero. Resaltar dos problemas:
-- conmutatividad
-- las restricciones solo se revisan al final, con la función de objetivo
+Gancho hacia Machine Learning: cuando el espacio de estados es
+continuo (ej. los parámetros de un modelo), la versión de hill
+climbing se llama **gradient ascent/descent**: en vez de enumerar
+vecinos discretos, se usa el gradiente de la función objetivo para
+decidir la dirección y el tamaño del paso.
 
 ---
 
-# Búsqueda con backtracking
+class: middle, center, divider-slide
 
-- La búsqueda con backtracking es el algoritmo canónico no informado
-  para resolver CSP.
-- Idea 1: .bold[una variable a la vez]:
-    - La aplicación ingenua de algoritmos de búsqueda ignora una
-      propiedad crucial: las asignaciones de variables son
-      .italic[conmutativas]. Por lo tanto, fijamos el orden.
-        - $\text{WA}=\text{rojo}$ y luego $\text{NT}=\text{verde}$ es lo
-          mismo que $\text{NT}=\text{verde}$ y luego $\text{WA}=\text{rojo}$.
-    - Solo hace falta considerar asignaciones a una única variable en
-      cada paso.
-        - $b=d$ y hay $d^n$ hojas.
-- Idea 2: .bold[revisar restricciones sobre la marcha]:
-    - Considerar solo valores que no entren en conflicto con la
-      asignación parcial actual.
-    - Prueba de objetivo incremental.
+## Simulated annealing
+
+.width-60[![Metal siendo forjado](figures/clase4/annealing-forge.png)]
 
 ---
 
-class: middle
+# Simulated annealing
 
-.center.width-80[![Ejemplo de backtracking](figures/clase3/backtracking-example.png)]
+*Idea*: combinar un **paseo aleatorio** (explora mucho, pero
+ineficiente) con **hill climbing** (eficiente, pero se atasca) para
+obtener un algoritmo completo y razonablemente eficiente.
+
+- Analogía física: el *recocido* (annealing) enfría metales
+  lentamente para que los átomos encuentren una configuración de
+  energía mínima, en vez de quedar atrapados en un estado
+  metaestable por un enfriamiento brusco.
+- En cada paso se elige un vecino al azar:
+    - Si mejora la función objetivo, se acepta siempre.
+    - Si la empeora, se acepta con una probabilidad que depende de
+      una "temperatura" $T$ que **decrece** con el tiempo.
 
 ---
 
-class: middle
+# Simulated annealing — pseudocódigo
 
-.center.width-100[![Pseudocódigo de backtracking](figures/clase3/backtracking.png)]
+```
+function SIMULATED-ANNEALING(problema, schedule) returns un estado
+    actual ← ESTADO-INICIAL(problema)
+    for t = 1 to ∞ do
+        T ← schedule(t)
+        if T = 0 then return actual
+        siguiente ← un sucesor de actual, elegido al azar
+        ΔE ← VALOR(siguiente) − VALOR(actual)
+        if ΔE > 0 then actual ← siguiente
+        else actual ← siguiente con probabilidad e^(ΔE / T)
+```
+
+- Con $T$ alta al inicio: se aceptan muchos movimientos "malos" (mucha exploración).
+- Con $T \to 0$: el algoritmo se comporta como hill climbing puro (solo explotación).
+- Bajo un `schedule` que decrezca **suficientemente lento**, se puede
+  demostrar que simulated annealing converge al óptimo global con
+  probabilidad que tiende a 1.
+
+---
+
+# Simulated annealing — propiedades
+
+- *Completitud*: sí, bajo un schedule de enfriamiento adecuado
+  (teóricamente; en la práctica se usan schedules finitos que dan
+  buenas soluciones, no garantías).
+- *Optimalidad*: no garantizada en tiempo finito, pero en la práctica
+  suele encontrar soluciones muy cercanas al óptimo.
+- El diseño del `schedule(t)` (qué tan rápido baja $T$) es la parte
+  más delicada de aplicar el algoritmo a un problema real.
+
+.footnote[Se usa en logística (ruteo), diseño de circuitos VLSI, y fue
+uno de los primeros métodos exitosos para el problema del vendedor
+viajero (TSP) a gran escala.]
+
+---
+
+class: middle, center, divider-slide
+
+## (Breve) Local beam search y algoritmos genéticos
+
+---
+
+# Local beam search y algoritmos genéticos
+
+- **Local beam search**: mantiene $k$ estados en paralelo (no uno
+  solo); en cada paso genera todos los sucesores de los $k$ estados y
+  se queda con los $k$ mejores del total — hay comunicación implícita
+  entre las "ramas" (se abandonan las que van peor).
+- **Algoritmos genéticos**: una variante de beam search con
+  **reproducción**:
+    - Una *población* de estados ("individuos"), representados como
+      cadenas sobre un alfabeto finito.
+    - Una función de *fitness* mide qué tan buena es cada individuo.
+    - Se seleccionan padres (con probabilidad proporcional al
+      fitness), se combinan (*crossover*) y se aplican mutaciones
+      aleatorias para formar la siguiente generación.
+
+.alert[Esta sección se cubre a nivel conceptual — no entra en el
+notebook obligatorio de esta clase. Referencia para profundizar:
+AIMA Cap. 4 y CS188 Note 4.]
+
+---
+
+class: middle, center, divider-slide
+
+## Programación lineal
+
+.width-70[![Región factible de un problema de programación lineal](figures/clase4/lp-feasible-region.png)]
+
+---
+
+# Programación lineal (LP)
+
+Un **problema de programación lineal** consiste en:
+
+- Un conjunto de **variables de decisión** $x_1, \dots, x_n \in \mathbb{R}$ (¡continuas!, a diferencia de CSP).
+- Una **función objetivo lineal** a maximizar o minimizar:
+  $c_1 x_1 + c_2 x_2 + \dots + c_n x_n$
+- Un conjunto de **restricciones lineales** (igualdades o
+  desigualdades) sobre esas variables.
+
+*Diferencia clave con CSP (Clase 3)*: en CSP los dominios son
+discretos y finitos y buscamos *cualquier* asignación que satisfaga
+todas las restricciones (o falla). En LP los dominios son continuos y
+buscamos la *mejor* asignación posible según la función objetivo.
+
+---
+
+# Ejemplo: problema de producción
+
+Una fábrica produce **sillas** ($x_1$) y **mesas** ($x_2$). Cada
+silla deja \$20 de ganancia y cada mesa \$30. Restricciones:
+
+- Madera disponible: $2x_1 + 3x_2 \leq 120$
+- Horas de mano de obra: $x_1 + x_2 \leq 50$
+- No negatividad: $x_1, x_2 \geq 0$
+
+**Maximizar**: $20x_1 + 30x_2$
+
+La región factible es un polígono convexo; el óptimo de un problema
+LP **siempre** se encuentra en un vértice de ese polígono (o en toda
+una arista, si hay empates).
+
+---
+
+# Resolviendo LP
+
+- Para 2 variables se puede resolver **gráficamente** (dibujar la
+  región factible, evaluar la función objetivo en cada vértice).
+- Para problemas reales (decenas/miles de variables) se usan
+  algoritmos como **Simplex** (recorre vértices de la región
+  factible) o métodos de **punto interior** — no los programamos a
+  mano en este curso, usamos un *solver*.
+- En Python: `scipy.optimize.linprog` o `PuLP` (más legible, estilo
+  "álgebra") resuelven esto en unas pocas líneas — ver el notebook de
+  esta clase.
+
+---
+
+# Programación lineal entera (ILP)
+
+¿Qué pasa si las variables deben ser **enteras** (ej. "número de
+sillas" no puede ser 3.7)?
+
+- El problema se llama **programación lineal entera (ILP)**.
+- Ya no basta con mirar los vértices de la región factible continua:
+  hay que buscar puntos enteros dentro de ella.
+- ILP es, en general, **NP-difícil** — la misma familia de dificultad
+  que CSP (Clase 3). De hecho, muchos solvers de ILP usan
+  **backtracking + poda** (branch and bound) internamente, la misma
+  idea central de la Clase 3.
+
+.alert[Este es el punto de cierre del círculo: búsqueda (Clase 2) →
+estructura interna del estado (Clase 3, CSP) → función objetivo
+continua (Clase 4, LP) → y de vuelta a backtracking cuando forzamos
+variables enteras (ILP).]
+
+---
+
+# Comparación: los tres paradigmas de búsqueda del curso
+
+| | Búsqueda (Clase 2) | CSP (Clase 3) | Optimización (Clase 4) |
+|---|---|---|---|
+| ¿Qué es el estado? | Configuración parcial en un camino | Asignación parcial de variables/dominios | Configuración completa (búsqueda local) o vector real (LP) |
+| ¿Qué buscamos? | Un camino al objetivo (óptimo si aplica) | *Cualquier* asignación consistente | El estado / vector que **maximiza/minimiza** una función |
+| Garantías típicas | Completo y óptimo (BFS/UCS/A\* bien diseñados) | Completo (con backtracking sistemático) | Ninguna garantía dura en búsqueda local; sí en LP (óptimo global garantizado) |
+| Algoritmo típico | DFS, BFS, UCS, A\* | Backtracking + poda (arc consistency, MRV, LCV) | Hill climbing, simulated annealing / Simplex |
+| Memoria | $O(bm)$ a $O(b^d)$ según algoritmo | Depende de la poda | $O(1)$ en búsqueda local |
+
+---
+
+# Aplicaciones reales
+
+- **Ruteo de vehículos (VRP)** y logística de última milla: simulated annealing y variantes de búsqueda local.
+- **Programación de horarios/turnos**: CSP + optimización combinadas (satisfacer restricciones *y* minimizar costo).
+- **Optimización de portafolios financieros**: programación lineal/cuadrática.
+- **Diseño de circuitos VLSI**: simulated annealing para colocación de componentes (uso histórico original).
+- **Entrenamiento de redes neuronales**: *gradient descent* es, conceptualmente, hill climbing (o su versión de minimización) sobre un espacio de parámetros continuo — lo verán en detalle más adelante en el curso.
+
+---
+
+class: middle, center, divider-slide
+
+## Demo (notebook): N-reinas con hill climbing y simulated annealing
 
 ???
 
-- Backtracking = DFS + ordenamiento de variables + fallo ante violación
-- ¿Cuáles son los puntos de decisión?
-
-Puntos de decisión:
-- Ordenamiento de las variables
-- Ordenamiento de los valores
-- Filtrado
-- Estructura
+Ejecutar en vivo `notebooks/lecture4/Local_Search_NQueens.ipynb`:
+comparar cuántas corridas de steepest-ascent hill climbing quedan
+atrapadas en un máximo local vs. cuántas resuelve simulated annealing,
+y cuántas iteraciones toma cada una en promedio.
 
 ---
 
-class: middle
+class: middle, center, divider-slide
 
-## Mejorando el backtracking
-
-¿Podemos mejorar el backtracking usando ideas de .bold[propósito
-general], sin conocimiento específico del dominio?
-
-- .italic[Ordenamiento]:
-    - ¿Qué variable se debería asignar a continuación?
-    - ¿En qué orden se deberían probar sus valores?
-- .italic[Filtrado]: ¿podemos detectar un fallo inevitable temprano?
-- .italic[Estructura]: ¿podemos explotar la estructura del problema?
-
----
-
-class: middle
-
-## Ordenamiento de variables
-
-- .bold[Valores restantes mínimos] (MRV): elegir la variable .italic[con
-  menos valores legales restantes] en su dominio.
-- También conocida como la heurística de .italic[fallar primero].
-    - Detectar fallos rápidamente equivale a podar partes grandes del
-      árbol de búsqueda.
-
-.center.width-100[![Heurística MRV](figures/clase3/ordering-mrv.png)]
-
----
-
-class: middle
-
-## Ordenamiento de valores
-
-- .bold[Valor menos restrictivo] (LCV): dada una elección de variable,
-  elegir el .italic[valor menos restrictivo].
-- Es decir, el valor que descarta la menor cantidad de valores en las
-  variables restantes.
-
-.center.width-100[![Heurística LCV](figures/clase3/ordering-lcv.png)]
-
-.exercise[¿Por qué la selección de variable debería fallar primero, pero
-la selección de valor debería fallar al final?]
+## Demo (notebook): problema de producción con programación lineal
 
 ???
 
-Solo estamos buscando una solución. Por lo tanto:
-- selección de variable que falla primero, para podar porciones grandes
-  del árbol
-- selección de valor que falla al final, para buscar el valor más
-  probable
-
----
-
-class: middle
-
-## Filtrado: forward checking
-
-- Llevar el .italic[registro de los valores legales restantes] para las
-  variables sin asignar.
-    - Cada vez que se asigna una variable $X$, y para cada variable sin
-      asignar $Y$ conectada a $X$ por una restricción, eliminar del
-      dominio de $Y$ cualquier valor inconsistente.
-- .italic[Terminar la búsqueda] cuando alguna variable se quede sin
-  valores legales.
-
-.center.width-100[![Forward checking](figures/clase3/forward-checking.png)]
-
----
-
-class: middle
-
-## Filtrado: propagación de restricciones
-
-El forward checking propaga información hacia las variables sin asignar,
-pero no detecta tempranamente todos los fallos:
-
-.center.width-100[![Forward checking incompleto](figures/clase3/forward-checking-inc.png)]
-
-- ¡$NT$ y $SA$ no pueden ser ambos azules!
-- La .bold[propagación de restricciones] refuerza restricciones
-  localmente de forma repetida.
-
----
-
-class: middle
-
-## Consistencia de arcos
-
-- Un arco $X \to Y$ es .bold[consistente] si y solo si para todo valor
-  $x$ en el dominio de $X$ existe algún valor $y$ en el dominio de $Y$
-  que satisface la restricción binaria asociada.
-- Forward checking $\Leftrightarrow$ forzar la consistencia de los arcos
-  que apuntan a cada nueva asignación.
-- Este principio se puede generalizar para forzar la consistencia de
-  .bold[todos] los arcos.
-
-.center.width-100[![Consistencia de arcos](figures/clase3/arc-consistency.png)]
-
----
-
-class: middle
-
-.center.width-100[![Algoritmo AC-3](figures/clase3/ac3.png)]
-
-.exercise[¿En qué momento del backtracking se debería llamar este
-procedimiento?]
-
-???
-
-- Tras aplicar AC-3, o bien todo arco es arco-consistente, o alguna
-  variable tiene un dominio vacío, indicando que el CSP no se puede
-  resolver.
-- Esta revisión se debería insertar después de una nueva asignación,
-  antes de la llamada recursiva. Si se detecta una inconsistencia...
-
----
-
-# Estructura
-
-.center.width-50[![Grafo de restricciones](figures/clase3/csp-graph.png)]
-
-- Tasmania y el continente son .bold[subproblemas independientes].
-    - Cualquier solución para el continente combinada con cualquier
-      solución para Tasmania produce una solución para el mapa completo.
-- La independencia se puede determinar encontrando las .italic[componentes
-  conexas] del grafo de restricciones.
-
----
-
-class: middle
-
-## Complejidad temporal
-
-Supongamos que cada subproblema tiene $c$ variables de $n$ en total.
-Entonces $O(\frac{n}{c} d^c)$.
-- ej., $n=80$, $d=2$, $c=20$.
-- $2^{80} =$ 4 mil millones de años a 10 millones de nodos/seg.
-- $4 \times 2^{20} =$ 0.4 segundos a 10 millones de nodos/seg.
-
----
-
-class: middle
-
-## CSP con estructura de árbol
-
-.center.width-30[![Grafo de restricciones en árbol](figures/clase3/tree-csp.png)]
-
-.center.width-60[![Transformación del CSP en árbol](figures/clase3/tree-csp-trans.png)]
-
-- Algoritmo para CSP con estructura de árbol:
-    - Ordenar: elegir una variable raíz, ordenar las variables de modo
-      que los padres precedan a los hijos (orden topológico).
-    - Eliminar hacia atrás:
-        - para $i=n$ hasta $2$, forzar la consistencia de arcos de
-          $padre(X_i) \to X_i$.
-    - Asignar hacia adelante:
-        - para $i=1$ hasta $n$, asignar $X_i$ de forma consistente con
-          su $padre(X_i)$.
-- Complejidad temporal: $O(n d^2)$
-    - En comparación con los CSP generales, donde el peor caso es
-      $O(d^n)$.
-
-???
-
-Correr el algoritmo en el tablero.
-
----
-
-class: middle
-
-## CSP casi con estructura de árbol
-
-- .italic[Condicionamiento]: instanciar una variable, podar los dominios
-  de sus vecinos.
-- .italic[Condicionamiento por conjunto de corte] (*cutset*):
-    - Asignar (de todas las formas posibles) un conjunto $S$ de
-      variables tal que el grafo de restricciones restante sea un
-      árbol.
-    - Resolver los CSP residuales (con estructura de árbol).
-    - Si el CSP residual tiene solución, devolverla junto con la
-      asignación para $S$.
-
-.center.width-70[![Conjunto de corte](figures/clase3/cutset.png)]
+Ejecutar en vivo `notebooks/lecture4/Linear_Programming_Intro.ipynb`:
+formular el problema de sillas/mesas, resolverlo con
+`scipy.optimize.linprog`, y graficar la región factible con el óptimo
+marcado.
 
 ---
 
 # Resumen
 
-- Los estados de un CSP se representan con un conjunto de pares
-  variable/valor, no como estados atómicos.
-- El backtracking, una forma de búsqueda en profundidad, se usa
-  comúnmente para resolver CSP — es el mismo algoritmo para todos los
-  CSP.
-- El ordenamiento (MRV, LCV) y el filtrado (forward checking,
-  consistencia de arcos) aceleran el backtracking sin conocimiento
-  específico del dominio.
-- La complejidad de resolver un CSP está fuertemente relacionada con la
-  estructura de su grafo de restricciones — los CSP con estructura de
-  árbol se resuelven en tiempo lineal.
+- La optimización cambia el paradigma de "encontrar un camino" a
+  "encontrar el mejor estado" — el camino deja de importar.
+- **Búsqueda local** (hill climbing, simulated annealing) usa memoria
+  constante y funciona en espacios de estados enormes o infinitos,
+  a costa de perder garantías de completitud/optimalidad (excepto
+  bajo condiciones especiales, como random-restart o un buen
+  schedule en simulated annealing).
+- **Programación lineal** resuelve, de forma exacta y eficiente,
+  problemas con función objetivo y restricciones lineales sobre
+  variables continuas; forzar variables enteras (ILP) reintroduce la
+  dificultad de CSP.
+- Los tres paradigmas del curso (búsqueda, CSP, optimización)
+  comparten la misma pregunta de fondo — *¿cómo recorrer un espacio
+  de posibilidades sin enumerarlo todo?* — con distintas garantías y
+  costos.
 
 ---
 
 class: middle, center, end-slide
 count: false
 
-## Fin de la Clase 3
+## Fin de la Clase 4
 
-Próxima clase: Juegos adversariales — minimax y poda alfa-beta
+Próxima clase: Búsqueda adversarial (juegos) — *a confirmar con el coordinador*
