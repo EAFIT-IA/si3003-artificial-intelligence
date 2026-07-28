@@ -43,7 +43,11 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 
 ### Lecture 02 — Search 
 - `slides_pdf/clase2.pdf` — Solving problems by searching. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase2.md)
-- [notebooks](notebooks/lecture2/Clase02)
+- [notebooks](notebooks/lecture2)
+
+### Lecture 03 — Optimization 
+- `slides_pdf/clase3.pdf` — Optimization. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase3.md)
+- [notebooks](notebooks/lecture3)
 
 
 ## Resources
