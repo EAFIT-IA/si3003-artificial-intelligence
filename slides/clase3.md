@@ -8,14 +8,14 @@ class: middle, center, title-slide
 
 ???
 
-Clase 4 rompe con el esquema de las clases 2 y 3: hasta ahora nos
+Clase 3 rompe con el esquema de las clases anteriores: hasta ahora nos
 importaba el *camino* (secuencia de acciones) hasta el objetivo. Hoy
 el camino deja de importar por completo — solo el estado final. Esto
 nos permite atacar espacios de estados enormes o incluso continuos que
 DFS/BFS/A*/backtracking no pueden manejar. Cubrimos búsqueda local
 (hill climbing, simulated annealing), una mención breve de algoritmos
 genéticos, y programación lineal. Cerramos comparando los tres
-paradigmas de las clases 2, 3 y 4.
+paradigmas de las clases que llevamos hasta ahora.
 
 ---
 
