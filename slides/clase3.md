@@ -15,7 +15,7 @@ nos permite atacar espacios de estados enormes o incluso continuos que
 DFS/BFS/A*/backtracking no pueden manejar. Cubrimos búsqueda local
 (hill climbing, simulated annealing), una mención breve de algoritmos
 genéticos, y programación lineal. Cerramos comparando los tres
-paradigmas de las clases 2, 3 y 4.
+paradigmas de las clases 1, 2 y 3.
 
 ---
 
@@ -232,6 +232,18 @@ casos especiales de "zonas planas" donde el algoritmo se estanca:
 
 ---
 
+# Cresta (ridge) — vista visual
+
+.center.width-75[![Cresta: subir en zig-zag con movimientos N/S/E/O](figures/clase4/hill-climbing-ridge.png)]
+
+Si el algoritmo solo puede moverse en 4 direcciones (N/S/E/O) pero la
+cresta sube en diagonal, **cada movimiento individual disponible
+empeora o mantiene igual el valor** — aunque exista un camino en
+zig-zag que sí sube, hill climbing puro no lo detecta porque evalúa un
+paso a la vez, no la tendencia general.
+
+---
+
 # Variantes de hill climbing
 
 - **Steepest-ascent**: evalúa *todos* los vecinos y toma el mejor (la versión de la slide anterior).
@@ -302,6 +314,8 @@ function SIMULATED-ANNEALING(problema, schedule) returns un estado
 - Bajo un `schedule` que decrezca **suficientemente lento**, se puede
   demostrar que simulated annealing converge al óptimo global con
   probabilidad que tiende a 1.
+
+.center.width-75[![Curva típica de schedule de temperatura](figures/clase4/annealing-schedule.png)]
 
 ---
 
