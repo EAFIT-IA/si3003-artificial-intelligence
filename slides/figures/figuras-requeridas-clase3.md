@@ -1,145 +1,140 @@
-# Figuras requeridas — Clase 3 (CSP)
+# Figuras requeridas — Clase 3 (Optimización)
 
-Todas van en `figures/clase3/`. La carpeta tiene **36 archivos** — es una
-copia 1:1 de `figures/archives-lec-csp/` del repo de Louppe (mismos
-nombres, mismo contenido). Esa lección no es una de sus 10 numeradas
-(`lecture0.md`...`lecture9.md`): Louppe la archivó en
-`archives-lecture-csp.md`, mezclando **CSP** con una segunda mitad de
-**agentes lógicos / mundo de Wumpus**.
+Todas van en `figures/clase3/`. Divididas por origen, igual que en el
+documento de Clase 0, para que sepas qué reusar, qué adaptar y qué es
+nuevo.
 
-Decisión ya tomada: `clase3.md` cubre **solo CSP**. La mitad de agentes
-lógicos queda fuera de esta clase (ver sección B) — las figuras siguen
-en la carpeta por si más adelante armás una clase de lógica/incertidumbre
-y querés retomarlas, pero no se referencian desde `clase3.md`.
+## A. Reusar / adaptar de `figures/clase2/` (mismo estilo CS188)
 
-De los 36 archivos: **23 se usan** en `clase3.md`, **10** son la mitad de
-agentes lógicos que decidiste no dar, y **3** son extras sin uso conocido
-en ningún `.md` del repo original.
-
-## A. En uso en `clase3.md`
-
-**Apertura (Pacman "pensando")**
-```
-pacman-thinking.png        pacman-thinking2.png       map-cartoon.png
-```
-
-**Motivación: representación factored**
-```
-atomic-factored.png
-```
-
-**Definición formal + ejemplo mapa de Australia**
-```
-map-coloring.png            csp-graph.png
-```
-
-**Ejemplos clásicos**
-```
-cryptarithmetic.png         sudoku.png
-```
-
-**Ejemplo histórico: algoritmo de Waltz**
-```
-waltz.png                    waltz-inter.png
-```
-
-**Aplicaciones reales**
-```
-assignments.png
-```
-
-**Constraint programming**
-```
-eugene-freuder.jpg
-```
-
-**Backtracking search**
-```
-backtracking-example.png    backtracking.png
-```
-
-**Ordenamiento de variables/valores**
-```
-ordering-mrv.png             ordering-lcv.png
-```
-
-**Filtrado: forward checking y consistencia de arcos**
-```
-forward-checking.png        forward-checking-inc.png
-arc-consistency.png          ac3.png
-```
-
-**Estructura del grafo de restricciones**
-```
-tree-csp.png                 tree-csp-trans.png          cutset.png
-```
-(`csp-graph.png` se reutiliza en esta sección — ya está listado arriba.
-`tree-csp.png` no estaba en el original de Louppe, se agregó como el
-"antes" de `tree-csp-trans.png` — ver sección C del historial de este
-documento más abajo si querés el porqué.)
-
-## B. Fuera de alcance — agentes lógicos / mundo de Wumpus
-
-Estas 10 figuras son la segunda mitad de `archives-lecture-csp.md`.
-Quedan en la carpeta pero **no se usan** en `clase3.md` por la decisión
-de acotar la clase a CSP. Si en algún momento das una clase de lógica
-proposicional / razonamiento con incertidumbre, están listas para
-reusarse:
+Tu Clase 2 ya usa las ilustraciones del "robot minero" de CS188 para
+DFS/BFS/UCS (montaña con gemas enterradas a distinta profundidad). Ese
+mismo estilo visual encaja perfecto para búsqueda local, porque CS188
+literalmente reusa esas ilustraciones para su clase de Local Search:
 
 ```
-aristotle.jpg                kb-agent.png                syntax.png
-wumpus-world.png             wumpus-exploration1.png     wumpus-exploration2.png
-wumpus-simple.png            wumpus-kb.png                wumpus-entailment.png
-wumpus-noentailment.png
+mining-landscape.png     <- la misma montaña de Clase 2, sin recortar
+landscape-hero.png       <- variante para el slide de portada/agenda
 ```
 
-## C. Extras — sin uso conocido en ningún `.md` del repo original
+Si ya tienes el material de CS188 descargado (como con `figures/lec0`
+de Louppe en tu Clase 0), busca en su carpeta de "Local Search" —
+probablemente puedas copiar directo en vez de recrear.
 
-- **`atomic-factored-structured.svg`** — versión ampliada de
-  `atomic-factored.png` (el cartoon del robot imaginando un auto), con
-  una tercera categoría: representación *atómica* vs. *factored* vs.
-  *estructurada* (AIMA Fig. 2.16 completa). Si en algún momento querés
-  dar más contexto en el slide de motivación, esta da más que la que
-  usa `clase3.md` ahora mismo.
-- **`csp.png`** — mismo cartoon "robot imaginando auto boceteado vs.
-  foto real", en composición de tres paneles. Duplicado temático de
-  `atomic-factored.png`.
-- **`hunt.jpg`** — portada del cartucho *Hunt the Wumpus* (Texas
-  Instruments Home Computer, ~1981), el juego original de Gregory Yob en
-  que se basa el mundo de Wumpus de AIMA. Como ya no hay slide de Wumpus
-  en `clase3.md`, quedó sin uso — pero es un buen gancho histórico si
-  algún día retomás la sección B.
+**Estado: pendiente.** No se pudo generar en esta sesión porque
+depende de tus archivos de Clase 2, que no están disponibles aquí.
 
-## ⚠️ Atribución / derechos — vale la pena revisar antes de publicar
+## B. Ya generadas — diagramas conceptuales (matplotlib)
 
-Solo lo relevante para lo que **sí** está en `clase3.md` (CSP):
+Estas ya se generaron en esta sesión y quedaron referenciadas en el
+markdown; van en `figures/clase4/` con estos nombres:
 
-- **Cartoons de CS188** (`pacman-thinking.png`, `pacman-thinking2.png`,
-  `map-cartoon.png`, `atomic-factored.png`, `assignments.png`,
-  `waltz.png`/`waltz-inter.png`) — Louppe pone el footnote "Image
-  credits: CS188, UC Berkeley" en varias de estas, aunque no en todas.
-  Mismo criterio que en Clase 2: mantené el crédito a CS188 en todas,
-  aunque el slide puntual no lo repita.
-- **Figuras redibujadas de AIMA** (Russell & Norvig, capítulo 6 de
-  CSP) — a diferencia de Clase 2, acá varias son reproducciones bastante
-  literales de figuras específicas del libro, no solo diagramas
-  conceptuales genéricos: `map-coloring.png` / `csp-graph.png`
-  (Fig. 6.1), `cryptarithmetic.png` (Fig. 6.2), `sudoku.png` (Fig. 6.4),
-  `tree-csp.png` / `tree-csp-trans.png` (Fig. 6.10), `cutset.png`
-  (Fig. 6.11). Uso educativo en clase es estándar (así lo hace medio
-  mundo que enseña con AIMA), pero si el deck queda **público** en
-  GitHub Pages, es más prudente citarlas explícitamente como "Fig. X.X,
-  Russell & Norvig, AIMA" en vez de presentarlas sin atribución.
-- **`eugene-freuder.jpg`** — foto de una persona real (pionero de
-  constraint programming, aún con presencia académica activa). Si
-  publicás el deck, mejor verificar que la foto tenga fuente atribuible
-  (p. ej. su página institucional) en vez de dejarla sin crédito.
+```
+8queens-conflicts.png       <- tablero 8x8, configuración cercana a
+                                una solución con 2 pares en conflicto
+                                marcados en rojo
+lp-feasible-region.png      <- región factible del ejemplo sillas/mesas,
+                                con curvas de nivel de la función
+                                objetivo; el óptimo cae en TODA una
+                                arista (empate, caso especial que ya
+                                menciona el texto)
+hill-climbing-ridge.png     <- superficie 3D con una cresta diagonal y
+                                un camino en zig-zag N/S/E/O marcado,
+                                para el slide de "cresta (ridge)"
+annealing-schedule.png      <- curva T = schedule(t) (enfriamiento
+                                exponencial), para el slide de
+                                pseudocódigo de simulated annealing
+```
 
-Si más adelante reactivás la sección B (agentes lógicos), retomá también
-las notas de atribución para `aristotle.jpg`, `hunt.jpg` y la serie
-`wumpus-*.png` (varias son reproducciones de figuras de AIMA capítulo 7)
-— quedaron fuera de esta revisión porque esa sección no se está dando.
+Generadas con matplotlib a partir de la *idea* descrita en AIMA/CS188
+(no son reproducciones de sus imágenes) — mismo tratamiento de
+derechos que ya se usa en el notebook de Rumania/regresión.
 
-No soy abogado y esto no es asesoría legal — es una señal de alerta para
-que decidas con información. Si el deck se queda solo en tu servidor
-local / LMS cerrado de EAFIT, el riesgo real es bajo en todos los casos.
+**Estado: completo.**
+
+## C. Foto de apoyo (licencia libre) — pendiente
+
+```
+annealing-forge.png   <- foto de metal siendo forjado/templado
+                          (banco de imágenes libres, ej. Unsplash/
+                          Pexels, buscar "metal forging" o "annealing")
+```
+
+**Estado: pendiente.** Esta sí necesita ser una fotografía real, no
+algo generable sintéticamente. El slide-divisor de "Simulated
+annealing" en el markdown sigue apuntando a `annealing-forge.png`; si
+prefieres no conseguir la foto, `annealing-schedule.png` (sección B,
+ya generada) puede cubrir ese rol en su lugar — solo cambia la
+referencia en ese slide.
+
+## D. Ya disponibles — provienen de las notas de CS50 (Harvard)
+
+Estas cinco ya las tenías (adjuntas) y quedaron referenciadas en el
+markdown enriquecido de la Clase 4. Renómbralas así al copiarlas a
+`figures/clase4/`:
+
+```
+house-hospital.png        <- (subido como house_hospital.png)  ejemplo
+                              casas/hospitales, costo inicial 17
+house-hospital2.png       <- (subido como house_hospital2.png) mismo
+                              ejemplo tras hill climbing, costo 11
+state-space.png            <- (subido como state_space.png) paisaje de
+                              estados genérico (barras)
+max-min.png                 <- (subido como max_min.png) máximos/mínimos
+                              locales vs. globales
+flat-local-shoulder.png     <- (subido como flat_local_shoulder.png)
+                              meseta plana vs. hombro (shoulder)
+```
+
+Origen: [CS50 AI (Harvard), Lecture 3 — Optimization](https://cs50.harvard.edu/ai/notes/3/).
+Mismo tratamiento de crédito que las figuras de CS188 — son
+ilustraciones didácticas estándar (no fotos ni arte con derechos
+estrictos); basta con el crédito en el footnote del slide, como ya se
+hizo en el markdown.
+
+**Estado: completo.**
+
+Nota: las otras figuras de CS50 que llegaron en el mismo lote
+(`Degree.png`, `LCV.png`, `MRV.png`, `graph_con.png`, `graph_days.png`,
+`graph_students.png`, `neighbor_graph.png`) corresponden a heurísticas
+de CSP (MRV, Degree, LCV) y al ejemplo de horarios de exámenes — son
+material de la **Clase 3** (CSP), no de esta clase. Quedan fuera del
+alcance de este documento.
+
+## Resumen de estado
+
+| Figura | Estado |
+|---|---|
+| `mining-landscape.png` | 🔲 pendiente (reusar de clase2) |
+| `landscape-hero.png` | 🔲 pendiente (reusar de clase2) |
+| `8queens-conflicts.png` | ✅ generada |
+| `lp-feasible-region.png` | ✅ generada |
+| `hill-climbing-ridge.png` | ✅ generada |
+| `annealing-schedule.png` | ✅ generada |
+| `annealing-forge.png` | 🔲 pendiente (foto real, banco libre) |
+| `house-hospital.png` | ✅ disponible (CS50) |
+| `house-hospital2.png` | ✅ disponible (CS50) |
+| `state-space.png` | ✅ disponible (CS50) |
+| `max-min.png` | ✅ disponible (CS50) |
+| `flat-local-shoulder.png` | ✅ disponible (CS50) |
+
+## ⚠️ Atribución / derechos
+
+- Las figuras de la sección A son las mismas que ya usas (con crédito)
+  en Clase 2 — mismo origen (CS188, UC Berkeley), mismo tratamiento de
+  licencia que ya validaste para esa clase.
+- Las figuras de la sección B son diagramas genéricos generados con
+  matplotlib a partir de la *idea* descrita en AIMA/CS188 (no son una
+  reproducción de su imagen, así que no hay problema de derechos —
+  igual que ya haces con el notebook de Rumania/regresión en clases
+  anteriores).
+- La foto de la sección C debe salir de un banco con licencia libre de
+  uso (Unsplash, Pexels, Pixabay); evita fotos de stock con marca de
+  agua o de bancos que requieran atribución comercial si el deck se
+  publica en GitHub Pages público.
+- Las figuras de la sección D provienen de las notas de CS50 (Harvard)
+  — ilustraciones didácticas estándar, mismo tratamiento de crédito que
+  las de CS188.
+- No hay aquí ningún equivalente al caso de `alphafold-nature.png` de
+  la Clase 0 (figura de paper con derechos estrictos) — todo el
+  material de esta clase es o tuyo (diagramas generados), de fuentes
+  con licencia permisiva, o de notas académicas abiertas (CS50/CS188).
