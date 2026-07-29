@@ -2,20 +2,20 @@ class: middle, center, title-slide
 
 # SI3003 - Inteligencia Artificial
 
-<div class="kicker">Clase 4 — Optimización: búsqueda local y programación lineal</div>
+<div class="kicker">Clase 3 — Optimización: búsqueda local y programación lineal</div>
 
 <br><br>
 
 ???
 
-Clase 3 rompe con el esquema de las clases anteriores: hasta ahora nos
+Clase 4 rompe con el esquema de las clases 2 y 3: hasta ahora nos
 importaba el *camino* (secuencia de acciones) hasta el objetivo. Hoy
 el camino deja de importar por completo — solo el estado final. Esto
 nos permite atacar espacios de estados enormes o incluso continuos que
 DFS/BFS/A*/backtracking no pueden manejar. Cubrimos búsqueda local
 (hill climbing, simulated annealing), una mención breve de algoritmos
 genéticos, y programación lineal. Cerramos comparando los tres
-paradigmas de las clases que llevamos hasta ahora.
+paradigmas de las clases 2, 3 y 4.
 
 ---
 
@@ -36,7 +36,7 @@ paradigmas de las clases que llevamos hasta ahora.
 ]
 ]
 
-.footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley; [CS50 AI](https://cs50.harvard.edu/ai/), Harvard.]
+.footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley; [CS50 AI](https://cs50.harvard.edu/ai/), Harvard — notas de la Lecture 3: https://cs50.harvard.edu/ai/notes/3/]
 
 ---
 
@@ -75,6 +75,15 @@ A diferencia de un problema de búsqueda (Clase 2), aquí no hay estado
 inicial fijo ni prueba de objetivo binaria — hay un espectro de
 calidad, y buscamos el máximo (o mínimo).
 
+???
+
+Terminología equivalente entre fuentes: CS188/AIMA hablan de "valor" y
+"función objetivo" indistintamente; CS50 (Harvard) distingue
+explícitamente entre **función objetivo** (se maximiza) y **función de
+costo** (se minimiza) — misma idea, dos nombres según el signo. Vale la
+pena mencionarlo en clase porque los estudiantes verán ambas
+convenciones en la literatura.
+
 ---
 
 class: middle, center, divider-slide
@@ -89,17 +98,63 @@ class: middle, center, divider-slide
 
 # Búsqueda local
 
-- *Estrategia*: mantener **un solo estado actual** (o un conjunto
-  pequeño) y moverse a un estado vecino que mejore la función
-  objetivo — nunca se construye un árbol de búsqueda.
+- *Estrategia*: mantener **un solo nodo/estado actual** (o un conjunto
+  pequeño) y moverse a un estado **vecino** que mejore la función
+  objetivo — a diferencia de la búsqueda clásica (Clase 2), nunca se
+  construye ni se recorre un árbol de búsqueda completo.
 - *Ventaja*: memoria **constante**, funciona en espacios de estados
   enormes o infinitos donde BFS/A\* son inviables.
 - *Costo*: se pierde la garantía de completitud/optimalidad que
-  teníamos con búsqueda en árbol/grafo.
+  teníamos con búsqueda en árbol/grafo — a menudo se conforma con una
+  solución "suficientemente buena" en vez de la óptima.
 
-El espacio de estados se puede imaginar como un **paisaje**: el eje
-horizontal recorre los estados posibles y el eje vertical es el valor
-de la función objetivo (elevación = "qué tan bueno" es ese estado).
+El espacio de estados se puede imaginar como un **paisaje**
+(*state-space landscape*): el eje horizontal recorre los estados
+posibles y el eje vertical es el valor de la función objetivo/costo
+(elevación = "qué tan bueno" es ese estado).
+
+.center.width-85[![State-space landscape](figures/clase4/state-space.png)]
+
+---
+
+# Ejemplo introductorio: casas y hospitales
+
+Un ejemplo clásico (CS50, Harvard) para presentar búsqueda local antes
+de formalizarla:
+
+> Tenemos 4 casas en ubicaciones fijas de una cuadrícula. Queremos
+> construir 2 hospitales de modo que se **minimice** la distancia total
+> de cada casa a su hospital más cercano (distancia Manhattan).
+
+- **Estado**: una configuración concreta de las posiciones de los 2 hospitales.
+- **Función de costo**: suma, sobre todas las casas, de la distancia
+  a su hospital más cercano.
+- **Estado vecino**: mover un hospital una casilla en alguna dirección.
+
+.center.width-75[![Casas y hospitales, costo inicial 17](figures/clase4/house-hospital.png)]
+
+En esta configuración inicial (aleatoria) el costo es **17**.
+
+---
+
+# Ejemplo: mejorando con hill climbing
+
+Aplicando hill climbing —mover repetidamente un hospital si eso reduce
+el costo total— llegamos, tras varias transiciones, a esta
+configuración:
+
+.center.width-75[![Casas y hospitales, costo 11 tras hill climbing](figures/clase4/house-hospital2.png)]
+
+El costo bajó de 17 a **11**: una mejora clara. Pero **no es el óptimo
+global** — mover el hospital izquierdo justo debajo de la casa superior
+izquierda daría costo 9. El algoritmo no llega ahí porque, desde el
+estado con costo 11, **todos los vecinos inmediatos son iguales o
+peores** — es decir, quedó atrapado en un mínimo local.
+
+.alert[Esta es la limitación central de hill climbing: es *miope*
+(short-sighted). En cada paso toma la mejor decisión local, sin mirar
+más allá de sus vecinos inmediatos, así que puede conformarse con una
+solución *buena* que no es la *mejor* posible.]
 
 ---
 
@@ -135,19 +190,45 @@ paso toma la decisión localmente óptima, sin mirar atrás ni adelante.
 
 ---
 
+# Máximos y mínimos: local vs. global
+
+Antes de nombrar los problemas de hill climbing, formalicemos qué
+significa quedar "atrapado":
+
+- Un **máximo local** es un estado con mayor valor que *todos sus
+  vecinos* — pero no necesariamente que todos los estados posibles.
+- Un **máximo global** es el estado con el mayor valor de *todo* el
+  espacio de estados.
+- Simétricamente se definen **mínimo local** y **mínimo global** para
+  funciones de costo.
+
+.center.width-90[![Máximos y mínimos locales vs. globales](figures/clase4/max-min.png)]
+
+Hill climbing solo puede garantizar que termina en un máximo/mínimo
+**local** — puede o no coincidir con el global, y el algoritmo no
+tiene forma de saberlo desde donde está parado.
+
+---
+
 # Problemas de hill climbing
 
 Hill climbing es **incompleto**: puede quedar atrapado sin llegar
-nunca al óptimo global.
+nunca al óptimo global. Además de los máximos/mínimos locales, hay dos
+casos especiales de "zonas planas" donde el algoritmo se estanca:
 
-.center.width-90[![Paisaje con máximo local, meseta y cresta](figures/clase4/hill-climbing-problems.png)]
+.center.width-90[![Máximo local plano vs. hombro (shoulder)](figures/clase4/flat-local-shoulder.png)]
 
-- **Máximo local**: mejor que todos sus vecinos, pero no el mejor global.
-- **Meseta (plateau)**: una zona plana; puede ser un "máximo local
-  plano" (sin salida) o un "hombro" (*shoulder*, con salida pero sin
-  pistas de dirección).
-- **Cresta (ridge)**: una secuencia de máximos locales difícil de
-  navegar si los movimientos permitidos son limitados (ej. solo N/S/E/O).
+- **Máximo/mínimo local plano** (*flat local maximum/minimum*): varios
+  estados adyacentes con el mismo valor, formando una meseta cuyos
+  vecinos son todos peores — no hay forma de salir mejorando.
+- **Hombro (shoulder)**: varios estados adyacentes con el mismo valor,
+  pero cuyos vecinos *sí* incluyen estados mejores — el problema es que,
+  parado en medio de la meseta, el algoritmo no tiene ninguna pista de
+  hacia dónde moverse para encontrarlos.
+- **Cresta (ridge)**: una secuencia de máximos locales alineados en
+  diagonal, difícil de navegar si los movimientos permitidos son
+  limitados (ej. solo N/S/E/O) — cada paso individual parece empeorar
+  aunque la cresta como conjunto suba.
 
 ---
 
@@ -221,6 +302,26 @@ function SIMULATED-ANNEALING(problema, schedule) returns un estado
 - Bajo un `schedule` que decrezca **suficientemente lento**, se puede
   demostrar que simulated annealing converge al óptimo global con
   probabilidad que tiende a 1.
+
+---
+
+# Simulated annealing — ejemplo: el vendedor viajero (TSP)
+
+El **problema del vendedor viajero (TSP)** pide conectar un conjunto
+de puntos (ciudades, clientes) con la **ruta más corta** que los visita
+a todos y regresa al inicio — exactamente lo que necesita resolver una
+empresa de reparto para ir de la bodega a cada cliente y volver.
+
+- **Estado**: una ruta completa (un orden de visita de todos los puntos).
+- **Vecino natural**: intercambiar el orden de dos paradas en la ruta.
+- **Por qué no fuerza bruta**: el número de rutas posibles crece como
+  $n!$ — con apenas 10 puntos ya hay $10! = 3\,628\,800$ rutas posibles
+  a evaluar.
+
+.alert[Simulated annealing no garantiza la ruta óptima, pero encuentra
+soluciones muy buenas a una fracción del costo computacional de
+enumerar todas las rutas — por eso es una de las heurísticas clásicas
+para TSP a escala real.]
 
 ---
 
@@ -320,6 +421,51 @@ una arista, si hay empates).
 - En Python: `scipy.optimize.linprog` o `PuLP` (más legible, estilo
   "álgebra") resuelven esto en unas pocas líneas — ver el notebook de
   esta clase.
+
+---
+
+# Segundo ejemplo: dos máquinas (minimización)
+
+Una variante útil porque **minimiza** en vez de maximizar, y porque
+obliga a convertir una restricción `≥` a la forma estándar `≤` que
+esperan los solvers:
+
+- Dos máquinas $x_1, x_2$ (horas de uso). $x_1$ cuesta \$50/hora,
+  $x_2$ cuesta \$80/hora. **Minimizar**: $50x_1 + 80x_2$.
+- Mano de obra disponible: $x_1$ requiere 5 unidades/hora, $x_2$
+  requiere 2 unidades/hora, con 20 unidades totales disponibles:
+  $5x_1 + 2x_2 \leq 20$.
+- Producción mínima requerida: $x_1$ produce 10 unidades/hora, $x_2$
+  produce 12 unidades/hora, y se necesitan al menos 90 unidades:
+  $10x_1 + 12x_2 \geq 90$.
+
+`linprog` de scipy solo acepta restricciones en la forma $\leq$, así
+que multiplicamos la segunda restricción por $-1$:
+$-10x_1 - 12x_2 \leq -90$.
+
+```python
+import scipy.optimize
+
+# Función objetivo: 50x_1 + 80x_2 (minimizar)
+# Restricción 1: 5x_1 + 2x_2 <= 20
+# Restricción 2: -10x_1 - 12x_2 <= -90
+
+result = scipy.optimize.linprog(
+    [50, 80],                    # coeficientes de la función objetivo
+    A_ub=[[5, 2], [-10, -12]],   # coeficientes del lado izquierdo
+    b_ub=[20, -90],              # límites del lado derecho
+)
+
+if result.success:
+    print(f"X1: {round(result.x[0], 2)} horas")
+    print(f"X2: {round(result.x[1], 2)} horas")
+else:
+    print("No solution")
+```
+
+.footnote[`linprog` minimiza por defecto. Para maximizar (como en el
+ejemplo de sillas/mesas), se minimiza el negativo de la función
+objetivo: `-c` en vez de `c`.]
 
 ---
 
