@@ -32,7 +32,7 @@ paradigmas de las clases 1, 2 y 3.
 - Comparación: búsqueda vs. CSP vs. optimización
 ]
 .kol-1-2[
-.center.width-100[![Paisaje de optimización](figures/clase3/landscape-hero.png)]
+.center.width-100[![Paisaje de optimización](figures/clase4/landscape-hero.png)]
 ]
 ]
 
@@ -90,7 +90,7 @@ class: middle, center, divider-slide
 
 ## Búsqueda local
 
-.width-70[![Robot minero explorando una montaña](figures/clase3/mining-landscape.png)]
+.width-70[![Robot minero explorando una montaña](figures/clase4/mining-landscape.png)]
 
 .footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley.]
 
@@ -113,7 +113,7 @@ El espacio de estados se puede imaginar como un **paisaje**
 posibles y el eje vertical es el valor de la función objetivo/costo
 (elevación = "qué tan bueno" es ese estado).
 
-.center.width-85[![State-space landscape](figures/clase3/state-space.png)]
+.center.width-85[![State-space landscape](figures/clase4/state-space.png)]
 
 ---
 
@@ -131,7 +131,7 @@ de formalizarla:
   a su hospital más cercano.
 - **Estado vecino**: mover un hospital una casilla en alguna dirección.
 
-.center.width-75[![Casas y hospitales, costo inicial 17](figures/clase3/house-hospital.png)]
+.center.width-75[![Casas y hospitales, costo inicial 17](figures/clase4/house-hospital.png)]
 
 En esta configuración inicial (aleatoria) el costo es **17**.
 
@@ -143,7 +143,7 @@ Aplicando hill climbing —mover repetidamente un hospital si eso reduce
 el costo total— llegamos, tras varias transiciones, a esta
 configuración:
 
-.center.width-75[![Casas y hospitales, costo 11 tras hill climbing](figures/clase3/house-hospital2.png)]
+.center.width-75[![Casas y hospitales, costo 11 tras hill climbing](figures/clase4/house-hospital2.png)]
 
 El costo bajó de 17 a **11**: una mejora clara. Pero **no es el óptimo
 global** — mover el hospital izquierdo justo debajo de la casa superior
@@ -186,7 +186,7 @@ paso toma la decisión localmente óptima, sin mirar atrás ni adelante.
 - **Vecinos**: mover una reina a otra fila de su misma columna.
 - **Objetivo**: costo = 0 (ninguna reina se ataca).
 
-.center.width-60[![8 reinas con conflictos marcados](figures/clase3/8queens-conflicts.png)]
+.center.width-60[![8 reinas con conflictos marcados](figures/clase4/8queens-conflicts.png)]
 
 ---
 
@@ -202,7 +202,7 @@ significa quedar "atrapado":
 - Simétricamente se definen **mínimo local** y **mínimo global** para
   funciones de costo.
 
-.center.width-90[![Máximos y mínimos locales vs. globales](figures/clase3/max-min.png)]
+.center.width-90[![Máximos y mínimos locales vs. globales](figures/clase4/max-min.png)]
 
 Hill climbing solo puede garantizar que termina en un máximo/mínimo
 **local** — puede o no coincidir con el global, y el algoritmo no
@@ -216,7 +216,7 @@ Hill climbing es **incompleto**: puede quedar atrapado sin llegar
 nunca al óptimo global. Además de los máximos/mínimos locales, hay dos
 casos especiales de "zonas planas" donde el algoritmo se estanca:
 
-.center.width-90[![Máximo local plano vs. hombro (shoulder)](figures/clase3/flat-local-shoulder.png)]
+.center.width-90[![Máximo local plano vs. hombro (shoulder)](figures/clase4/flat-local-shoulder.png)]
 
 - **Máximo/mínimo local plano** (*flat local maximum/minimum*): varios
   estados adyacentes con el mismo valor, formando una meseta cuyos
@@ -234,7 +234,7 @@ casos especiales de "zonas planas" donde el algoritmo se estanca:
 
 # Cresta (ridge) — vista visual
 
-.center.width-75[![Cresta: subir en zig-zag con movimientos N/S/E/O](figures/clase3/hill-climbing-ridge.png)]
+.center.width-75[![Cresta: subir en zig-zag con movimientos N/S/E/O](figures/clase4/hill-climbing-ridge.png)]
 
 Si el algoritmo solo puede moverse en 4 direcciones (N/S/E/O) pero la
 cresta sube en diagonal, **cada movimiento individual disponible
@@ -274,7 +274,7 @@ class: middle, center, divider-slide
 
 ## Simulated annealing
 
-.width-60[![Metal siendo forjado](figures/clase3/annealing-forge.png)]
+.width-60[![Metal siendo forjado](figures/clase4/annealing-forge.png)]
 
 ---
 
@@ -315,7 +315,7 @@ function SIMULATED-ANNEALING(problema, schedule) returns un estado
   demostrar que simulated annealing converge al óptimo global con
   probabilidad que tiende a 1.
 
-.center.width-75[![Curva típica de schedule de temperatura](figures/clase3/annealing-schedule.png)]
+.center.width-75[![Curva típica de schedule de temperatura](figures/clase4/annealing-schedule.png)]
 
 ---
 
@@ -368,49 +368,17 @@ class: middle, center, divider-slide
   se queda con los $k$ mejores del total — hay comunicación implícita
   entre las "ramas" (se abandonan las que van peor).
 - **Algoritmos genéticos**: una variante de beam search con
-  **reproducción**. Un individuo es un cromosoma
-  $x=(x_1,\dots,x_L)$ sobre un alfabeto finito (ej. binario). La
-  función de *fitness* mide qué tan bueno es cada individuo — por
-  ejemplo, para el problema OneMax que verán en el notebook:
+  **reproducción**:
+    - Una *población* de estados ("individuos"), representados como
+      cadenas sobre un alfabeto finito.
+    - Una función de *fitness* mide qué tan buena es cada individuo.
+    - Se seleccionan padres (con probabilidad proporcional al
+      fitness), se combinan (*crossover*) y se aplican mutaciones
+      aleatorias para formar la siguiente generación.
 
-$$
-\text{fitness}(x)=\sum_{i=1}^{L}x_i
-$$
-
-  Cada generación se construye así:
-
-    1. **Selección** (por torneo): se muestrean $k$ individuos al azar
-       y se queda el de mayor fitness — mayor $k$ implica mayor
-       presión de selección.
-    2. **Crossover** (un punto, con probabilidad $p_c$): dado un punto
-       de corte $j$, dos padres $x,y$ producen
-       $x'=(x_1,\dots,x_j,y_{j+1},\dots,y_L)$ y su complemento.
-    3. **Mutación** (con probabilidad $p_m$ por gen): cada $x_i$ se
-       invierte independientemente con probabilidad $p_m$ — es lo que
-       le da a GA la capacidad de recuperar diversidad genética que el
-       crossover por sí solo no puede introducir.
-
-```
-function GENETIC-ALGORITHM(población, fitness) returns un individuo
-    repeat
-        nueva ← { }
-        for i = 1 to TAMAÑO(población) do
-            x ← SELECCIÓN-TORNEO(población, fitness)
-            y ← SELECCIÓN-TORNEO(población, fitness)
-            hijo ← CROSSOVER(x, y)
-            if random() < p_m then hijo ← MUTAR(hijo)
-            agregar hijo a nueva
-        población ← nueva
-    until se cumple criterio de parada
-    return el mejor individuo de población según fitness
-```
-
-.alert[El notebook de esta clase (`03_algoritmos_geneticos.ipynb`)
-implementa selección por torneo, crossover de un punto, mutación y
-elitismo sobre el problema OneMax, y trae un experimento que compara
-distintas tasas de mutación — es material completo, no solo una
-mención de relleno. Referencia para profundizar: AIMA Cap. 4 y CS188
-Note 4.]
+.alert[Esta sección se cubre a nivel conceptual — no entra en el
+notebook obligatorio de esta clase. Referencia para profundizar:
+AIMA Cap. 4 y CS188 Note 4.]
 
 ---
 
@@ -418,7 +386,7 @@ class: middle, center, divider-slide
 
 ## Programación lineal
 
-.width-70[![Región factible de un problema de programación lineal](figures/clase3/lp-feasible-region.png)]
+.width-70[![Región factible de un problema de programación lineal](figures/clase4/lp-feasible-region.png)]
 
 ---
 
@@ -432,7 +400,7 @@ Un **problema de programación lineal** consiste en:
 - Un conjunto de **restricciones lineales** (igualdades o
   desigualdades) sobre esas variables.
 
-*Diferencia clave con CSP (Clase 2)*: en CSP los dominios son
+*Diferencia clave con CSP (Clase 3)*: en CSP los dominios son
 discretos y finitos y buscamos *cualquier* asignación que satisfaga
 todas las restricciones (o falla). En LP los dominios son continuos y
 buscamos la *mejor* asignación posible según la función objetivo.
@@ -442,13 +410,13 @@ buscamos la *mejor* asignación posible según la función objetivo.
 # Ejemplo: problema de producción
 
 Una fábrica produce **sillas** ($x_1$) y **mesas** ($x_2$). Cada
-silla deja \$25 de ganancia y cada mesa \$30. Restricciones:
+silla deja \$20 de ganancia y cada mesa \$30. Restricciones:
 
 - Madera disponible: $2x_1 + 3x_2 \leq 120$
 - Horas de mano de obra: $x_1 + x_2 \leq 50$
 - No negatividad: $x_1, x_2 \geq 0$
 
-**Maximizar**: $25x_1 + 30x_2$
+**Maximizar**: $20x_1 + 30x_2$
 
 La región factible es un polígono convexo; el óptimo de un problema
 LP **siempre** se encuentra en un vértice de ese polígono (o en toda
@@ -524,20 +492,20 @@ sillas" no puede ser 3.7)?
 - Ya no basta con mirar los vértices de la región factible continua:
   hay que buscar puntos enteros dentro de ella.
 - ILP es, en general, **NP-difícil** — la misma familia de dificultad
-  que CSP (Clase 2). De hecho, muchos solvers de ILP usan
+  que CSP (Clase 3). De hecho, muchos solvers de ILP usan
   **backtracking + poda** (branch and bound) internamente, la misma
-  idea central de la Clase 2.
+  idea central de la Clase 3.
 
 .alert[Este es el punto de cierre del círculo: búsqueda (Clase 2) →
-estructura interna del estado (Clase 2, CSP) → función objetivo
-continua (Clase 3, LP) → y de vuelta a backtracking cuando forzamos
+estructura interna del estado (Clase 3, CSP) → función objetivo
+continua (Clase 4, LP) → y de vuelta a backtracking cuando forzamos
 variables enteras (ILP).]
 
 ---
 
 # Comparación: los tres paradigmas de búsqueda del curso
 
-| | Búsqueda (Clase 2) | CSP (Clase 2) | Optimización (Clase 3) |
+| | Búsqueda (Clase 2) | CSP (Clase 3) | Optimización (Clase 4) |
 |---|---|---|---|
 | ¿Qué es el estado? | Configuración parcial en un camino | Asignación parcial de variables/dominios | Configuración completa (búsqueda local) o vector real (LP) |
 | ¿Qué buscamos? | Un camino al objetivo (óptimo si aplica) | *Cualquier* asignación consistente | El estado / vector que **maximiza/minimiza** una función |
@@ -559,16 +527,14 @@ variables enteras (ILP).]
 
 class: middle, center, divider-slide
 
-## Demo (notebook): hospitales con hill climbing y simulated annealing
+## Demo (notebook): N-reinas con hill climbing y simulated annealing
 
 ???
 
-Ejecutar en vivo `01_hill_climbing.ipynb` y `02_simulated_annealing.ipynb`:
-sobre el problema de ubicación de hospitales (grid con casas fijas),
-comparar cuántas corridas de hill climbing estocástico quedan
-atrapadas en un óptimo local vs. Random Restart (`01`), y contrastar
-con la comparación estadística de 50 corridas Hill Climbing vs.
-Simulated Annealing sobre la función 1D multimodal (`02`).
+Ejecutar en vivo `notebooks/lecture4/Local_Search_NQueens.ipynb`:
+comparar cuántas corridas de steepest-ascent hill climbing quedan
+atrapadas en un máximo local vs. cuántas resuelve simulated annealing,
+y cuántas iteraciones toma cada una en promedio.
 
 ---
 
@@ -578,11 +544,10 @@ class: middle, center, divider-slide
 
 ???
 
-Ejecutar en vivo `04_programacion_lineal.ipynb`: formular el problema
-de sillas/mesas, resolverlo por vértices y con
-`scipy.optimize.linprog`, graficar la región factible con el óptimo
-marcado, y cerrar con el análisis de sensibilidad sobre la utilidad
-de las mesas.
+Ejecutar en vivo `notebooks/lecture4/Linear_Programming_Intro.ipynb`:
+formular el problema de sillas/mesas, resolverlo con
+`scipy.optimize.linprog`, y graficar la región factible con el óptimo
+marcado.
 
 ---
 
@@ -609,6 +574,6 @@ de las mesas.
 class: middle, center, end-slide
 count: false
 
-## Fin de la Clase 3
+## Fin de la Clase 4
 
 Próxima clase: Búsqueda adversarial (juegos) — *a confirmar con el coordinador*
