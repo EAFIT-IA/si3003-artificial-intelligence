@@ -27,12 +27,12 @@ paradigmas de las clases 1, 2 y 3.
 - Búsqueda local
     - Hill climbing y sus variantes
     - Simulated annealing
-    - (breve) Algoritmos genéticos
+    - Algoritmos genéticos
 - Programación lineal
 - Comparación: búsqueda vs. CSP vs. optimización
 ]
 .kol-1-2[
-.center.width-100[![Paisaje de optimización](figures/clase4/landscape-hero.png)]
+.center.width-50[![Paisaje de optimización](figures/clase3/landscape-hero.jpg)]
 ]
 ]
 
@@ -90,7 +90,7 @@ class: middle, center, divider-slide
 
 ## Búsqueda local
 
-.width-70[![Robot minero explorando una montaña](figures/clase4/mining-landscape.png)]
+.width-70[![Robot minero explorando una montaña](figures/clase3/landscape-hero.png)]
 
 .footnote[Créditos: [CS188](https://inst.eecs.berkeley.edu/~cs188/), UC Berkeley.]
 
@@ -113,7 +113,7 @@ El espacio de estados se puede imaginar como un **paisaje**
 posibles y el eje vertical es el valor de la función objetivo/costo
 (elevación = "qué tan bueno" es ese estado).
 
-.center.width-85[![State-space landscape](figures/clase4/state-space.png)]
+.center.width-50[![State-space landscape](figures/clase3/state-space.png)]
 
 ---
 
@@ -131,7 +131,7 @@ de formalizarla:
   a su hospital más cercano.
 - **Estado vecino**: mover un hospital una casilla en alguna dirección.
 
-.center.width-75[![Casas y hospitales, costo inicial 17](figures/clase4/house-hospital.png)]
+.center.width-40[![Casas y hospitales, costo inicial 17](figures/clase3/house-hospital.png)]
 
 En esta configuración inicial (aleatoria) el costo es **17**.
 
@@ -143,7 +143,7 @@ Aplicando hill climbing —mover repetidamente un hospital si eso reduce
 el costo total— llegamos, tras varias transiciones, a esta
 configuración:
 
-.center.width-75[![Casas y hospitales, costo 11 tras hill climbing](figures/clase4/house-hospital2.png)]
+.center.width-50[![Casas y hospitales, costo 11 tras hill climbing](figures/clase3/house-hospital2.png)]
 
 El costo bajó de 17 a **11**: una mejora clara. Pero **no es el óptimo
 global** — mover el hospital izquierdo justo debajo de la casa superior
@@ -186,7 +186,7 @@ paso toma la decisión localmente óptima, sin mirar atrás ni adelante.
 - **Vecinos**: mover una reina a otra fila de su misma columna.
 - **Objetivo**: costo = 0 (ninguna reina se ataca).
 
-.center.width-60[![8 reinas con conflictos marcados](figures/clase4/8queens-conflicts.png)]
+.center.width-50[![8 reinas con conflictos marcados](figures/clase3/8queens-conflicts.png)]
 
 ---
 
@@ -202,7 +202,7 @@ significa quedar "atrapado":
 - Simétricamente se definen **mínimo local** y **mínimo global** para
   funciones de costo.
 
-.center.width-90[![Máximos y mínimos locales vs. globales](figures/clase4/max-min.png)]
+.center.width-50[![Máximos y mínimos locales vs. globales](figures/clase3/max-min.png)]
 
 Hill climbing solo puede garantizar que termina en un máximo/mínimo
 **local** — puede o no coincidir con el global, y el algoritmo no
@@ -216,7 +216,7 @@ Hill climbing es **incompleto**: puede quedar atrapado sin llegar
 nunca al óptimo global. Además de los máximos/mínimos locales, hay dos
 casos especiales de "zonas planas" donde el algoritmo se estanca:
 
-.center.width-90[![Máximo local plano vs. hombro (shoulder)](figures/clase4/flat-local-shoulder.png)]
+.center.width-90[![Máximo local plano vs. hombro (shoulder)](figures/clase3/flat-local-shoulder.png)]
 
 - **Máximo/mínimo local plano** (*flat local maximum/minimum*): varios
   estados adyacentes con el mismo valor, formando una meseta cuyos
@@ -234,7 +234,7 @@ casos especiales de "zonas planas" donde el algoritmo se estanca:
 
 # Cresta (ridge) — vista visual
 
-.center.width-75[![Cresta: subir en zig-zag con movimientos N/S/E/O](figures/clase4/hill-climbing-ridge.png)]
+.center.width-50[![Cresta: subir en zig-zag con movimientos N/S/E/O](figures/clase3/hill-climbing-ridge.png)]
 
 Si el algoritmo solo puede moverse en 4 direcciones (N/S/E/O) pero la
 cresta sube en diagonal, **cada movimiento individual disponible
@@ -274,7 +274,7 @@ class: middle, center, divider-slide
 
 ## Simulated annealing
 
-.width-60[![Metal siendo forjado](figures/clase4/annealing-forge.png)]
+.width-60[![Metal siendo forjado](figures/clase3/annealing-forge.png)]
 
 ---
 
@@ -315,7 +315,7 @@ function SIMULATED-ANNEALING(problema, schedule) returns un estado
   demostrar que simulated annealing converge al óptimo global con
   probabilidad que tiende a 1.
 
-.center.width-75[![Curva típica de schedule de temperatura](figures/clase4/annealing-schedule.png)]
+.center.width-75[![Curva típica de schedule de temperatura](figures/clase3/annealing-schedule.png)]
 
 ---
 
@@ -361,24 +361,76 @@ class: middle, center, divider-slide
 
 ---
 
+class: middle, center, divider-slide
+
+## Local beam search y algoritmos genéticos
+
+---
+
 # Local beam search y algoritmos genéticos
 
 - **Local beam search**: mantiene $k$ estados en paralelo (no uno
   solo); en cada paso genera todos los sucesores de los $k$ estados y
   se queda con los $k$ mejores del total — hay comunicación implícita
-  entre las "ramas" (se abandonan las que van peor).
+  entre las "ramas" (se abandonan las que van peor). A diferencia de
+  $k$ corridas independientes de hill climbing, aquí las ramas
+  "compiten" por el mismo cupo de $k$ supervivientes.
 - **Algoritmos genéticos**: una variante de beam search con
-  **reproducción**:
-    - Una *población* de estados ("individuos"), representados como
-      cadenas sobre un alfabeto finito.
-    - Una función de *fitness* mide qué tan buena es cada individuo.
-    - Se seleccionan padres (con probabilidad proporcional al
-      fitness), se combinan (*crossover*) y se aplican mutaciones
-      aleatorias para formar la siguiente generación.
+  **reproducción**. Retomamos el ejemplo de 8-reinas (misma
+  representación que usamos para hill climbing), siguiendo CS188
+  Note 4:
+    - Un *individuo* es un cromosoma $x=(x_1,\dots,x_L)$ sobre un
+      alfabeto finito. Para 8-reinas: $L=8$ y cada $x_i\in\{1,\dots,8\}$
+      es la fila de la reina en la columna $i$.
+    - La función de *fitness* mide qué tan bueno es cada individuo.
+      Para 8-reinas, en vez de contar conflictos (que queremos
+      minimizar, como en hill climbing), definimos algo que
+      **maximizar**: el número de **pares de reinas que no se
+      atacan**, sobre el máximo posible $\binom{8}{2}=28$:
 
-.alert[Esta sección se cubre a nivel conceptual — no entra en el
-notebook obligatorio de esta clase. Referencia para profundizar:
-AIMA Cap. 4 y CS188 Note 4.]
+$$
+\text{fitness}(x)=28-\#\{\text{pares en conflicto}\}
+$$
+
+  Cada generación se construye así:
+
+    1. **Selección** (por torneo): se muestrean $k$ individuos al azar
+       y se queda el de mayor fitness — mayor $k$ implica mayor
+       presión de selección.
+    2. **Crossover** (un punto, con probabilidad $p_c$): dado un punto
+       de corte $j$, dos padres $x,y$ producen
+       $x'=(x_1,\dots,x_j,y_{j+1},\dots,y_L)$ y su complemento. Para
+       8-reinas, esto combina el arreglo de columnas de un padre con
+       el de otro.
+    3. **Mutación** (con probabilidad $p_m$ por gen): cada $x_i$
+       cambia a un valor aleatorio del alfabeto con probabilidad
+       $p_m$ — es lo que le da a GA la capacidad de recuperar
+       diversidad genética que el crossover por sí solo no puede
+       introducir.
+
+```
+function GENETIC-ALGORITHM(población, fitness) returns un individuo
+    repeat
+        nueva ← { }
+        for i = 1 to TAMAÑO(población) do
+            x ← SELECCIÓN-TORNEO(población, fitness)
+            y ← SELECCIÓN-TORNEO(población, fitness)
+            hijo ← CROSSOVER(x, y)
+            if random() < p_m then hijo ← MUTAR(hijo)
+            agregar hijo a nueva
+        población ← nueva
+    until se cumple criterio de parada
+    return el mejor individuo de población según fitness
+```
+
+.alert[El notebook de esta clase (`03_algoritmos_geneticos.ipynb`)
+implementa selección por torneo, crossover de un punto, mutación y
+elitismo, pero sobre **OneMax**
+($\text{fitness}(x)=\sum_{i=1}^{L}x_i$, alfabeto binario) en vez de
+8-reinas — es la misma mecánica con un fitness más simple de
+depurar, y el notebook trae una actividad para extenderlo a una
+frase objetivo. Referencia: AIMA Cap. 4 y CS188 Note 4.]
+
 
 ---
 
