@@ -531,23 +531,20 @@ class: middle, center, divider-slide
 
 Un **problema de programación lineal** consiste en:
 
-- Un conjunto de **variables de decisión** $x_1, \dots, x_n \in \mathbb{R}$ (¡continuas!, a diferencia de CSP).
+- Un conjunto de **variables de decisión** $x_1, \dots, x_n \in \mathbb{R}$ ¡continuas!.
 - Una **función objetivo lineal** a maximizar o minimizar:
   $c_1 x_1 + c_2 x_2 + \dots + c_n x_n$
 - Un conjunto de **restricciones lineales** (igualdades o
   desigualdades) sobre esas variables.
 
-*Diferencia clave con CSP (Clase 3)*: en CSP los dominios son
-discretos y finitos y buscamos *cualquier* asignación que satisfaga
-todas las restricciones (o falla). En LP los dominios son continuos y
-buscamos la *mejor* asignación posible según la función objetivo.
+*En LP los dominios son continuos y buscamos la *mejor* asignación posible según la función objetivo.*
 
 ---
 
 # Ejemplo: problema de producción
 
 Una fábrica produce **sillas** ($x_1$) y **mesas** ($x_2$). Cada
-silla deja \$20 de ganancia y cada mesa \$30. Restricciones:
+silla deja $20$ de ganancia y cada mesa $30$. Restricciones:
 
 - Madera disponible: $2x_1 + 3x_2 \leq 120$
 - Horas de mano de obra: $x_1 + x_2 \leq 50$
@@ -581,8 +578,8 @@ Una variante útil porque **minimiza** en vez de maximizar, y porque
 obliga a convertir una restricción `≥` a la forma estándar `≤` que
 esperan los solvers:
 
-- Dos máquinas $x_1, x_2$ (horas de uso). $x_1$ cuesta \$50/hora,
-  $x_2$ cuesta \$80/hora. **Minimizar**: $50x_1 + 80x_2$.
+- Dos máquinas $x_1, x_2$ (horas de uso). $x_1$ cuesta 50 dólares/hora,
+  $x_2$ cuesta 80 dólares/hora. **Minimizar**: $50x_1 + 80x_2$.
 - Mano de obra disponible: $x_1$ requiere 5 unidades/hora, $x_2$
   requiere 2 unidades/hora, con 20 unidades totales disponibles:
   $5x_1 + 2x_2 \leq 20$.
@@ -592,7 +589,11 @@ esperan los solvers:
 
 `linprog` de scipy solo acepta restricciones en la forma $\leq$, así
 que multiplicamos la segunda restricción por $-1$:
-$-10x_1 - 12x_2 \leq -90$.
+
+$$
+-10x_1 - 12x_2 \leq -90
+$$
+---
 
 ```python
 import scipy.optimize
@@ -617,38 +618,6 @@ else:
 .footnote[`linprog` minimiza por defecto. Para maximizar (como en el
 ejemplo de sillas/mesas), se minimiza el negativo de la función
 objetivo: `-c` en vez de `c`.]
-
----
-
-# Programación lineal entera (ILP)
-
-¿Qué pasa si las variables deben ser **enteras** (ej. "número de
-sillas" no puede ser 3.7)?
-
-- El problema se llama **programación lineal entera (ILP)**.
-- Ya no basta con mirar los vértices de la región factible continua:
-  hay que buscar puntos enteros dentro de ella.
-- ILP es, en general, **NP-difícil** — la misma familia de dificultad
-  que CSP (Clase 3). De hecho, muchos solvers de ILP usan
-  **backtracking + poda** (branch and bound) internamente, la misma
-  idea central de la Clase 3.
-
-.alert[Este es el punto de cierre del círculo: búsqueda (Clase 2) →
-estructura interna del estado (Clase 3, CSP) → función objetivo
-continua (Clase 4, LP) → y de vuelta a backtracking cuando forzamos
-variables enteras (ILP).]
-
----
-
-# Comparación: los tres paradigmas de búsqueda del curso
-
-| | Búsqueda (Clase 2) | CSP (Clase 3) | Optimización (Clase 4) |
-|---|---|---|---|
-| ¿Qué es el estado? | Configuración parcial en un camino | Asignación parcial de variables/dominios | Configuración completa (búsqueda local) o vector real (LP) |
-| ¿Qué buscamos? | Un camino al objetivo (óptimo si aplica) | *Cualquier* asignación consistente | El estado / vector que **maximiza/minimiza** una función |
-| Garantías típicas | Completo y óptimo (BFS/UCS/A\* bien diseñados) | Completo (con backtracking sistemático) | Ninguna garantía dura en búsqueda local; sí en LP (óptimo global garantizado) |
-| Algoritmo típico | DFS, BFS, UCS, A\* | Backtracking + poda (arc consistency, MRV, LCV) | Hill climbing, simulated annealing / Simplex |
-| Memoria | $O(bm)$ a $O(b^d)$ según algoritmo | Depende de la poda | $O(1)$ en búsqueda local |
 
 ---
 
