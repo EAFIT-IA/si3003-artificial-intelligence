@@ -200,3 +200,9 @@ h3 { font-size: 22pt; }
 
 /* ---------- Math (KaTeX) ---------- */
 .katex { font-size: 1em; }
+
+
+.compact-code .remark-code {
+  font-size: 0.68em;
+  line-height: 1.35;
+}

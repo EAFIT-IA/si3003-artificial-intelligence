@@ -32,7 +32,7 @@ paradigmas de las clases 1, 2 y 3.
 - Comparación: búsqueda vs. CSP vs. optimización
 ]
 .kol-1-2[
-.center.width-50[![Paisaje de optimización](figures/clase3/landscape-hero.jpg)]
+.center.width-60[![Paisaje de optimización](figures/clase3/landscape-hero.jpg)]
 ]
 ]
 
@@ -177,7 +177,7 @@ paso toma la decisión localmente óptima, sin mirar atrás ni adelante.
 
 ---
 
-# Ejemplo: 8-reinas con hill climbing
+## Ejemplo: 8-reinas con hill climbing
 
 - **Estado**: una configuración con las 8 reinas puestas, una por
   columna (siempre 8 reinas, en cualquier fila).
@@ -186,11 +186,11 @@ paso toma la decisión localmente óptima, sin mirar atrás ni adelante.
 - **Vecinos**: mover una reina a otra fila de su misma columna.
 - **Objetivo**: costo = 0 (ninguna reina se ataca).
 
-.center.width-50[![8 reinas con conflictos marcados](figures/clase3/8queens-conflicts.png)]
+.center.width-40[![8 reinas con conflictos marcados](figures/clase3/8queens-conflicts.png)]
 
 ---
 
-# Máximos y mínimos: local vs. global
+## Máximos y mínimos: local vs. global
 
 Antes de nombrar los problemas de hill climbing, formalicemos qué
 significa quedar "atrapado":
@@ -210,7 +210,7 @@ tiene forma de saberlo desde donde está parado.
 
 ---
 
-# Problemas de hill climbing
+## Problemas de hill climbing
 
 Hill climbing es **incompleto**: puede quedar atrapado sin llegar
 nunca al óptimo global. Además de los máximos/mínimos locales, hay dos
@@ -232,7 +232,7 @@ casos especiales de "zonas planas" donde el algoritmo se estanca:
 
 ---
 
-# Cresta (ridge) — vista visual
+## Cresta (ridge) — vista visual
 
 .center.width-50[![Cresta: subir en zig-zag con movimientos N/S/E/O](figures/clase3/hill-climbing-ridge.png)]
 
@@ -244,7 +244,7 @@ paso a la vez, no la tendencia general.
 
 ---
 
-# Variantes de hill climbing
+## Variantes de hill climbing
 
 - **Steepest-ascent**: evalúa *todos* los vecinos y toma el mejor (la versión de la slide anterior).
 - **First-choice hill climbing**: genera vecinos al azar uno por uno
@@ -295,31 +295,40 @@ obtener un algoritmo completo y razonablemente eficiente.
 
 ---
 
-# Simulated annealing — pseudocódigo
+## Simulated annealing
 
+.grid[
+.kol-1-2[
+.compact-code[
 ```
-function SIMULATED-ANNEALING(problema, schedule) returns un estado
+function SIMULATED-ANNEALING(problema, schedule)
+        returns un estado
     actual ← ESTADO-INICIAL(problema)
     for t = 1 to ∞ do
         T ← schedule(t)
         if T = 0 then return actual
-        siguiente ← un sucesor de actual, elegido al azar
+        siguiente ← un sucesor de
+            actual, elegido al azar
         ΔE ← VALOR(siguiente) − VALOR(actual)
         if ΔE > 0 then actual ← siguiente
-        else actual ← siguiente con probabilidad e^(ΔE / T)
+        else actual ← siguiente con
+            probabilidad e^(ΔE / T)
 ```
-
+]
+]
+.kol-1-2[
 - Con $T$ alta al inicio: se aceptan muchos movimientos "malos" (mucha exploración).
 - Con $T \to 0$: el algoritmo se comporta como hill climbing puro (solo explotación).
 - Bajo un `schedule` que decrezca **suficientemente lento**, se puede
   demostrar que simulated annealing converge al óptimo global con
   probabilidad que tiende a 1.
 
-.center.width-75[![Curva típica de schedule de temperatura](figures/clase3/annealing-schedule.png)]
-
+.center.width-100[![Curva típica de schedule de temperatura](figures/clase3/annealing-schedule.png)]
+]
+]
 ---
 
-# Simulated annealing — ejemplo: el vendedor viajero (TSP)
+### Simulated annealing — ejemplo: el vendedor viajero (TSP)
 
 El **problema del vendedor viajero (TSP)** pide conectar un conjunto
 de puntos (ciudades, clientes) con la **ruta más corta** que los visita
@@ -339,7 +348,7 @@ para TSP a escala real.]
 
 ---
 
-# Simulated annealing — propiedades
+### Simulated annealing — propiedades
 
 - *Completitud*: sí, bajo un schedule de enfriamiento adecuado
   (teóricamente; en la práctica se usan schedules finitos que dan
@@ -355,10 +364,6 @@ viajero (TSP) a gran escala.]
 
 ---
 
-class: middle, center, divider-slide
-
-## (Breve) Local beam search y algoritmos genéticos
-
 ---
 
 class: middle, center, divider-slide
@@ -367,46 +372,126 @@ class: middle, center, divider-slide
 
 ---
 
-# Local beam search y algoritmos genéticos
+# Local beam search
 
-- **Local beam search**: mantiene $k$ estados en paralelo (no uno
-  solo); en cada paso genera todos los sucesores de los $k$ estados y
-  se queda con los $k$ mejores del total — hay comunicación implícita
-  entre las "ramas" (se abandonan las que van peor). A diferencia de
-  $k$ corridas independientes de hill climbing, aquí las ramas
-  "compiten" por el mismo cupo de $k$ supervivientes.
-- **Algoritmos genéticos**: una variante de beam search con
-  **reproducción**. Retomamos el ejemplo de 8-reinas (misma
-  representación que usamos para hill climbing), siguiendo CS188
-  Note 4:
-    - Un *individuo* es un cromosoma $x=(x_1,\dots,x_L)$ sobre un
-      alfabeto finito. Para 8-reinas: $L=8$ y cada $x_i\in\{1,\dots,8\}$
-      es la fila de la reina en la columna $i$.
-    - La función de *fitness* mide qué tan bueno es cada individuo.
-      Para 8-reinas, en vez de contar conflictos (que queremos
-      minimizar, como en hill climbing), definimos algo que
-      **maximizar**: el número de **pares de reinas que no se
-      atacan**, sobre el máximo posible $\binom{8}{2}=28$:
+.grid[
+.kol-1-2[
+- Corre $k$ hill-climbings **en paralelo**, pero no de forma
+  independiente: en cada paso se generan todos los sucesores de los
+  $k$ estados, y se conservan los $k$ mejores del total combinado.
+- Diferencia clave con $k$ *random restarts* independientes: aquí
+  hay **comunicación implícita** entre las ramas — si una rama va
+  muy bien, puede "absorber" los cupos de las que van mal
+  ("ven, la hierba es más verde por acá").
+- Riesgo: los $k$ estados pueden converger rápido a la misma región
+  del espacio de estados y perder diversidad — parecido a lo que
+  verán con la diversidad de la población en GA.
+]
+.kol-1-2[
+.center.width-100[![Diagrama de árbol de beam search](figures/clase3/local-beam.png)]
+]
+]
+
+---
+
+## Local beam search — pseudocódigo
+
+```
+function LOCAL-BEAM-SEARCH(problema, k) returns un estado
+    estados ← k estados generados al azar
+    loop do
+        sucesores ← { }
+        for cada s en estados do
+            sucesores ← sucesores ∪ SUCESORES(s)
+        if algún s en sucesores es objetivo then return s
+        estados ← los k mejores de sucesores según VALOR
+```
+
+- **Stochastic beam search**: en vez de tomar siempre los $k$
+  mejores, elige los $k$ sucesores **con probabilidad proporcional a
+  su valor** — mitiga la pérdida de diversidad, análogo a cómo
+  simulated annealing mitiga el atasco de hill climbing.
+
+.alert[Este mismo nombre — *beam search* — lo van a volver a ver en
+la Parte 2 del curso, en la generación de texto de un LLM (elegir
+entre las $k$ secuencias más probables en cada paso). Es la misma
+idea, aplicada a un espacio de estados distinto.]
+
+---
+
+class: middle, center, divider-slide
+
+## Algoritmos genéticos
+
+---
+
+# Algoritmos genéticos — motivación y representación
+
+.grid[
+.kol-1-2[
+- Una variante de beam search con **reproducción**: en vez de que
+  los $k$ mejores sobrevivan tal cual, se combinan entre sí para
+  producir la siguiente generación.
+- Retomamos el ejemplo de 8-reinas:
+    - Un **individuo** es un cromosoma $x=(x_1,\dots,x_L)$ sobre un
+      alfabeto finito.
+    - Para 8-reinas: $L=8$ y cada $x_i\in\{1,\dots,8\}$ es la fila
+      de la reina en la columna $i$.
+    - Una **población** es un conjunto de $k$ individuos —
+      exactamente como los $k$ estados de local beam search.
+]
+.kol-1-2[
+.center.width-90[![Representación de un cromosoma como cadena de genes](figures/clase3/cromosoma.png)]
+]
+]
+
+---
+
+# Algoritmos genéticos — fitness y selección
+
+- La función de ***fitness*** mide qué tan bueno es cada individuo.
+  Para 8-reinas, en vez de contar conflictos (que queremos
+  minimizar, como en hill climbing), definimos algo que
+  **maximizar**: el número de pares de reinas que no se atacan,
+  sobre el máximo posible $\binom{8}{2}=28$:
 
 $$
-\text{fitness}(x)=28-\#\{\text{pares en conflicto}\}
+\text{fitness}(x) = 28 - n_{\text{conflictos}}
 $$
 
-  Cada generación se construye así:
+- **Selección por torneo**: se muestrean $k\_{\text{torneo}}$ individuos al azar de la población y se queda el de mayor fitness. A mayor $k\_{\text{torneo}}$, mayor presión de selección (los mejores individuos dominan más rápido, pero se pierde diversidad más rápido también).
+- Alternativa clásica (AIMA): selección **proporcional al fitness**
+  — la probabilidad de ser padre es
+  $P(x)=\text{fitness}(x)/\sum_i \text{fitness}(x_i)$. Es la que
+  implementarán en la Actividad 1 del notebook.
 
-    1. **Selección** (por torneo): se muestrean $k$ individuos al azar
-       y se queda el de mayor fitness — mayor $k$ implica mayor
-       presión de selección.
-    2. **Crossover** (un punto, con probabilidad $p_c$): dado un punto
-       de corte $j$, dos padres $x,y$ producen
-       $x'=(x_1,\dots,x_j,y_{j+1},\dots,y_L)$ y su complemento. Para
-       8-reinas, esto combina el arreglo de columnas de un padre con
-       el de otro.
-    3. **Mutación** (con probabilidad $p_m$ por gen): cada $x_i$
-       cambia a un valor aleatorio del alfabeto con probabilidad
-       $p_m$ — es lo que le da a GA la capacidad de recuperar
-       diversidad genética que el crossover por sí solo no puede
-       introducir.
+---
+
+# Algoritmos genéticos — crossover y mutación
+
+.grid[
+.kol-1-2[
+- **Crossover** de un punto (con probabilidad $p\_c$): dado un punto
+  de corte $j$, dos padres $x,y$ producen
+$$
+x'=(x\_1,\dots,x\_j,y\_{j+1},\dots,y\_L)
+$$
+  y su complemento (intercambiando los roles de $x$ y $y$). Para
+  8-reinas, esto combina el arreglo de columnas de un padre con el
+  de otro.
+- **Mutación** (con probabilidad $p_m$ por gen): cada $x_i$ cambia a
+  un valor aleatorio del alfabeto con probabilidad $p_m$ — le da a
+  GA la capacidad de recuperar diversidad genética que el crossover
+  por sí solo no puede introducir.
+]
+.kol-1-2[
+.center.width-100[![Crossover y mutación entre dos padres](figures/clase3/cross-over-mutacion.png)]
+]
+]
+
+---
+
+# Algoritmos genéticos — el algoritmo completo
 
 ```
 function GENETIC-ALGORITHM(población, fitness) returns un individuo
@@ -428,8 +513,8 @@ implementa selección por torneo, crossover de un punto, mutación y
 elitismo, pero sobre **OneMax**
 ($\text{fitness}(x)=\sum_{i=1}^{L}x_i$, alfabeto binario) en vez de
 8-reinas — es la misma mecánica con un fitness más simple de
-depurar, y el notebook trae una actividad para extenderlo a una
-frase objetivo. Referencia: AIMA Cap. 4 y CS188 Note 4.]
+depurar, y trae una actividad para extenderlo a una frase objetivo.
+Referencia: AIMA Cap. 4 y CS188 Note 4.]
 
 
 ---
