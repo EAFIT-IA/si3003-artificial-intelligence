@@ -252,20 +252,6 @@ $$
 Estas ecuaciones nos permiten ver qué valores tendría $V^\pi$
 si conociéramos completamente la dinámica del ambiente.
 
-Por ejemplo, para $\gamma=0.9$:
-
-$$
-V^\pi(S_2)=10
-$$
-
-$$
-V^\pi(S_1)=9
-$$
-
-$$
-V^\pi(S_0)=9.1
-$$
-
 > **Importante:** el agente no recibe estos valores del ambiente.
 >
 > Durante la interacción solo observa transiciones de la forma
