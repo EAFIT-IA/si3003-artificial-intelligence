@@ -126,9 +126,7 @@ Pero para evaluar toda la trayectoria necesitamos sumar las recompensas futuras.
 A esta cantidad la llamamos **retorno**:
 
 $$
-G_t
-=
-R_{t+1}
+G_t = R_{t+1}
 +
 \gamma R_{t+2}
 +
