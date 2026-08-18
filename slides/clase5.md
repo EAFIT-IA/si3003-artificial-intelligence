@@ -254,7 +254,7 @@ la política para siempre.
 El valor de tomar la acción $a$ en el estado $s$ bajo una política
 $\pi$ es:
 
-.center.width-40[![Función de valor de acción](figures/clase5/fig10-action-value-function.png)]
+.center.width-60[![Función de valor de acción](figures/clase5/fig10-action-value-function.png)]
 
 ---
 
