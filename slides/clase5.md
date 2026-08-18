@@ -53,10 +53,6 @@ Vamos a profundizar en uno de los métodos de aprendizaje por refuerzo,
 los .bold[métodos basados en el valor], y a estudiar un algoritmo de
 aprendizaje por refuerzo: el .bold[Q-Learning].
 
----
-
-class: smaller
-
 # Hoy
 
 La idea de esta clase es profundizar en los siguientes temas:
