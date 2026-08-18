@@ -320,8 +320,7 @@ $$
 definida como:
 
 $$
-Q^\pi(s,a)
-=
+Q^\pi(s,a) =
 \mathbb{E}_\pi
 [
 G_t
@@ -354,8 +353,7 @@ $$
 Entonces:
 
 $$
-Q^\pi(S_0,\text{right})
-=
+Q^\pi(S_0,\text{right}) =
 1+\gamma V^\pi(S_1)
 $$
 
@@ -368,10 +366,8 @@ $$
 obtenemos:
 
 $$
-Q^\pi(S_0,\text{right})
-=
-1+0.9(9)
-=
+Q^\pi(S_0,\text{right}) =
+1+0.9(9) =
 9.1
 $$
 
@@ -394,11 +390,8 @@ $$
 entonces:
 
 $$
-Q^\pi(S_0,\text{down})
-=
-0+\gamma(-10)
-=
--9
+Q^\pi(S_0,\text{down}) =
+0+\gamma(-10) = -9
 $$
 
 Por lo tanto:
