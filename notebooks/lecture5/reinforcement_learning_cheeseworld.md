@@ -530,8 +530,7 @@ Este target combina:
 Comparamos el target con nuestra estimación actual:
 
 $$
-\delta
-=
+\delta =
 \text{TD target} - Q(s,a)
 $$
 
