@@ -262,9 +262,7 @@ V^\pi(S_0) =
 $$
 
 $$
-V^\pi(S_0) = 1+0.9(9)
-=
-9.1
+V^\pi(S_0) = 1+0.9(9) = 9.1
 $$
 
 Aquí aparece una idea fundamental:
@@ -278,8 +276,7 @@ Aquí aparece una idea fundamental:
 La ecuación general es:
 
 $$
-V^\pi(s)
-=
+V^\pi(s) =
 \sum_a
 \pi(a|s)
 \sum_{s'}
@@ -294,8 +291,7 @@ $$
 En un mundo determinístico y con una política determinística se simplifica a:
 
 $$
-V^\pi(s)
-=
+V^\pi(s) =
 R(s,a,s')
 +
 \gamma V^\pi(s')
