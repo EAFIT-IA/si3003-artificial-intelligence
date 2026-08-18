@@ -358,8 +358,7 @@ y luego continuar siguiendo la política $\pi$.
 Por definición:
 
 $$
-Q^\pi(S_0,\text{right})
-=
+Q^\pi(S_0,\text{right}) =
 \mathbb{E}_\pi
 \left[
 G_t
@@ -372,8 +371,7 @@ $$
 También podemos relacionarlo con Bellman:
 
 $$
-Q^\pi(S_0,\text{right})
-=
+Q^\pi(S_0,\text{right}) =
 1+\gamma V^\pi(S_1)
 $$
 
@@ -404,8 +402,7 @@ $$
 De nuevo:
 
 $$
-Q^\pi(S_0,\text{down})
-=
+Q^\pi(S_0,\text{down}) =
 0+\gamma V^\pi(S_3)
 $$
 
