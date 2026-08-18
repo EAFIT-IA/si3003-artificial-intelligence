@@ -39,8 +39,6 @@ Es como aprender a jugar un videojuego: al principio cometemos muchos
 errores, pero con cada intento aprendemos qué acciones nos acercan más
 a obtener una buena puntuación.
 
----
-
 class: middle, center, smaller
 
 .width-70[![Introducción a Q-Learning](figures/clase5/fig01-introduction-q-learning.gif)]
