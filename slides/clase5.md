@@ -93,10 +93,6 @@ observación del entorno, una política proporcionará una acción (o
 varias probabilidades para cada acción) que el agente debería llevar a
 cabo.
 
----
-
-class: middle, center, smaller
-
 .width-60[![La política π, el cerebro del agente](figures/clase5/fig03-policy.png)]
 
 .footnote[Créditos: [Deep RL Course](https://huggingface.co/learn/deep-rl-course), Hugging Face.]
@@ -134,10 +130,6 @@ El objetivo de un agente de RL es tener una política óptima
 $\pi^\*$.
 
 Para encontrar la política óptima, tenemos 2 métodos diferentes:
-
----
-
-class: smaller
 
 ## Métodos basados en política
 
@@ -180,7 +172,7 @@ recompensa, crearemos una .bold[Política Greedy] (codiciosa).
 .italic[Nota: *greedy* significa que la política elige en cada momento
 la acción que parece mejor según la función de valor.]
 
-.center.width-50[![Métodos basados en valores](figures/clase5/fig05b-value-based-methods.png)]
+.center.width-60[![Métodos basados en valores](figures/clase5/fig05b-value-based-methods.png)]
 
 ---
 
@@ -235,7 +227,7 @@ class: smaller
 Escribimos la función de valor de estado bajo una política $\pi$ de la
 siguiente manera:
 
-.center.width-40[![Función de valor de estado](figures/clase5/fig08-state-value-function.png)]
+.center.width-60[![Función de valor de estado](figures/clase5/fig08-state-value-function.png)]
 
 ---
 
@@ -246,7 +238,7 @@ esperada si el agente parte de ese estado y, a partir de ahí, sigue la
 política de forma indefinida (en todos los pasos temporales futuros, si
 lo prefieres).
 
-.center.width-40[![Ejemplo de función de valor de estado](figures/clase5/fig09-example-state-value-function.png)]
+.center.width-60[![Ejemplo de función de valor de estado](figures/clase5/fig09-example-state-value-function.png)]
 
 ---
 
@@ -259,10 +251,6 @@ función de valor de acción devuelve el retorno esperado si el agente
 comienza en ese estado, toma esa acción y, a partir de entonces, sigue
 la política para siempre.
 
----
-
-class: smaller
-
 El valor de tomar la acción $a$ en el estado $s$ bajo una política
 $\pi$ es:
 
@@ -272,7 +260,7 @@ $\pi$ es:
 
 class: middle, center, smaller
 
-.width-50[![Valor de un par estado-acción](figures/clase5/fig11-value-of-state-action-pair.png)]
+.width-60[![Valor de un par estado-acción](figures/clase5/fig11-value-of-state-action-pair.png)]
 
 ---
 
@@ -285,7 +273,7 @@ Para la función de valor de acción, calculamos el valor del par
 estado-acción $(S_t, A_t)$, es decir, el valor de tomar esa acción en
 ese estado.
 
-.center.width-50[![Comparación de métodos basados en valores](figures/clase5/fig12-value-based-methods-comparison.png)]
+.center.width-70[![Comparación de métodos basados en valores](figures/clase5/fig12-value-based-methods-comparison.png)]
 
 ---
 
@@ -306,10 +294,6 @@ class: smaller
 
 La ecuación de Bellman simplifica el cálculo del valor de estado o del
 valor de estado-acción.
-
----
-
-class: smaller
 
 Sabemos que si calculamos $V(S_t)$ (el valor de un estado), necesitamos
 calcular el retorno comenzando desde ese estado y luego seguir la
@@ -332,8 +316,8 @@ durante todos los pasos de tiempo.
 
 class: middle, smaller
 
-Luego, para calcular $V(S_{t+1})$, necesitamos calcular el retorno
-comenzando desde ese estado $S_{t+1}$.
+Luego, para calcular $V(S\_{t+1})$, necesitamos calcular el retorno
+comenzando desde ese estado $S\_{t+1}$.
 
 .center.width-50[![V de St+1](figures/clase5/fig14-vst1.png)]
 
@@ -361,13 +345,13 @@ estado como:
 
 La recompensa inmediata + el valor descontado del estado siguiente:
 
-$$R_{t+1} + \big(\gamma * V(S_{t+1})\big)$$
+$$R\_{t+1} + \big(\gamma * V(S\_{t+1})\big)$$
 
 ---
 
 class: middle, center, smaller
 
-.width-50[![Ecuación de Bellman](figures/clase5/fig15-bellman-eq.png)]
+.width-70[![Ecuación de Bellman](figures/clase5/fig15-bellman-eq.png)]
 
 .footnote[Créditos: [Deep RL Course](https://huggingface.co/learn/deep-rl-course), Hugging Face.]
 
@@ -386,8 +370,8 @@ class: smaller
 
 En resumen, la idea de la ecuación de Bellman es que, en lugar de
 calcular cada valor como la suma del retorno esperado —lo cual es un
-proceso largo—, calculamos el valor como la suma de la .bold[recompensa
-inmediata] + el .bold[valor descontado del estado siguiente].
+proceso largo—, calculamos el valor como la suma de la 
+.bold[recompensa inmediata] + el .bold[valor descontado del estado siguiente].
 
 ---
 
@@ -404,12 +388,6 @@ de valor de acción:
   valor de acción que nos indicará el valor de cada estado o de cada
   par estado-acción.
 
----
-
-class: smaller
-
-## Q-Learning
-
 Actualiza su función de valor de acción en cada paso, en lugar de
 hacerlo al final del episodio.
 
@@ -424,7 +402,7 @@ class: middle, smaller
 Dado un estado y una acción, nuestra función Q devuelve un valor de
 estado-acción (también llamado .bold[valor Q]).
 
-.center.width-40[![Función Q](figures/clase5/fig17-q-function.png)]
+.center.width-70[![Función Q](figures/clase5/fig17-q-function.png)]
 
 .footnote[Créditos: [Deep RL Course](https://huggingface.co/learn/deep-rl-course), Hugging Face.]
 
@@ -449,7 +427,7 @@ un par estado-acción.
 
 class: middle, smaller
 
-.center.width-50[![Inicialización de Q-Learning](figures/clase5/fig18-q-learning-init.png)]
+.center.width-70[![Inicialización de Q-Learning](figures/clase5/fig18-q-learning-init.png)]
 
 La tabla Q está inicializada. Por eso, todos los valores son $= 0$.
 
@@ -485,7 +463,7 @@ class: smaller
 
 class: middle, center, smaller
 
-.width-60[![Ejemplo de Q-Learning](figures/clase5/fig19-q-learning-example.png)]
+.width-70[![Ejemplo de Q-Learning](figures/clase5/fig19-q-learning-example.png)]
 
 Con el entrenamiento, nuestra tabla Q mejora, ya que gracias a ella
 podemos conocer el valor de cada par estado-acción.
@@ -494,7 +472,7 @@ podemos conocer el valor de cada par estado-acción.
 
 class: middle, center, smaller
 
-.width-60[![Algoritmo Q-Learning](figures/clase5/fig20-algoritmo-q-learning.png)]
+.width-70[![Algoritmo Q-Learning](figures/clase5/fig20-algoritmo-q-learning.png)]
 
 .footnote[Sarsamax (Q-Learning) — Russell & Norvig, *AIMA*, notación de pseudocódigo estándar.]
 
@@ -502,7 +480,7 @@ class: middle, center, smaller
 
 class: middle, center, smaller
 
-.width-50[![Q-Learning paso 1](figures/clase5/fig21-q-learning-step1.png)]
+.width-70[![Q-Learning paso 1](figures/clase5/fig21-q-learning-step1.png)]
 
 Inicializamos $Q$ arbitrariamente (ej. $Q(s,a)=0$ para todo
 $s \in \mathcal{S}$ y $a \in \mathcal{A}(s)$, y
@@ -512,7 +490,7 @@ $Q(\text{estado-terminal}, \cdot)=0$): inicializamos la tabla Q.
 
 class: middle, center, smaller
 
-.width-50[![Q-Learning paso 2](figures/clase5/fig22-q-learning-step2.png)]
+.width-70[![Q-Learning paso 2](figures/clase5/fig22-q-learning-step2.png)]
 
 Elegimos la acción $A_t$ usando una política derivada de $Q$ (ej.
 $\epsilon$-greedy).
@@ -540,13 +518,13 @@ Al comienzo del entrenamiento, .bold[la probabilidad de realizar
 exploración será muy alta], ya que $\epsilon$ es muy alto, por lo que
 la mayor parte del tiempo exploraremos.
 
-.center.width-40[![Epsilon en el tiempo](figures/clase5/fig23-epsilon-in-time.png)]
+.center.width-50[![Epsilon en el tiempo](figures/clase5/fig23-epsilon-in-time.png)]
 
 ---
 
 class: middle, center, smaller
 
-Ejecutamos la acción $A_t$ y observamos $R_{t+1}, S_{t+1}$.
+Ejecutamos la acción $A_t$ y observamos $R\_{t+1}, S\_{t+1}$.
 
 .width-50[![Q-Learning paso 3](figures/clase5/fig24-q-learning-step3.png)]
 
@@ -558,7 +536,7 @@ class: middle, smaller
 
 .center.width-60[![Q-Learning paso 4](figures/clase5/fig25-q-learning-step4.png)]
 
-$$Q(S_t,A_t) \leftarrow Q(S_t,A_t) + \alpha\big[R_{t+1} + \gamma \max_a Q(S_{t+1},a) - Q(S_t,A_t)\big]$$
+$$Q(S_t,A_t) \leftarrow Q(S_t,A_t) + \alpha\big[R\_{t+1} + \gamma \max_a Q(S\_{t+1},a) - Q(S_t,A_t)\big]$$
 
 ---
 
