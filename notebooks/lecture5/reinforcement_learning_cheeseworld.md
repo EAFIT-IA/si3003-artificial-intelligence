@@ -40,7 +40,7 @@ Los estados corresponden a:
 | $S_5$ | $(1,2)$ | $+10$ | Sí |
 
 > **Figura 1. CheeseWorld y sus recompensas.**  
-> Placeholder: `figures/cheeseworld-environment.png`
+![CheeseWorld](figs/Fig1.png)
 
 En Reinforcement Learning el agente interactúa con el ambiente de manera secuencial.
 
