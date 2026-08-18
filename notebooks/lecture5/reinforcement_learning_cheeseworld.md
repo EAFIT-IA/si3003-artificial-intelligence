@@ -440,8 +440,7 @@ de la experiencia.
 Si conocemos $Q^\pi$, podemos obtener el valor de un estado bajo una política:
 
 $$
-V^\pi(s)
-=
+V^\pi(s) =
 \sum_a
 \pi(a|s)Q^\pi(s,a)
 $$
@@ -449,8 +448,7 @@ $$
 Si queremos actuar de manera greedy:
 
 $$
-\pi(s)
-=
+\pi(s) =
 \arg\max_a Q(s,a)
 $$
 
