@@ -106,12 +106,9 @@ Una recompensa individual solo indica qué ocurrió en **una transición**.
 Supongamos la trayectoria:
 
 $$
-S_0
-\xrightarrow{\text{right},\ +1}
-S_1
-\xrightarrow{\text{right},\ 0}
-S_2
-\xrightarrow{\text{down},\ +10}
+S_0 \xrightarrow{\text{right},\ +1}
+S_1 \xrightarrow{\text{right},\ 0}
+S_2 \xrightarrow{\text{down},\ +10}
 S_5
 $$
 
