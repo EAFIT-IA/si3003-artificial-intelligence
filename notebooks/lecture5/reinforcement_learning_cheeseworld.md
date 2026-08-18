@@ -511,8 +511,7 @@ $$
 Q-Learning construye un objetivo:
 
 $$
-\text{TD target}
-=
+\text{TD target} =
 r
 +
 \gamma
@@ -533,22 +532,14 @@ Comparamos el target con nuestra estimación actual:
 $$
 \delta
 =
-\text{TD target}
--
-Q(s,a)
+\text{TD target} - Q(s,a)
 $$
 
 o equivalentemente:
 
 $$
-\delta
-=
-r
-+
-\gamma
-\max_{a'}Q(s',a')
--
-Q(s,a)
+\delta =
+r + \gamma \max_{a'}Q(s',a') - Q(s,a)
 $$
 
 > **Figura 6. TD target y TD error en una transición.**  
@@ -571,20 +562,7 @@ $$
 Sustituyendo $\delta$:
 
 $$
-Q(s,a)
-\leftarrow
-Q(s,a)
-+
-\alpha
-\left[
-r
-+
-\gamma
-\max_{a'}Q(s',a')
--
-Q(s,a)
-\right]
-$$
+Q(s,a) \leftarrow Q(s,a) + \alpha \left[r + \gamma \max_{a'}Q(s',a') - Q(s,a) \right] $$
 
 donde $\alpha$ es el **learning rate**.
 
