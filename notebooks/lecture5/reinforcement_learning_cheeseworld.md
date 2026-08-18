@@ -194,8 +194,7 @@ Ahora queremos responder una pregunta diferente:
 La **función de valor** responde esta pregunta:
 
 $$
-V^\pi(s)
-=
+V^\pi(s) =
 \mathbb{E}_\pi[G_t\mid S_t=s]
 $$
 
