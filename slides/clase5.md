@@ -524,7 +524,7 @@ la mayor parte del tiempo exploraremos.
 
 class: middle, center, smaller
 
-Ejecutamos la acción $A_t$ y observamos $R\_{t+1}, S\_{t+1}$.
+Ejecutamos la acción $A_t$ y observamos $R\_{t+1}$, $S\_{t+1}$.
 
 .width-50[![Q-Learning paso 3](figures/clase5/fig24-q-learning-step3.png)]
 
@@ -534,9 +534,8 @@ class: middle, smaller
 
 ## Paso 4: actualizar $Q(S_t, A_t)$
 
-.center.width-60[![Q-Learning paso 4](figures/clase5/fig25-q-learning-step4.png)]
+.center.width-70[![Q-Learning paso 4](figures/clase5/fig25-q-learning-step4.png)]
 
-$$Q(S_t,A_t) \leftarrow Q(S_t,A_t) + \alpha\big[R\_{t+1} + \gamma \max_a Q(S\_{t+1},a) - Q(S_t,A_t)\big]$$
 ---
 
 class: smaller
