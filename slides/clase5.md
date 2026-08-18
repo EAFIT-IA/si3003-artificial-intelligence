@@ -524,7 +524,7 @@ la mayor parte del tiempo exploraremos.
 
 class: middle, center, smaller
 
-Ejecutamos la acción $A_t$ y observamos $R\_{t+1}$, $S\_{t+1}$.
+Ejecutamos la acción $A\_t$ y observamos $R\_{t+1}, S\_{t+1}$.
 
 .width-50[![Q-Learning paso 3](figures/clase5/fig24-q-learning-step3.png)]
 
