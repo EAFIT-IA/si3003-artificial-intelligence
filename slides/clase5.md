@@ -74,7 +74,7 @@ En RL construimos agentes que toman decisiones inteligentes, por
 ejemplo un agente que juega videojuegos o invierte en la bolsa. Siempre
 buscando .bold[maximizar sus beneficios].
 
-.center.width-40[![Relación agente-entorno](figures/clase5/fig02-agent-environment-relation.png)]
+.center.width-60[![Relación agente-entorno](figures/clase5/fig02-agent-environment-relation.png)]
 
 .footnote[Créditos: [Deep RL Course](https://huggingface.co/learn/deep-rl-course), Hugging Face.]
 
@@ -97,7 +97,7 @@ cabo.
 
 class: middle, center, smaller
 
-.width-50[![La política π, el cerebro del agente](figures/clase5/fig03-policy.png)]
+.width-60[![La política π, el cerebro del agente](figures/clase5/fig03-policy.png)]
 
 .footnote[Créditos: [Deep RL Course](https://huggingface.co/learn/deep-rl-course), Hugging Face.]
 
