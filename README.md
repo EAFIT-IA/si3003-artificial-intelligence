@@ -53,6 +53,7 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 
   ### Lecture 05 — Reinforcement Learning 
 - `slides_pdf/clase5.pdf` — RL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase5.md)
+- [notebooks](notebooks/lecture5)
 
 
 
