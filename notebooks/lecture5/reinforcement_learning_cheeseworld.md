@@ -742,3 +742,11 @@ $$
 - $V^\pi(s)$: qué tan bueno es un estado bajo una política.
 - $Q^\pi(s,a)$: qué tan buena es una acción desde un estado.
 - Q-Learning: algoritmo que aprende una aproximación de $Q^*(s,a)$ mediante interacción.
+
+
+---
+
+# Ejercicio
+![Ejercicio](figs/Ejercicio.png)
+
+
