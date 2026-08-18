@@ -323,72 +323,115 @@ Interpretación:
 
 ---
 
-## Ejemplo
+## Ejemplo en CheeseWorld
 
 Desde $S_0$ tenemos dos acciones posibles:
 
 - `right`
 - `down`
 
-Si ejecutamos `right`:
+Si ejecutamos `right`, observamos:
 
 $$
 S_0
-\xrightarrow{+1}
+\xrightarrow[\text{right}]{+1}
 S_1
 $$
 
-Entonces:
+El ambiente nos entrega:
 
 $$
-Q^\pi(S_0,\text{right}) =
-1+\gamma V^\pi(S_1)
+R_{t+1}=+1,
+\qquad
+S_{t+1}=S_1
 $$
 
-Como:
-
-$$
-V^\pi(S_1)=9
-$$
-
-obtenemos:
-
-$$
-Q^\pi(S_0,\text{right}) =
-1+0.9(9) =
-9.1
-$$
-
-En cambio, si ejecutamos `down`:
-
-$$
-S_0
-\xrightarrow{0}
-S_3
-$$
-
-y después la política lleva al veneno:
-
-$$
-S_3
-\xrightarrow{-10}
-S_4
-$$
-
-entonces:
-
-$$
-Q^\pi(S_0,\text{down}) =
-0+\gamma(-10) = -9
-$$
-
-Por lo tanto:
+Queremos conocer:
 
 $$
 Q^\pi(S_0,\text{right})
->
+$$
+
+que representa el retorno esperado al tomar `right` desde $S_0$
+y luego continuar siguiendo la política $\pi$.
+
+Por definición:
+
+$$
+Q^\pi(S_0,\text{right})
+=
+\mathbb{E}_\pi
+\left[
+G_t
+\mid
+S_t=S_0,\,
+A_t=\text{right}
+\right]
+$$
+
+También podemos relacionarlo con Bellman:
+
+$$
+Q^\pi(S_0,\text{right})
+=
+1+\gamma V^\pi(S_1)
+$$
+
+Pero aparece un problema:
+
+$$
+\boxed{V^\pi(S_1)\text{ es desconocido}}
+$$
+
+El ambiente no nos entrega $V^\pi(S_1)$.
+
+---
+
+Si ejecutamos `down`, observamos:
+
+$$
+S_0
+\xrightarrow[\text{down}]{0}
+S_3
+$$
+
+y queremos conocer:
+
+$$
 Q^\pi(S_0,\text{down})
 $$
+
+De nuevo:
+
+$$
+Q^\pi(S_0,\text{down})
+=
+0+\gamma V^\pi(S_3)
+$$
+
+pero:
+
+$$
+\boxed{V^\pi(S_3)\text{ también es desconocido}}
+$$
+
+Por tanto, aunque conceptualmente queremos comparar:
+
+$$
+Q^\pi(S_0,\text{right})
+\quad\text{vs.}\quad
+Q^\pi(S_0,\text{down})
+$$
+
+el agente **todavía no conoce ninguno de estos valores**.
+
+La pregunta ahora es:
+
+> ¿Cómo puede el agente aprender qué acción es mejor si solo observa
+> recompensas y nuevos estados?
+
+Eso nos lleva a estimar directamente los valores $Q(s,a)$ a partir
+de la experiencia.
 
 > **Figura 5. Comparación entre $V(s)$ y $Q(s,a)$.**  
 ![v vs q](figs/Fig5.png)
