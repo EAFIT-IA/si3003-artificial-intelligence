@@ -260,7 +260,7 @@ $\pi$ es:
 
 class: middle, center, smaller
 
-.width-60[![Valor de un par estado-acción](figures/clase5/fig11-value-of-state-action-pair.png)]
+.width-70[![Valor de un par estado-acción](figures/clase5/fig11-value-of-state-action-pair.png)]
 
 ---
 
