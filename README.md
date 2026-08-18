@@ -51,8 +51,8 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - `slides_pdf/clase4.pdf` — MDPs. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase4.md)
 - [notebooks](notebooks/lecture4)
 
-  ### Lecture 04 — MDPs 
-- `slides_pdf/clase4.pdf` — RL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase5.md)
+  ### Lecture 05 — Reinforcement Learning 
+- `slides_pdf/clase5.pdf` — RL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase5.md)
 
 
 
