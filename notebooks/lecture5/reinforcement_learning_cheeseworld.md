@@ -69,7 +69,7 @@ $$
 La recompensa corresponde a la transición realizada. En CheeseWorld esto equivale a la recompensa del estado al que llega el agente.
 
 > **Figura 2. Ciclo de interacción agente–ambiente.**  
-> Placeholder: `figures/agent-environment-loop.png`
+![agente-ambiente](figs/Fig2.png)
 
 ### Política
 
@@ -165,7 +165,7 @@ G_0=9.1
 $$
 
 > **Figura 3. Retorno descontado de una trayectoria.**  
-> Placeholder: `figures/discounted-return.png`
+![descuento](figs/Fig3.png)
 
 ### ¿Por qué descontamos?
 
@@ -314,8 +314,7 @@ R(s,a,s')
 $$
 
 > **Figura 4. Bellman: valor presente = recompensa inmediata + valor futuro.**  
-> Placeholder: `figures/bellman-value.png`
-
+![Bellman](figs/Fig4.png)
 ---
 
 # 3. Q Function
@@ -427,7 +426,7 @@ Q^\pi(S_0,\text{down})
 $$
 
 > **Figura 5. Comparación entre $V(s)$ y $Q(s,a)$.**  
-> Placeholder: `figures/value-vs-q.png`
+![v vs q](figs/Fig5.png)
 
 ---
 
@@ -550,7 +549,7 @@ Q(s,a)
 $$
 
 > **Figura 6. TD target y TD error en una transición.**  
-> Placeholder: `figures/td-error.png`
+![TD-error](figs/Fig6.png)
 
 ---
 
@@ -670,7 +669,7 @@ Esto produce un balance entre:
 - **explotación:** usar lo aprendido.
 
 > **Figura 7. Exploración vs explotación con $\epsilon$-greedy.**  
-> Placeholder: `figures/epsilon-greedy.png`
+![e-greedy](figs/Fig7.png)
 
 ---
 
