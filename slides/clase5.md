@@ -537,7 +537,6 @@ class: middle, smaller
 .center.width-60[![Q-Learning paso 4](figures/clase5/fig25-q-learning-step4.png)]
 
 $$Q(S_t,A_t) \leftarrow Q(S_t,A_t) + \alpha\big[R\_{t+1} + \gamma \max_a Q(S\_{t+1},a) - Q(S_t,A_t)\big]$$
-
 ---
 
 class: smaller
