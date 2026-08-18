@@ -206,24 +206,26 @@ Es decir:
 
 ## Ejemplo en CheeseWorld
 
-Supongamos la política:
+Supongamos que el agente sigue la política:
 
 $$
-\pi(S_0)=\text{right}
-$$
-
-$$
-\pi(S_1)=\text{right}
-$$
-
-$$
+\pi(S_0)=\text{right}, \qquad
+\pi(S_1)=\text{right}, \qquad
 \pi(S_2)=\text{down}
 $$
 
-La trayectoria es determinística:
+Esta política produce la trayectoria determinística:
 
 $$
-S_0\rightarrow S_1\rightarrow S_2\rightarrow S_5
+S_0 \rightarrow S_1 \rightarrow S_2 \rightarrow S_5
+$$
+
+donde las recompensas observadas durante las transiciones son:
+
+$$
+S_0 \xrightarrow{+1} S_1
+\xrightarrow{0} S_2
+\xrightarrow{+10} S_5
 $$
 
 Como $S_5$ es terminal:
@@ -232,38 +234,64 @@ $$
 V^\pi(S_5)=0
 $$
 
-Desde $S_2$:
+La ecuación de Bellman relaciona el valor de cada estado con la
+recompensa inmediata y el valor del siguiente estado:
 
 $$
-V^\pi(S_2) =
-10+\gamma(0)
+V^\pi(S_2)=10+\gamma V^\pi(S_5)
 $$
+
+$$
+V^\pi(S_1)=0+\gamma V^\pi(S_2)
+$$
+
+$$
+V^\pi(S_0)=1+\gamma V^\pi(S_1)
+$$
+
+Estas ecuaciones nos permiten ver qué valores tendría $V^\pi$
+si conociéramos completamente la dinámica del ambiente.
+
+Por ejemplo, para $\gamma=0.9$:
 
 $$
 V^\pi(S_2)=10
-$$
-
-Desde $S_1$:
-
-$$
-V^\pi(S_1) =
-0+\gamma V^\pi(S_2)
 $$
 
 $$
 V^\pi(S_1)=9
 $$
 
-Desde $S_0$:
-
 $$
-V^\pi(S_0) =
-1+\gamma V^\pi(S_1)
+V^\pi(S_0)=9.1
 $$
 
+> **Importante:** el agente no recibe estos valores del ambiente.
+>
+> Durante la interacción solo observa transiciones de la forma
+>
+> $$
+> (S_t,A_t)\rightarrow(R_{t+1},S_{t+1})
+> $$
+>
+> Los valores $V^\pi(s)$ son cantidades desconocidas que deben ser
+> estimadas a partir de la experiencia.
+
+Por tanto, la idea importante de Bellman no es que conozcamos el valor
+del siguiente estado, sino que podemos relacionar una estimación con otra:
+
 $$
-V^\pi(S_0) = 1+0.9(9) = 9.1
+\boxed{
+\text{valor presente}
+\approx
+\text{recompensa observada}
++
+\gamma\,\text{valor futuro estimado}
+}
 $$
+
+Esta idea será la base para pasar de $V^\pi(s)$ a $Q^\pi(s,a)$ y,
+finalmente, a Q-Learning.
 
 Aquí aparece una idea fundamental:
 
