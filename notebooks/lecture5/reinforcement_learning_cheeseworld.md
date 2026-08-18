@@ -285,32 +285,6 @@ Aquí aparece una idea fundamental:
 
 ---
 
-## Ecuación de Bellman para $V^\pi$
-
-La ecuación general es:
-
-$$
-V^\pi(s) =
-\sum_a
-\pi(a|s)
-\sum_{s'}
-P(s'|s,a)
-\left[
-R(s,a,s')
-+
-\gamma V^\pi(s')
-\right]
-$$
-
-En un mundo determinístico y con una política determinística se simplifica a:
-
-$$
-V^\pi(s) =
-R(s,a,s')
-+
-\gamma V^\pi(s')
-$$
-
 > **Figura 4. Bellman: valor presente = recompensa inmediata + valor futuro.**  
 ![Bellman](figs/Fig4.png)
 ---
