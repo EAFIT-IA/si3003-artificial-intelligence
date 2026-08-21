@@ -58,8 +58,6 @@ aprendizaje por refuerzo: el .bold[Q-Learning].
 La idea de esta clase es profundizar en los siguientes temas:
 
 - Métodos basados en valores.
-- Diferencias entre el aprendizaje de Monte Carlo y el aprendizaje por
-  diferencias temporales.
 - Estudiaremos e implementaremos un algoritmo de aprendizaje por
   refuerzo (RL): el aprendizaje Q (Q-Learning).
 
