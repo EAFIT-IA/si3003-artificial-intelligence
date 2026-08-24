@@ -575,4 +575,3 @@ count: false
 
 ## Fin de la Clase 6
 
-Próxima clase: Aprendizaje Bayesiano — Naive Bayes
