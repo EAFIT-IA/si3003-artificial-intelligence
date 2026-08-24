@@ -65,13 +65,13 @@ Aprender es útil como método de construcción de sistemas — exponer el
 sistema a la realidad en lugar de intentar programarlo a mano. Además,
 ¡los humanos podemos saber hacer algo sin saber explicar cómo!
 
-.center.width-70[![Skinner y el condicionamiento operante](figures/clase6/fig02-skinner-pigeon.png)]
+.center.width-70[![Skinner y el condicionamiento operante](figures/clase6/fig_02.png)]
 
 ---
 
 class: middle, center, smaller
 
-.width-90[![El perceptrón, un hito temprano del aprendizaje de máquina](figures/clase6/fig03-perceptron.png)]
+.width-90[![El perceptrón, un hito temprano del aprendizaje de máquina](figures/clase6/fig_03.png)]
 
 .footnote[Frank Rosenblatt y el Mark I Perceptron, finales de los años 50.]
 
@@ -135,7 +135,7 @@ class: middle, center, smaller
 
 # Ejemplo de clasificación: reconocimiento de objetos
 
-.width-90[![Clasificación jirafa vs llama](figures/clase6/fig04-giraffe-llama-classification.png)]
+.width-90[![Clasificación jirafa vs llama](figures/clase6/fig_04.png)]
 
 ---
 
@@ -143,25 +143,25 @@ class: middle, center, smaller
 
 # Ejemplo de regresión: ajuste de curvas
 
-.width-55[![Puntos de datos sin ajustar](figures/clase6/fig05-curve-fit-points.png)]
+.width-55[![Puntos de datos sin ajustar](figures/clase6/fig_05.png)]
 
 ---
 
 class: middle, center, smaller
 
-.width-55[![Ajuste lineal](figures/clase6/fig06-curve-fit-line.png)]
+.width-55[![Ajuste lineal](figures/clase6/fig_06.png)]
 
 ---
 
 class: middle, center, smaller
 
-.width-55[![Ajuste cuadrático y cúbico](figures/clase6/fig07-curve-fit-green-blue.png)]
+.width-55[![Ajuste cuadrático y cúbico](figures/clase6/fig_07.png)]
 
 ---
 
 class: middle, center, smaller
 
-.width-55[![Sobreajuste: la curva naranja pasa por todos los puntos pero generaliza mal](figures/clase6/fig08-curve-fit-overfit.png)]
+.width-55[![Sobreajuste: la curva naranja pasa por todos los puntos pero generaliza mal](figures/clase6/fig_08.png)]
 
 ---
 
@@ -181,7 +181,7 @@ class: smaller
 
 class: middle, center, smaller
 
-.width-45[![Robot clasificando correo en inbox vs. spam](figures/clase6/fig09-classification-cartoon.png)]
+.width-45[![Robot clasificando correo en inbox vs. spam](figures/clase6/fig_09.png)]
 
 # Clasificación
 
@@ -200,7 +200,7 @@ class: smaller
   - Patrones de texto: $dd, MAYÚSCULAS
   - No-texto: remitente en contactos, enlace-ancla no coincide
 
-.center.width-55[![Ejemplo de filtro de spam](figures/clase6/fig10-spam-filter-example.png)]
+.center.width-55[![Ejemplo de filtro de spam](figures/clase6/fig_10.png)]
 
 ---
 
@@ -215,7 +215,7 @@ class: smaller
 - .bold[Features]: píxel (6,8)=ON; patrones de forma (número de
   componentes, aspect ratio, número de loops); mapas de filtros…
 
-.center.width-40[![Reconocimiento de dígitos manuscritos](figures/clase6/fig11-digit-recognition.png)]
+.center.width-40[![Reconocimiento de dígitos manuscritos](figures/clase6/fig_11.png)]
 
 ---
 
@@ -231,7 +231,7 @@ class: smaller
   mohoso / OK
 - … muchas más
 
-.center.width-45[![Identificando un objeto entre varias opciones](figures/clase6/fig12-other-classification-tasks.png)]
+.center.width-45[![Identificando un objeto entre varias opciones](figures/clase6/fig_12.png)]
 
 ---
 
@@ -252,7 +252,7 @@ Representación popular para clasificadores — ¡incluso entre humanos!
 Acabo de llegar a un restaurante: ¿debería esperar por una mesa o irme
 a otro lado?
 
-.center.width-70[![Árbol de decisión para esperar en un restaurante](figures/clase6/fig13-decision-tree-restaurant.png)]
+.center.width-70[![Árbol de decisión para esperar en un restaurante](figures/clase6/fig_13.png)]
 
 ---
 
@@ -266,7 +266,7 @@ alternativas cerca pero está lloviendo afuera.
 .bold[El árbol de decisión particiona] el espacio de entradas y le
 asigna una etiqueta a cada partición.
 
-.center.width-70[![Recorrido del árbol para un caso concreto](figures/clase6/fig14-decision-tree-annotated.png)]
+.center.width-70[![Recorrido del árbol para un caso concreto](figures/clase6/fig_14.png)]
 
 ---
 
@@ -280,7 +280,7 @@ función] de la entrada.
 Ej.: para funciones booleanas, se construye un camino de la raíz a una
 hoja por cada fila de la tabla de verdad ($A \text{ xor } B$):
 
-.center.width-65[![Expresividad: XOR como árbol de decisión](figures/clase6/fig15-expressiveness-xor.png)]
+.center.width-65[![Expresividad: XOR como árbol de decisión](figures/clase6/fig_15.png)]
 
 Trivialmente existe un árbol de decisión consistente que ajusta
 exactamente cualquier conjunto de entrenamiento (a menos que la
@@ -330,7 +330,7 @@ class: middle, center, smaller
 
 # Datos de entrenamiento
 
-.width-100[![Tabla de ejemplos de entrenamiento del restaurante](figures/clase6/fig16-training-data-table.png)]
+.width-100[![Tabla de ejemplos de entrenamiento del restaurante](figures/clase6/fig_16.png)]
 
 ---
 
@@ -364,7 +364,7 @@ class: smaller
 Idea: medir la contribución de un atributo a aumentar la "pureza" de
 las etiquetas en cada subconjunto de ejemplos.
 
-.center.width-80[![Comparación de pureza: Patrons vs. Type](figures/clase6/fig17-information-gain-circles.png)]
+.center.width-80[![Comparación de pureza: Patrons vs. Type](figures/clase6/fig_17.png)]
 
 .bold[Patrons] es mejor elección: da .italic[información] sobre la
 clasificación (reduce la .bold[entropía] de la distribución de
@@ -437,7 +437,7 @@ class: middle, center, smaller
 
 # Resultado sobre los datos del restaurante
 
-.width-70[![Árbol de decisión aprendido a partir de los 12 ejemplos](figures/clase6/fig18-results-restaurant-tree.png)]
+.width-70[![Árbol de decisión aprendido a partir de los 12 ejemplos](figures/clase6/fig_18.png)]
 
 Árbol aprendido a partir de los 12 ejemplos: .bold[más simple] que el
 árbol "verdadero" que vimos al inicio.
@@ -448,7 +448,7 @@ class: middle, center, smaller
 
 # Entrenamiento y prueba
 
-.width-85[![Enseñanza, examen de práctica y examen final](figures/clase6/fig19-training-testing-cartoon.png)]
+.width-85[![Enseñanza, examen de práctica y examen final](figures/clase6/fig_19.png)]
 
 ---
 
@@ -483,7 +483,7 @@ class: middle, center, smaller
 
 # Resultado sobre los datos del restaurante
 
-.width-70[![Curva de aprendizaje: precisión vs. tamaño del conjunto de entrenamiento](figures/clase6/fig23-results-learning-curve.png)]
+.width-70[![Curva de aprendizaje: precisión vs. tamaño del conjunto de entrenamiento](figures/clase6/fig_23.png)]
 
 .footnote[Curva ilustrativa generada para esta clase — la forma (subida rápida y luego estabilización con ruido) reproduce la tendencia típica reportada en AIMA/CS188 para este mismo experimento.]
 
@@ -499,7 +499,7 @@ class: middle, center, title-slide
 
 class: middle, center, smaller
 
-.width-60[![Ajustando una línea recta a puntos de datos](figures/clase6/fig20-linear-regression-cartoon.png)]
+.width-60[![Ajustando una línea recta a puntos de datos](figures/clase6/fig_20.png)]
 
 ---
 
@@ -507,7 +507,7 @@ class: smaller
 
 # Regresión lineal = ajustar una línea recta / hiperplano
 
-.center.width-70[![Predicción con regresión lineal: hw(x) = w0 + w1x](figures/clase6/fig21-linear-regression-fit.png)]
+.center.width-70[![Predicción con regresión lineal: hw(x) = w0 + w1x](figures/clase6/fig_21.png)]
 
 Predicción: $h_w(x) = w_0 + w_1 x$
 
@@ -517,7 +517,7 @@ class: smaller
 
 # Error de predicción
 
-.center.width-80[![Error o residual entre observación y predicción](figures/clase6/fig22-prediction-error-residual.png)]
+.center.width-80[![Error o residual entre observación y predicción](figures/clase6/fig_22.png)]
 
 Error en una instancia: $y - h_w(x)$ — la diferencia entre lo
 .bold[observado] y lo .bold[predicho] se llama .italic[residual].
