@@ -55,6 +55,9 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - `slides_pdf/clase5.pdf` — RL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase5.md)
 - [notebooks](notebooks/lecture5)
 
+  ### Lecture 06 — Machine Learning
+- `slides_pdf/clase5.pdf` — RL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase6.md)
+- [notebooks](notebooks/lecture6)
 
 
 
