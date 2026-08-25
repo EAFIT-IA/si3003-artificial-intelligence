@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Tree · Classification · Gini</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08090e;
+  --s1: #0f1018;
+  --s2: #14151f;
+  --s3: #1a1b28;
+  --border: #252638;
+  --text: #e2e4f0;
+  --dim: #6b6e8a;
+  --accent: #00e5b4;
+  --accent2: #ff4d6d;
+  --ca: #60a5fa;
+  --cb: #fb923c;
+  --cc: #86efac;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+header {
+  padding: 0.6rem 1.2rem;
+  display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+  background: var(--s1);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+header h1 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+header h1 em { color: var(--accent); font-style: normal; }
+.tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 500;
+  padding: 0.18rem 0.55rem; border-radius: 99px;
+  border: 1px solid var(--accent); color: var(--accent); letter-spacing: 0.1em;
+}
+.spacer { flex: 1; }
+.legend { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+.leg-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; color: var(--dim); }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; }
+.sep-v { width: 1px; height: 18px; background: var(--border); }
+.axis-toggle { display: flex; background: var(--s2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.axis-toggle button {
+  padding: 0.28rem 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  border: none; background: transparent; color: var(--dim); cursor: pointer; transition: all 0.12s;
+}
+.axis-toggle button.on { background: var(--s3); color: var(--text); }
+.hbtn {
+  padding: 0.3rem 0.85rem; border-radius: 8px;
+  font-family: 'Outfit', sans-serif; font-size: 0.76rem; font-weight: 500;
+  border: 1px solid var(--border); background: var(--s3); color: var(--text);
+  cursor: pointer; transition: all 0.12s; white-space: nowrap;
+}
+.hbtn:hover { border-color: var(--accent); color: var(--accent); }
+.hbtn.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+.hbtn.primary:hover { background: #00c99c; }
+.hbtn.warn { border-color: var(--accent2); color: var(--accent2); }
+.hbtn.warn:hover { background: var(--accent2); color: #fff; }
+.hbtn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+.body-wrap { display: flex; flex: 1; overflow: hidden; }
+
+.canvas-col { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.breadcrumb {
+  padding: 0.38rem 1rem; background: var(--s2); border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+  display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; flex-shrink: 0;
+}
+.crumb { color: var(--accent); cursor: pointer; text-decoration: underline dotted; }
+.crumb:hover { color: #fff; }
+.bsep { color: var(--border); }
+.depth-chip {
+  margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  color: var(--dim); background: var(--s3); border: 1px solid var(--border);
+  padding: 0.12rem 0.45rem; border-radius: 99px;
+}
+.depth-chip span { color: var(--accent); }
+.canvas-wrap { flex: 1; position: relative; overflow: hidden; }
+canvas { display: block; cursor: crosshair; }
+
+.info-col {
+  width: 310px; flex-shrink: 0; background: var(--s1);
+  border-left: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column;
+}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+.sec { padding: 1rem 1.1rem; border-bottom: 1px solid var(--border); }
+.sec-title {
+  font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--dim); margin-bottom: 0.75rem;
+}
+
+.hint {
+  background: var(--s3); border-left: 3px solid var(--accent);
+  border-radius: 0 7px 7px 0; padding: 0.5rem 0.75rem;
+  font-size: 0.73rem; color: var(--dim); line-height: 1.5; margin-bottom: 0.75rem;
+}
+
+.count-row { display: flex; gap: 0.45rem; margin-bottom: 0.7rem; }
+.count-pill {
+  display: flex; align-items: center; gap: 0.3rem; padding: 0.28rem 0.55rem;
+  border-radius: 7px; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  border: 1px solid; flex: 1; justify-content: center;
+}
+.count-pill.ca { color: var(--ca); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.06); }
+.count-pill.cb { color: var(--cb); border-color: rgba(251,146,60,0.3); background: rgba(251,146,60,0.06); }
+.count-pill.cc { color: var(--cc); border-color: rgba(134,239,172,0.3); background: rgba(134,239,172,0.06); }
+
+.gini-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.38rem; }
+.gini-label { font-size: 0.73rem; color: var(--dim); }
+.gini-num { font-family: 'JetBrains Mono', monospace; font-size: 1.35rem; font-weight: 500; color: var(--accent); }
+.gini-track { height: 5px; background: var(--s3); border-radius: 99px; overflow: hidden; }
+.gini-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.22s ease; }
+.gini-range { display: flex; justify-content: space-between; font-size: 0.62rem; color: var(--border); font-family: 'JetBrains Mono', monospace; margin-top: 0.22rem; }
+
+.split-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; margin-bottom: 0.7rem; }
+.split-side {
+  background: var(--s2); border: 1px solid var(--border); border-radius: 9px; padding: 0.7rem;
+}
+.split-side-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--dim);
+  text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.4rem;
+}
+.side-gini { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 500; color: var(--accent); margin-bottom: 0.15rem; }
+.side-n { font-size: 0.68rem; color: var(--dim); }
+.side-bar { height: 3px; border-radius: 99px; margin-top: 0.45rem; background: var(--s3); overflow: hidden; }
+.side-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.22s; }
+
+.gain-card {
+  background: linear-gradient(135deg, rgba(0,229,180,0.08), rgba(0,229,180,0.02));
+  border: 1px solid rgba(0,229,180,0.2); border-radius: 11px; padding: 0.85rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.gain-label { font-size: 0.73rem; color: var(--dim); }
+.gain-sub { font-size: 0.65rem; color: var(--dim); margin-top: 0.1rem; font-family: 'JetBrains Mono', monospace; }
+.gain-val { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 500; color: var(--accent); }
+.gain-val.neg { color: var(--accent2) !important; }
+
+.tree-node-row {
+  display: flex; align-items: center; gap: 0.45rem; padding: 0.28rem 0.45rem;
+  border-radius: 5px; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem; color: var(--dim); transition: background 0.1s;
+}
+.tree-node-row:hover { background: var(--s3); color: var(--text); }
+.tree-node-row.active { background: rgba(0,229,180,0.08); color: var(--accent); }
+.tree-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Decision Tree · <em>Classification</em></h1>
+  <span class="tag">GINI INDEX</span>
+  <div class="spacer"></div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--ca)"></div>Class A</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--cb)"></div>Class B</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--cc)"></div>Class C</div>
+  </div>
+  <div class="sep-v"></div>
+  <div class="axis-toggle">
+    <button class="on" id="btnX" onclick="setAxis('x')">X split</button>
+    <button id="btnY" onclick="setAxis('y')">Y split</button>
+  </div>
+  <button class="hbtn primary" id="fixBtn" onclick="fixSplit()" disabled>Fix Split</button>
+  <button class="hbtn warn" id="upBtn" onclick="goUp()" disabled>↑ Up</button>
+  <button class="hbtn" onclick="resample()">Resample</button>
+  <button class="hbtn" onclick="resetAll()">Reset</button>
+</header>
+
+<div class="body-wrap">
+  <div class="canvas-col">
+    <div class="breadcrumb" id="breadcrumb">
+      <span class="crumb" onclick="navTo('root')">Root</span>
+      <div class="depth-chip">Depth <span id="depthTxt">0</span>/2</div>
+    </div>
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <div class="info-col">
+    <div class="sec">
+      <div class="sec-title">Current Node</div>
+      <div class="hint" id="hintMsg">Move cursor over the plot to preview a split. Values update in real time.</div>
+      <div class="count-row">
+        <div class="count-pill ca">A: <b id="cntA">—</b></div>
+        <div class="count-pill cb">B: <b id="cntB">—</b></div>
+        <div class="count-pill cc">C: <b id="cntC">—</b></div>
+      </div>
+      <div>
+        <div class="gini-head">
+          <span class="gini-label">Node Gini impurity</span>
+          <span class="gini-num" id="nodeGiniVal">—</span>
+        </div>
+        <div class="gini-track"><div class="gini-fill" id="nodeGiniBar" style="width:0%"></div></div>
+        <div class="gini-range"><span>0 (pure)</span><span>0.667 (max)</span></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Split Preview</div>
+      <div class="split-cols">
+        <div class="split-side">
+          <div class="split-side-title">◀ Left</div>
+          <div class="side-gini" id="lgini">—</div>
+          <div class="side-n" id="ln">n = —</div>
+          <div class="side-bar"><div class="side-bar-fill" id="lbar" style="width:0%"></div></div>
+        </div>
+        <div class="split-side">
+          <div class="split-side-title">▶ Right</div>
+          <div class="side-gini" id="rgini">—</div>
+          <div class="side-n" id="rn">n = —</div>
+          <div class="side-bar"><div class="side-bar-fill" id="rbar" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="gain-card">
+        <div>
+          <div class="gain-label">Gini Gain</div>
+          <div class="gain-sub" id="gainFormula">hover to compute</div>
+        </div>
+        <div class="gain-val" id="gainVal">—</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Tree Structure</div>
+      <div id="treeViz" style="font-size:0.72rem;color:var(--dim)">No splits fixed yet.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let axis = 'x';
+let mouseVal = null;
+let nodes = {};
+let currentId = 'root';
+let allData = [];
+const PAD = 36;
+
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+function genData() {
+  const N = 120;
+  allData = [];
+  const centers = [[0.22,0.28],[0.75,0.22],[0.5,0.76]];
+  const spread = 0.15;
+  for (let i = 0; i < N; i++) {
+    const cls = i % 3;
+    const [cx,cy] = centers[cls];
+    const a = Math.random()*Math.PI*2, r = Math.random()*spread;
+    allData.push({
+      x: Math.max(0.03, Math.min(0.97, cx + Math.cos(a)*r)),
+      y: Math.max(0.03, Math.min(0.97, cy + Math.sin(a)*r)),
+      cls
+    });
+  }
+}
+
+function resample() { genData(); resetAll(); }
+
+function resetAll() {
+  nodes = { root: { id:'root', parentId:null, side:null, depth:0, data:[...allData], split:null, children:null } };
+  currentId = 'root';
+  mouseVal = null;
+  updateAll();
+}
+
+// ══════════════════════════════════════════
+// GINI
+// ══════════════════════════════════════════
+function gini(pts) {
+  const n = pts.length;
+  if (!n) return 0;
+  const c = [0,0,0];
+  for (const p of pts) c[p.cls]++;
+  return 1 - c.reduce((s,v) => s + (v/n)**2, 0);
+}
+function classCounts(pts) { const c=[0,0,0]; for(const p of pts) c[p.cls]++; return c; }
+function splitPts(pts, ax, val) { return [pts.filter(p=>p[ax]<=val), pts.filter(p=>p[ax]>val)]; }
+
+// ══════════════════════════════════════════
+// CANVAS
+// ══════════════════════════════════════════
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const wrap = document.getElementById('canvasWrap');
+
+function resize() { canvas.width=wrap.clientWidth; canvas.height=wrap.clientHeight; draw(); }
+window.addEventListener('resize', resize);
+
+function toC(x,y) { return [PAD+x*(canvas.width-2*PAD), canvas.height-PAD-y*(canvas.height-2*PAD)]; }
+function toD(cx,cy) { return [(cx-PAD)/(canvas.width-2*PAD), (canvas.height-PAD-cy)/(canvas.height-2*PAD)]; }
+
+const CC = ['#60a5fa','#fb923c','#86efac'];
+const CD = ['rgba(96,165,250,0.15)','rgba(251,146,60,0.15)','rgba(134,239,172,0.15)'];
+
+// Compute the data-space bounding box for any node by walking from root
+function getNodeBounds(id) {
+  let bounds = { x0:0, x1:1, y0:0, y1:1 };
+  // Build path from root to this node
+  const path = [];
+  let n = nodes[id];
+  while (n && n.parentId) { path.unshift(n); n = nodes[n.parentId]; }
+  // Walk down applying each ancestor's split
+  let cur = nodes['root'];
+  for (const step of path) {
+    if (!cur || !cur.split) break;
+    const { ax, val } = cur.split;
+    if (step.side === 'L') {
+      if (ax==='x') bounds.x1 = Math.min(bounds.x1, val);
+      else           bounds.y1 = Math.min(bounds.y1, val);
+    } else {
+      if (ax==='x') bounds.x0 = Math.max(bounds.x0, val);
+      else           bounds.y0 = Math.max(bounds.y0, val);
+    }
+    cur = nodes[step.id];
+  }
+  return bounds;
+}
+
+// Draw a split line clipped to a node's bounding box
+function drawClippedLine(val, ax, bounds, color, alpha, dashed) {
+  ctx.save();
+  ctx.globalAlpha = alpha ?? 1;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = dashed ? 1.2 : 2;
+  if (dashed) ctx.setLineDash([5,5]);
+  ctx.beginPath();
+  if (ax==='x') {
+    const [cx]    = toC(val, 0);
+    const [, cy0] = toC(0, bounds.y1);
+    const [, cy1] = toC(0, bounds.y0);
+    ctx.moveTo(cx, cy0);
+    ctx.lineTo(cx, cy1);
+  } else {
+    const [, cy]  = toC(0, val);
+    const [cx0]   = toC(bounds.x0, 0);
+    const [cx1]   = toC(bounds.x1, 0);
+    ctx.moveTo(cx0, cy);
+    ctx.lineTo(cx1, cy);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function isAncestorNode(ancestorId, nodeId) {
+  let n = nodes[nodeId];
+  while (n && n.parentId) {
+    if (n.parentId === ancestorId) return true;
+    n = nodes[n.parentId];
+  }
+  return false;
+}
+
+function draw() {
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0f1018'; ctx.fillRect(0,0,W,H);
+
+  // grid
+  ctx.strokeStyle='#1a1b28'; ctx.lineWidth=1;
+  for (let i=0;i<=10;i++) {
+    const [x1,y1]=toC(i/10,0),[x2,y2]=toC(i/10,1);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    const [x3,y3]=toC(0,i/10),[x4,y4]=toC(1,i/10);
+    ctx.beginPath();ctx.moveTo(x3,y3);ctx.lineTo(x4,y4);ctx.stroke();
+  }
+  // axis ticks
+  ctx.fillStyle='#2a2c40'; ctx.font='10px JetBrains Mono,monospace';
+  ctx.textAlign='center';
+  for (let i=0;i<=10;i+=2) { const [cx,cy]=toC(i/10,0); ctx.fillText((i/10).toFixed(1),cx,cy+14); }
+  ctx.textAlign='right';
+  for (let i=0;i<=10;i+=2) { const [cx,cy]=toC(0,i/10); ctx.fillText((i/10).toFixed(1),cx-6,cy+4); }
+
+  const node = nodes[currentId]; if (!node) return;
+
+  // Dim all points first
+  for (const p of allData) {
+    const [cx,cy]=toC(p.x,p.y);
+    ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2);
+    ctx.fillStyle=CD[p.cls]; ctx.fill();
+  }
+
+  // Draw ALL fixed splits clipped to their own node's region
+  for (const id in nodes) {
+    const n = nodes[id];
+    if (!n.split) continue;
+    if (id === currentId) continue; // drawn last on top
+    const bounds = getNodeBounds(id);
+    const isAncestor = isAncestorNode(id, currentId);
+    drawClippedLine(n.split.val, n.split.ax, bounds, '#00e5b4', isAncestor ? 0.4 : 0.2, true);
+  }
+
+  // Region shading from mouse preview
+  if (mouseVal !== null && !node.split) {
+    ctx.save(); ctx.globalAlpha=0.06; ctx.fillStyle='#60a5fa';
+    if (axis==='x') {
+      const [cx]=toC(mouseVal,0);
+      ctx.fillRect(PAD,PAD,cx-PAD,H-2*PAD);
+    } else {
+      const [,cy]=toC(0,mouseVal);
+      ctx.fillRect(PAD,cy,W-2*PAD,H-PAD-cy);
+    }
+    ctx.restore();
+  }
+
+  // Active node points (bright)
+  for (const p of node.data) {
+    const [cx,cy]=toC(p.x,p.y);
+    ctx.beginPath(); ctx.arc(cx,cy,5.5,0,Math.PI*2);
+    ctx.fillStyle=CC[p.cls]; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.18)'; ctx.lineWidth=0.8; ctx.stroke();
+  }
+
+  // Current node's fixed split — bright, clipped to its own region, drawn on top
+  if (node.split) {
+    const bounds = getNodeBounds(currentId);
+    drawClippedLine(node.split.val, node.split.ax, bounds, '#00e5b4', 0.95, false);
+    // "click to enter" region labels
+    const ax=node.split.ax, val=node.split.val;
+    ctx.save(); ctx.font='600 12px Syne,sans-serif'; ctx.globalAlpha=0.55;
+    if (ax==='x') {
+      const [cx]=toC(val,0);
+      ctx.fillStyle='#60a5fa'; ctx.textAlign='center';
+      ctx.fillText('← Left', PAD+(cx-PAD)/2, PAD+18);
+      ctx.font='500 10px JetBrains Mono,monospace';
+      ctx.fillText('click to enter', PAD+(cx-PAD)/2, PAD+32);
+      ctx.font='600 12px Syne,sans-serif';
+      ctx.fillStyle='#fb923c'; ctx.textAlign='center';
+      ctx.fillText('Right →', cx+(W-PAD-cx)/2, PAD+18);
+      ctx.font='500 10px JetBrains Mono,monospace';
+      ctx.fillText('click to enter', cx+(W-PAD-cx)/2, PAD+32);
+    } else {
+      const [,cy]=toC(0,val);
+      ctx.fillStyle='#60a5fa'; ctx.textAlign='left';
+      ctx.font='600 12px Syne,sans-serif';
+      ctx.fillText('▼ Left (below)', PAD+8, cy+(H-PAD-cy)/2);
+      ctx.font='500 10px JetBrains Mono,monospace';
+      ctx.fillText('click to enter', PAD+8, cy+(H-PAD-cy)/2+16);
+      ctx.fillStyle='#fb923c'; ctx.textAlign='left';
+      ctx.font='600 12px Syne,sans-serif';
+      ctx.fillText('▲ Right (above)', PAD+8, PAD+(cy-PAD)/2);
+      ctx.font='500 10px JetBrains Mono,monospace';
+      ctx.fillText('click to enter', PAD+8, PAD+(cy-PAD)/2+16);
+    }
+    ctx.restore();
+  }
+
+  // Live preview — also clipped to current node's region
+  if (mouseVal !== null && !node.split) {
+    const bounds = getNodeBounds(currentId);
+    drawClippedLine(mouseVal, axis, bounds, '#fde68a', 0.85, false);
+    ctx.save(); ctx.globalAlpha=0.9; ctx.fillStyle='#fde68a';
+    ctx.font='500 10px JetBrains Mono,monospace';
+    if (axis==='x') { const [cx]=toC(mouseVal,0); ctx.textAlign='center'; ctx.fillText(mouseVal.toFixed(3),cx,PAD-9); }
+    else { const [,cy]=toC(0,mouseVal); ctx.textAlign='left'; ctx.fillText(mouseVal.toFixed(3),W-PAD+4,cy+4); }
+    ctx.restore();
+  }
+}
+
+// ══════════════════════════════════════════
+// MOUSE / EVENTS
+// ══════════════════════════════════════════
+canvas.addEventListener('mousemove', e => {
+  const rect=canvas.getBoundingClientRect();
+  const [dx,dy]=toD(e.clientX-rect.left, e.clientY-rect.top);
+  mouseVal=Math.max(0.01,Math.min(0.99,axis==='x'?dx:dy));
+  const node=nodes[currentId];
+  canvas.style.cursor = (node && node.split) ? 'pointer' : 'crosshair';
+  draw(); updateSplitPanel();
+});
+canvas.addEventListener('mouseleave', () => { mouseVal=null; draw(); updateSplitPanel(); });
+canvas.addEventListener('click', e => {
+  const node=nodes[currentId];
+  if (!node) return;
+  // If already split: click on a region navigates into that child
+  if (node.split && node.children) {
+    const rect=canvas.getBoundingClientRect();
+    const [dx,dy]=toD(e.clientX-rect.left, e.clientY-rect.top);
+    const v = node.split.ax==='x' ? dx : dy;
+    currentId = v <= node.split.val ? node.children[0] : node.children[1];
+    mouseVal=null; updateAll(); return;
+  }
+  if (mouseVal!==null) fixSplit();
+});
+
+// ══════════════════════════════════════════
+// SPLIT ACTIONS
+// ══════════════════════════════════════════
+function fixSplit() {
+  if (mouseVal===null) return;
+  const node=nodes[currentId];
+  if (!node||node.split||node.depth>=2) return;
+  node.split={ax:axis,val:mouseVal};
+  const [L,R]=splitPts(node.data,axis,mouseVal);
+  const lid=currentId+'_L', rid=currentId+'_R';
+  nodes[lid]={id:lid,parentId:currentId,side:'L',depth:node.depth+1,data:L,split:null,children:null};
+  nodes[rid]={id:rid,parentId:currentId,side:'R',depth:node.depth+1,data:R,split:null,children:null};
+  node.children=[lid,rid];
+  // Auto-navigate to left child so student can keep splitting immediately
+  currentId = lid;
+  mouseVal = null;
+  updateAll();
+}
+
+function goUp() {
+  const n=nodes[currentId];
+  if (n&&n.parentId) { currentId=n.parentId; mouseVal=null; updateAll(); }
+}
+
+function navTo(id) { if (nodes[id]) { currentId=id; mouseVal=null; updateAll(); } }
+
+function setAxis(a) {
+  axis=a;
+  document.getElementById('btnX').classList.toggle('on',a==='x');
+  document.getElementById('btnY').classList.toggle('on',a==='y');
+  draw(); updateSplitPanel();
+}
+
+// ══════════════════════════════════════════
+// UI
+// ══════════════════════════════════════════
+function fmt(v) { return typeof v==='number'?v.toFixed(4):'—'; }
+
+function updateAll() {
+  const node=nodes[currentId]; if (!node) return;
+  const g=gini(node.data);
+  const cc=classCounts(node.data);
+  document.getElementById('cntA').textContent=cc[0];
+  document.getElementById('cntB').textContent=cc[1];
+  document.getElementById('cntC').textContent=cc[2];
+  document.getElementById('nodeGiniVal').textContent=fmt(g);
+  document.getElementById('nodeGiniBar').style.width=(g/0.667*100)+'%';
+
+  const hasFixed=!!node.split, atMax=node.depth>=2;
+  if (hasFixed && node.children) {
+    const [lid,rid]=node.children;
+    const lNode=nodes[lid], rNode=nodes[rid];
+    document.getElementById('hintMsg').innerHTML=
+      `Split fixed: <b style="color:var(--accent)">${node.split.ax.toUpperCase()} ≤ ${node.split.val.toFixed(3)}</b><br>
+       <span style="font-size:0.7rem">Click a region on the canvas, or navigate:</span><br>
+       <div style="display:flex;gap:0.4rem;margin-top:0.4rem">
+         <button onclick="navTo('${lid}')" style="flex:1;padding:0.3rem;border-radius:6px;border:1px solid var(--ca);background:rgba(96,165,250,0.1);color:var(--ca);font-family:JetBrains Mono,monospace;font-size:0.68rem;cursor:pointer">
+           ◀ Left (n=${lNode.data.length}, g=${gini(lNode.data).toFixed(3)})
+         </button>
+         <button onclick="navTo('${rid}')" style="flex:1;padding:0.3rem;border-radius:6px;border:1px solid var(--cb);background:rgba(251,146,60,0.1);color:var(--cb);font-family:JetBrains Mono,monospace;font-size:0.68rem;cursor:pointer">
+           Right ▶ (n=${rNode.data.length}, g=${gini(rNode.data).toFixed(3)})
+         </button>
+       </div>`;
+  } else {
+    document.getElementById('hintMsg').textContent=
+      atMax ? 'Max depth (2) reached — this is a leaf node.'
+      : 'Hover to preview splits. Click the canvas or "Fix Split" to lock in your choice.';
+  }
+
+  document.getElementById('fixBtn').disabled=hasFixed||atMax||mouseVal===null;
+  document.getElementById('upBtn').disabled=!node.parentId;
+  buildBreadcrumb(node);
+  buildTreeViz();
+  updateSplitPanel();
+  draw();
+}
+
+function updateSplitPanel() {
+  const node=nodes[currentId]; if (!node) return;
+  const g=gini(node.data), n=node.data.length;
+  const src = mouseVal!==null && !node.split ? {ax:axis,val:mouseVal}
+            : node.split ? node.split : null;
+
+  if (src && n>0) {
+    const [L,R]=splitPts(node.data,src.ax,src.val);
+    const gl=gini(L), gr=gini(R);
+    const wg=(L.length/n)*gl+(R.length/n)*gr;
+    const gain=g-wg;
+    const wL=(L.length/n).toFixed(2), wR=(R.length/n).toFixed(2);
+
+    document.getElementById('lgini').textContent=fmt(gl);
+    document.getElementById('ln').textContent=`n = ${L.length}`;
+    document.getElementById('lbar').style.width=(gl/0.667*100)+'%';
+    document.getElementById('rgini').textContent=fmt(gr);
+    document.getElementById('rn').textContent=`n = ${R.length}`;
+    document.getElementById('rbar').style.width=(gr/0.667*100)+'%';
+    document.getElementById('gainFormula').textContent=`${fmt(g)} − [${wL}·${fmt(gl)} + ${wR}·${fmt(gr)}]`;
+    const gv=document.getElementById('gainVal');
+    gv.textContent=fmt(gain);
+    gv.className='gain-val'+(gain<0?' neg':'');
+    if (!node.split) document.getElementById('fixBtn').disabled=false;
+  } else {
+    ['lgini','rgini'].forEach(id=>document.getElementById(id).textContent='—');
+    ['ln','rn'].forEach(id=>document.getElementById(id).textContent='n = —');
+    ['lbar','rbar'].forEach(id=>document.getElementById(id).style.width='0%');
+    document.getElementById('gainFormula').textContent='hover to compute';
+    document.getElementById('gainVal').textContent='—';
+    document.getElementById('gainVal').className='gain-val';
+    if (!node.split&&node.depth<2) document.getElementById('fixBtn').disabled=true;
+  }
+}
+
+function buildBreadcrumb(node) {
+  const chain=[]; let n=node;
+  while(n){chain.unshift(n); n=n.parentId?nodes[n.parentId]:null;}
+  let html='';
+  for(let i=0;i<chain.length;i++){
+    const nn=chain[i];
+    const label=nn.id==='root'?'Root':`${nn.side} (d${nn.depth})`;
+    if(i<chain.length-1) html+=`<span class="crumb" onclick="navTo('${nn.id}')">${label}</span><span class="bsep">›</span>`;
+    else html+=`<span style="color:var(--text)">${label}</span>`;
+  }
+  html+=`<div class="depth-chip">Depth <span>${node.depth}</span>/2</div>`;
+  document.getElementById('breadcrumb').innerHTML=html;
+}
+
+function buildTreeViz() {
+  const el=document.getElementById('treeViz');
+  if(!nodes['root']?.split){el.innerHTML='<span>No splits fixed yet.</span>';return;}
+  el.innerHTML=renderNode('root',0);
+}
+
+function renderNode(id,indent) {
+  const n=nodes[id]; if(!n) return '';
+  const isActive=id===currentId;
+  const dotColor=n.split?'#fde68a':n.depth>=2?'#86efac':'#252638';
+  const label=id==='root'?`Root · n=${n.data.length} · g=${gini(n.data).toFixed(3)}`
+    :`${n.side} · n=${n.data.length} · g=${gini(n.data).toFixed(3)}`;
+  const spl=n.split?` [${n.split.ax.toUpperCase()}≤${n.split.val.toFixed(3)}]`:'';
+  let html=`<div class="tree-node-row ${isActive?'active':''}" onclick="navTo('${id}')" style="padding-left:${0.4+indent*1.1}rem">
+    <div class="tree-dot" style="background:${dotColor}"></div>
+    <span>${label}${spl}</span></div>`;
+  if(n.children) for(const cid of n.children) html+=renderNode(cid,indent+1);
+  return html;
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+genData();
+resetAll();
+resize();
+</script>
+</body>
+</html>

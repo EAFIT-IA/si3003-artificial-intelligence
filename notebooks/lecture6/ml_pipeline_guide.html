@@ -1,484 +1,318 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Del notebook al pipeline de Machine Learning</title>
-  <style>
-    html {
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 12px;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        background-color: white;
-      }
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
-      font-size: 85%;
-      margin: 0;
-      hyphens: manual;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    /* The extra [class] is a hack that increases specificity enough to
-       override a similar rule in reveal.js */
-    ul.task-list[class]{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      font-size: inherit;
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-    /* CSS for syntax highlighting */
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {  background-color: #f8f8f8; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ef2929; } /* Alert */
-    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { color: #204a87; } /* Attribute */
-    code span.bn { color: #0000cf; } /* BaseN */
-    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #4e9a06; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #8f5902; font-style: italic; } /* Comment */
-    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
-    code span.dt { color: #204a87; } /* DataType */
-    code span.dv { color: #0000cf; } /* DecVal */
-    code span.er { color: #a40000; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #0000cf; } /* Float */
-    code span.fu { color: #204a87; font-weight: bold; } /* Function */
-    code span.im { } /* Import */
-    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
-    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
-    code span.ot { color: #8f5902; } /* Other */
-    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
-    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
-    code span.ss { color: #4e9a06; } /* SpecialString */
-    code span.st { color: #4e9a06; } /* String */
-    code span.va { color: #000000; } /* Variable */
-    code span.vs { color: #4e9a06; } /* VerbatimString */
-    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
-  </style>
-  <style>
-    :root {
-      --navy: #102a43;
-      --blue: #2563eb;
-      --cyan: #0e7490;
-      --ink: #243b53;
-      --muted: #627d98;
-      --paper: #ffffff;
-      --canvas: #f4f7fb;
-      --line: #d9e2ec;
-      --code: #172033;
-      --accent-bg: #eaf2ff;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--canvas);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.68;
-    }
-
-    body > header,
-    body > nav#TOC,
-    body > main {
-      max-width: 1120px;
-      margin-inline: auto;
-    }
-
-    body > header {
-      margin-top: 28px;
-      padding: 44px 52px;
-      color: white;
-      background: linear-gradient(135deg, #102a43 0%, #164e63 58%, #0e7490 100%);
-      border-radius: 22px 22px 0 0;
-    }
-
-    body > header h1 {
-      margin: 0;
-      color: white;
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      line-height: 1.08;
-      letter-spacing: -0.035em;
-    }
-
-    body > header p { margin: 14px 0 0; color: #d9f3f7; font-size: 1.15rem; }
-
-    nav#TOC {
-      padding: 28px 48px 32px;
-      background: #e8f1f8;
-      border-inline: 1px solid var(--line);
-    }
-
-    nav#TOC::before {
-      content: "Contenido";
-      display: block;
-      margin-bottom: 10px;
-      color: var(--navy);
-      font-size: 1.1rem;
-      font-weight: 750;
-    }
-
-    nav#TOC ul { columns: 2; gap: 32px; margin: 0; padding-left: 20px; }
-    nav#TOC li { break-inside: avoid; margin: 5px 0; }
-    nav#TOC a { color: #155e75; text-decoration: none; }
-    nav#TOC a:hover { text-decoration: underline; }
-
-    main {
-      padding: 48px 56px 72px;
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-top: 0;
-      border-radius: 0 0 22px 22px;
-      box-shadow: 0 18px 50px rgb(16 42 67 / 9%);
-    }
-
-    h1, h2, h3 { color: var(--navy); line-height: 1.22; }
-    h2 { margin-top: 3.4rem; padding-bottom: 0.45rem; border-bottom: 2px solid #dbeafe; font-size: 1.8rem; }
-    h3 { margin-top: 2.2rem; font-size: 1.28rem; }
-    p, li { max-width: 86ch; }
-    a { color: var(--blue); }
-
-    blockquote {
-      margin: 1.5rem 0;
-      padding: 1rem 1.25rem;
-      color: #134e4a;
-      background: #ecfdf5;
-      border-left: 5px solid #14b8a6;
-      border-radius: 0 10px 10px 0;
-    }
-
-    blockquote p { margin: 0; }
-
-    pre {
-      overflow-x: auto;
-      margin: 1.25rem 0;
-      padding: 1.15rem 1.25rem;
-      color: #e6edf7;
-      background: var(--code);
-      border-radius: 12px;
-      box-shadow: inset 0 0 0 1px rgb(255 255 255 / 7%);
-    }
-
-    code {
-      font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
-      font-size: 0.9em;
-    }
-
-    :not(pre) > code {
-      padding: 0.12rem 0.38rem;
-      color: #9f1239;
-      background: #fff1f2;
-      border-radius: 5px;
-    }
-
-    table {
-      width: 100%;
-      margin: 1.5rem 0;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-
-    th {
-      padding: 0.8rem 0.9rem;
-      color: white;
-      text-align: left;
-      background: #164e63;
-    }
-
-    td { padding: 0.72rem 0.9rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-    tbody tr:nth-child(even) { background: #f8fafc; }
-    hr { margin: 3rem 0; border: 0; border-top: 1px solid var(--line); }
-
-    .mermaid {
-      margin: 1.5rem 0;
-      padding: 1rem;
-      text-align: center;
-      background: #fbfdff;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-    }
-
-    @media (max-width: 760px) {
-      body > header { margin-top: 0; padding: 32px 24px; border-radius: 0; }
-      nav#TOC { padding: 24px; }
-      nav#TOC ul { columns: 1; }
-      main { padding: 30px 22px 54px; border-radius: 0; }
-      h2 { font-size: 1.5rem; }
-    }
-
-    @media print {
-      body { background: white; }
-      body > header, nav#TOC, main { max-width: none; box-shadow: none; border: 0; }
-      nav#TOC ul { columns: 2; }
-      main { padding: 24px 38px; }
-      h2 { break-after: avoid; }
-      pre, table, blockquote { break-inside: avoid; }
-    }
-  </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const toc = document.querySelector("nav#TOC");
-      if (toc && !document.querySelector("body > main")) {
-        const main = document.createElement("main");
-        let node = toc.nextSibling;
-        while (node) {
-          const next = node.nextSibling;
-          main.appendChild(node);
-          node = next;
+    <style>pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */</style>
+      <style>
+        :root {
+          --navy: #102a43;
+          --blue: #2563eb;
+          --cyan: #0e7490;
+          --ink: #243b53;
+          --muted: #627d98;
+          --paper: #ffffff;
+          --canvas: #f4f7fb;
+          --line: #d9e2ec;
+          --code: #172033;
+          --accent-bg: #eaf2ff;
         }
-        document.body.appendChild(main);
-      }
-      document.querySelectorAll("pre.mermaid").forEach((pre) => {
-        const diagram = document.createElement("div");
-        diagram.className = "mermaid";
-        diagram.textContent = pre.textContent;
-        pre.replaceWith(diagram);
-      });
-      if (window.mermaid) {
-        mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
-      }
-    });
-  </script>
-</head>
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+          margin: 0;
+          color: var(--ink);
+          background: var(--canvas);
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          line-height: 1.68;
+        }
+
+        body > header,
+        body > nav#TOC,
+        body > main {
+          width: min(96vw, 1480px);
+          max-width: 1480px;
+          margin-inline: auto;
+        }
+
+        body > header {
+          margin-top: 28px;
+          padding: 42px 64px;
+          color: white;
+          background: linear-gradient(135deg, #102a43 0%, #164e63 58%, #0e7490 100%);
+          border-radius: 22px 22px 0 0;
+        }
+
+        body > header h1 {
+          margin: 0;
+          color: white;
+          font-size: clamp(2rem, 4vw, 3.4rem);
+          line-height: 1.08;
+          letter-spacing: -0.035em;
+        }
+
+        body > header p { margin: 14px 0 0; color: #d9f3f7; font-size: 1.15rem; }
+
+        nav#TOC {
+          padding: 26px 64px 30px;
+          background: #e8f1f8;
+          border-inline: 1px solid var(--line);
+        }
+
+        nav#TOC::before {
+          content: "Contenido";
+          display: block;
+          margin-bottom: 10px;
+          color: var(--navy);
+          font-size: 1.1rem;
+          font-weight: 750;
+        }
+
+        nav#TOC ul { columns: 3; gap: 36px; margin: 0; padding-left: 20px; }
+        nav#TOC li { break-inside: avoid; margin: 5px 0; }
+        nav#TOC a { color: #155e75; text-decoration: none; }
+        nav#TOC a:hover { text-decoration: underline; }
+
+        main {
+          padding: 48px 68px 72px;
+          background: var(--paper);
+          border: 1px solid var(--line);
+          border-top: 0;
+          border-radius: 0 0 22px 22px;
+          box-shadow: 0 18px 50px rgb(16 42 67 / 9%);
+        }
+
+        h1, h2, h3 { color: var(--navy); line-height: 1.22; }
+        h2 { margin-top: 3.4rem; padding-bottom: 0.45rem; border-bottom: 2px solid #dbeafe; font-size: 1.8rem; }
+        h3 { margin-top: 2.2rem; font-size: 1.28rem; }
+        p, li { max-width: 112ch; }
+        a { color: var(--blue); }
+
+        blockquote {
+          margin: 1.5rem 0;
+          padding: 1rem 1.25rem;
+          color: #134e4a;
+          background: #ecfdf5;
+          border-left: 5px solid #14b8a6;
+          border-radius: 0 10px 10px 0;
+        }
+
+        blockquote p { margin: 0; }
+
+        pre {
+          overflow-x: auto;
+          margin: 1.25rem 0;
+          padding: 1.15rem 1.25rem;
+          color: #e6edf7;
+          background: var(--code);
+          border-radius: 12px;
+          box-shadow: inset 0 0 0 1px rgb(255 255 255 / 7%);
+        }
+
+        code {
+          font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+          font-size: 0.9em;
+        }
+
+        :not(pre) > code {
+          padding: 0.12rem 0.38rem;
+          color: #9f1239;
+          background: #fff1f2;
+          border-radius: 5px;
+        }
+
+        table {
+          width: 100%;
+          margin: 1.5rem 0;
+          border-collapse: collapse;
+          font-size: 0.95rem;
+        }
+
+        th {
+          padding: 0.8rem 0.9rem;
+          color: white;
+          text-align: left;
+          background: #164e63;
+        }
+
+        td { padding: 0.72rem 0.9rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        hr { margin: 3rem 0; border: 0; border-top: 1px solid var(--line); }
+
+        .mermaid {
+          margin: 1.5rem 0;
+          padding: 1rem;
+          text-align: center;
+          background: #fbfdff;
+          border: 1px solid var(--line);
+          border-radius: 14px;
+        }
+
+        @media (max-width: 760px) {
+          body > header { margin-top: 0; padding: 32px 24px; border-radius: 0; }
+          nav#TOC { padding: 24px; }
+          nav#TOC ul { columns: 1; }
+          main { padding: 30px 22px 54px; border-radius: 0; }
+          h2 { font-size: 1.5rem; }
+        }
+
+        @media print {
+          body { background: white; }
+          body > header, nav#TOC, main { max-width: none; box-shadow: none; border: 0; }
+          nav#TOC ul { columns: 2; }
+          main { padding: 24px 38px; }
+          h2 { break-after: avoid; }
+          pre, table, blockquote { break-inside: avoid; }
+        }
+      </style>
+
+      <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          document.querySelectorAll("pre.mermaid").forEach((pre) => {
+            const diagram = document.createElement("div");
+            diagram.className = "mermaid";
+            diagram.textContent = pre.textContent;
+            pre.replaceWith(diagram);
+          });
+          if (window.mermaid) {
+            mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+          }
+        });
+      </script>
+  </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">Del notebook al pipeline de Machine Learning</h1>
-<p class="subtitle">Guía para la clase</p>
-</header>
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#1-el-flujo-completo" id="toc-1-el-flujo-completo">1. El
-flujo completo</a></li>
-<li><a href="#2-por-qué-dividir-los-notebooks"
-id="toc-2-por-qué-dividir-los-notebooks">2. ¿Por qué dividir los
-notebooks?</a></li>
-<li><a href="#3-estructura-del-proyecto"
-id="toc-3-estructura-del-proyecto">3. Estructura del proyecto</a></li>
-<li><a href="#4-notebook-1-profiling-y-separación-de-datos"
-id="toc-4-notebook-1-profiling-y-separación-de-datos">4. Notebook 1:
-profiling y separación de datos</a></li>
-<li><a href="#5-notebook-2-análisis-exploratorio-de-datos"
-id="toc-5-notebook-2-análisis-exploratorio-de-datos">5. Notebook 2:
-análisis exploratorio de datos</a></li>
-<li><a href="#6-notebook-3-procesamiento-y-feature-engineering"
-id="toc-6-notebook-3-procesamiento-y-feature-engineering">6. Notebook 3:
-procesamiento y feature engineering</a></li>
-<li><a href="#7-notebook-4-entrenamiento-y-selección"
-id="toc-7-notebook-4-entrenamiento-y-selección">7. Notebook 4:
-entrenamiento y selección</a></li>
-<li><a href="#8-notebook-5-evaluación-final"
-id="toc-8-notebook-5-evaluación-final">8. Notebook 5: evaluación
-final</a></li>
-<li><a href="#9-notebook-6-inferencia-y-despliegue"
-id="toc-9-notebook-6-inferencia-y-despliegue">9. Notebook 6: inferencia
-y despliegue</a></li>
-<li><a href="#10-artefactos-entre-etapas"
-id="toc-10-artefactos-entre-etapas">10. Artefactos entre etapas</a></li>
-<li><a href="#11-errores-comunes" id="toc-11-errores-comunes">11.
-Errores comunes</a></li>
-<li><a href="#12-por-qué-notebooks-ahora-y-scripts-después"
-id="toc-12-por-qué-notebooks-ahora-y-scripts-después">12. ¿Por qué
-notebooks ahora y scripts después?</a></li>
-<li><a href="#13-el-challenge-para-estudiantes"
-id="toc-13-el-challenge-para-estudiantes">13. El challenge para
-estudiantes</a></li>
-<li><a href="#14-ideas-clave-para-recordar"
-id="toc-14-ideas-clave-para-recordar">14. Ideas clave para
-recordar</a></li>
-<li><a href="#preguntas-para-discutir-en-clase"
-id="toc-preguntas-para-discutir-en-clase">Preguntas para discutir en
-clase</a></li>
-</ul>
-</nav>
-<p>En un primer ejercicio de Machine Learning es normal escribir todo en
-un único notebook:</p>
-<pre class="text"><code>cargar datos → explorar → transformar → entrenar → evaluar</code></pre>
-<p>Esto funciona para aprender un algoritmo, pero empieza a producir
-problemas cuando queremos que el experimento sea reproducible, que otras
-personas puedan entenderlo o que el modelo pueda utilizarse fuera del
-notebook.</p>
-<p>En esta guía organizaremos el proyecto como una secuencia de etapas
-conectadas. Cada notebook tendrá una responsabilidad clara y producirá
-artefactos que serán consumidos por la siguiente etapa.</p>
-<hr />
-<h2 id="1-el-flujo-completo">1. El flujo completo</h2>
-<pre class="mermaid"><code>flowchart TD
+  <header id="title-block-header">
+    <h1 class="title">Del notebook al pipeline de Machine Learning</h1>
+    <p class="subtitle">Guía para la clase</p>
+  </header>
+    <nav id="TOC" role="doc-toc">
+    <ul>
+    <li><a href="#1-el-flujo-completo" id="toc-1-el-flujo-completo">1.
+    El flujo completo</a></li>
+    <li><a href="#2-por-qué-dividir-los-notebooks"
+    id="toc-2-por-qué-dividir-los-notebooks">2. ¿Por qué dividir los
+    notebooks?</a></li>
+    <li><a href="#3-estructura-del-proyecto"
+    id="toc-3-estructura-del-proyecto">3. Estructura del
+    proyecto</a></li>
+    <li><a href="#4-notebook-1-profiling-y-separación-de-datos"
+    id="toc-4-notebook-1-profiling-y-separación-de-datos">4. Notebook 1:
+    profiling y separación de datos</a></li>
+    <li><a href="#5-notebook-2-análisis-exploratorio-de-datos"
+    id="toc-5-notebook-2-análisis-exploratorio-de-datos">5. Notebook 2:
+    análisis exploratorio de datos</a></li>
+    <li><a href="#6-notebook-3-procesamiento-y-feature-engineering"
+    id="toc-6-notebook-3-procesamiento-y-feature-engineering">6.
+    Notebook 3: procesamiento y feature engineering</a></li>
+    <li><a href="#7-notebook-4-entrenamiento-y-selección"
+    id="toc-7-notebook-4-entrenamiento-y-selección">7. Notebook 4:
+    entrenamiento y selección</a></li>
+    <li><a href="#8-notebook-5-evaluación-final"
+    id="toc-8-notebook-5-evaluación-final">8. Notebook 5: evaluación
+    final</a></li>
+    <li><a href="#9-notebook-6-inferencia-y-despliegue"
+    id="toc-9-notebook-6-inferencia-y-despliegue">9. Notebook 6:
+    inferencia y despliegue</a></li>
+    <li><a href="#10-artefactos-entre-etapas"
+    id="toc-10-artefactos-entre-etapas">10. Artefactos entre
+    etapas</a></li>
+    <li><a href="#11-errores-comunes" id="toc-11-errores-comunes">11.
+    Errores comunes</a></li>
+    <li><a href="#12-por-qué-notebooks-ahora-y-scripts-después"
+    id="toc-12-por-qué-notebooks-ahora-y-scripts-después">12. ¿Por qué
+    notebooks ahora y scripts después?</a></li>
+    <li><a href="#13-el-challenge-para-estudiantes"
+    id="toc-13-el-challenge-para-estudiantes">13. El challenge para
+    estudiantes</a></li>
+    <li><a href="#14-ideas-clave-para-recordar"
+    id="toc-14-ideas-clave-para-recordar">14. Ideas clave para
+    recordar</a></li>
+    <li><a href="#preguntas-para-discutir-en-clase"
+    id="toc-preguntas-para-discutir-en-clase">Preguntas para discutir en
+    clase</a></li>
+    </ul>
+  </nav>
+    <main>
+    <p>En un primer ejercicio de Machine Learning es normal escribir
+    todo en un único notebook:</p>
+    <pre class="text"><code>cargar datos → explorar → transformar → entrenar → evaluar</code></pre>
+    <p>Esto funciona para aprender un algoritmo, pero empieza a producir
+    problemas cuando queremos que el experimento sea reproducible, que
+    otras personas puedan entenderlo o que el modelo pueda utilizarse
+    fuera del notebook.</p>
+    <p>En esta guía organizaremos el proyecto como una secuencia de
+    etapas conectadas. Cada notebook tendrá una responsabilidad clara y
+    producirá artefactos que serán consumidos por la siguiente
+    etapa.</p>
+    <hr />
+    <h2 id="1-el-flujo-completo">1. El flujo completo</h2>
+    <pre class="mermaid"><code>flowchart TD
     A[Datos originales] --&gt; B[Profiling y split]
     B --&gt; C[Train y test]
     C --&gt; D[EDA sobre train]
@@ -490,96 +324,98 @@ artefactos que serán consumidos por la siguiente etapa.</p>
     G --&gt; I[Inferencia]
     H --&gt; J[Métricas finales]
     I --&gt; K[Predicciones]</code></pre>
-<p>La idea principal es sencilla:</p>
-<blockquote>
-<p>Cada etapa recibe entradas bien definidas, realiza una
-responsabilidad y produce salidas verificables.</p>
-</blockquote>
-<hr />
-<h2 id="2-por-qué-dividir-los-notebooks">2. ¿Por qué dividir los
-notebooks?</h2>
-<h3 id="21-separación-de-responsabilidades">2.1. Separación de
-responsabilidades</h3>
-<p>Un notebook que carga datos, entrena diez modelos, modifica variables
-y evalúa test repetidamente es difícil de entender. Al dividirlo, cada
-archivo responde una pregunta concreta:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Etapa</th>
-<th>Pregunta principal</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Datos</td>
-<td>¿Los datos son válidos y cómo deben dividirse?</td>
-</tr>
-<tr class="even">
-<td>EDA</td>
-<td>¿Qué podemos aprender del conjunto de entrenamiento?</td>
-</tr>
-<tr class="odd">
-<td>Procesamiento</td>
-<td>¿Cómo se convertirán los datos originales en entradas para el
-modelo?</td>
-</tr>
-<tr class="even">
-<td>Entrenamiento</td>
-<td>¿Qué modelo e hiperparámetros funcionan mejor?</td>
-</tr>
-<tr class="odd">
-<td>Evaluación</td>
-<td>¿Cómo generaliza el modelo elegido a datos no observados?</td>
-</tr>
-<tr class="even">
-<td>Inferencia</td>
-<td>¿Cómo usamos el modelo con observaciones nuevas?</td>
-</tr>
-</tbody>
-</table>
-<h3 id="22-protección-del-conjunto-de-prueba">2.2. Protección del
-conjunto de prueba</h3>
-<p>El conjunto de test simula datos futuros. Si lo usamos para
-seleccionar variables, escoger modelos o ajustar hiperparámetros, deja
-de ser una evaluación independiente.</p>
-<p>Por eso:</p>
-<ul>
-<li><code>train</code> se usa para explorar, diseñar y entrenar;</li>
-<li>la validación cruzada sobre <code>train</code> se usa para
-seleccionar modelos;</li>
-<li><code>test</code> se utiliza una sola vez, después de elegir el
-modelo campeón.</li>
-</ul>
-<h3 id="23-reproducibilidad">2.3. Reproducibilidad</h3>
-<p>La división permite ejecutar nuevamente una etapa sin rehacer todo el
-proyecto. También hace visibles las decisiones:</p>
-<ul>
-<li>semilla aleatoria;</li>
-<li>porcentaje del split;</li>
-<li>columnas utilizadas;</li>
-<li>transformaciones;</li>
-<li>métrica de selección;</li>
-<li>hiperparámetros finales.</li>
-</ul>
-<h3 id="24-depuración">2.4. Depuración</h3>
-<p>Si algo falla, sabemos en qué etapa buscar:</p>
-<ul>
-<li>columnas incorrectas: pipeline de datos;</li>
-<li>fuga de información: procesamiento o entrenamiento;</li>
-<li>modelo que no carga: persistencia;</li>
-<li>predicción con columnas desordenadas: contrato de inferencia.</li>
-</ul>
-<h3 id="25-transición-hacia-mlops">2.5. Transición hacia MLOps</h3>
-<p>Los notebooks siguen siendo herramientas de aprendizaje y
-experimentación. Sin embargo, esta organización se parece a un sistema
-real:</p>
-<pre class="text"><code>pipeline de datos → pipeline de entrenamiento → pipeline de inferencia</code></pre>
-<p>Más adelante, el código estable puede moverse de los notebooks a
-funciones y scripts automatizados.</p>
-<hr />
-<h2 id="3-estructura-del-proyecto">3. Estructura del proyecto</h2>
-<pre class="text"><code>project/
+    <p>La idea principal es sencilla:</p>
+    <blockquote>
+    <p>Cada etapa recibe entradas bien definidas, realiza una
+    responsabilidad y produce salidas verificables.</p>
+    </blockquote>
+    <hr />
+    <h2 id="2-por-qué-dividir-los-notebooks">2. ¿Por qué dividir los
+    notebooks?</h2>
+    <h3 id="21-separación-de-responsabilidades">2.1. Separación de
+    responsabilidades</h3>
+    <p>Un notebook que carga datos, entrena diez modelos, modifica
+    variables y evalúa test repetidamente es difícil de entender. Al
+    dividirlo, cada archivo responde una pregunta concreta:</p>
+    <table>
+    <thead>
+    <tr class="header">
+    <th>Etapa</th>
+    <th>Pregunta principal</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd">
+    <td>Datos</td>
+    <td>¿Los datos son válidos y cómo deben dividirse?</td>
+    </tr>
+    <tr class="even">
+    <td>EDA</td>
+    <td>¿Qué podemos aprender del conjunto de entrenamiento?</td>
+    </tr>
+    <tr class="odd">
+    <td>Procesamiento</td>
+    <td>¿Cómo se convertirán los datos originales en entradas para el
+    modelo?</td>
+    </tr>
+    <tr class="even">
+    <td>Entrenamiento</td>
+    <td>¿Qué modelo e hiperparámetros funcionan mejor?</td>
+    </tr>
+    <tr class="odd">
+    <td>Evaluación</td>
+    <td>¿Cómo generaliza el modelo elegido a datos no observados?</td>
+    </tr>
+    <tr class="even">
+    <td>Inferencia</td>
+    <td>¿Cómo usamos el modelo con observaciones nuevas?</td>
+    </tr>
+    </tbody>
+    </table>
+    <h3 id="22-protección-del-conjunto-de-prueba">2.2. Protección del
+    conjunto de prueba</h3>
+    <p>El conjunto de test simula datos futuros. Si lo usamos para
+    seleccionar variables, escoger modelos o ajustar hiperparámetros,
+    deja de ser una evaluación independiente.</p>
+    <p>Por eso:</p>
+    <ul>
+    <li><code>train</code> se usa para explorar, diseñar y
+    entrenar;</li>
+    <li>la validación cruzada sobre <code>train</code> se usa para
+    seleccionar modelos;</li>
+    <li><code>test</code> se utiliza una sola vez, después de elegir el
+    modelo campeón.</li>
+    </ul>
+    <h3 id="23-reproducibilidad">2.3. Reproducibilidad</h3>
+    <p>La división permite ejecutar nuevamente una etapa sin rehacer
+    todo el proyecto. También hace visibles las decisiones:</p>
+    <ul>
+    <li>semilla aleatoria;</li>
+    <li>porcentaje del split;</li>
+    <li>columnas utilizadas;</li>
+    <li>transformaciones;</li>
+    <li>métrica de selección;</li>
+    <li>hiperparámetros finales.</li>
+    </ul>
+    <h3 id="24-depuración">2.4. Depuración</h3>
+    <p>Si algo falla, sabemos en qué etapa buscar:</p>
+    <ul>
+    <li>columnas incorrectas: pipeline de datos;</li>
+    <li>fuga de información: procesamiento o entrenamiento;</li>
+    <li>modelo que no carga: persistencia;</li>
+    <li>predicción con columnas desordenadas: contrato de
+    inferencia.</li>
+    </ul>
+    <h3 id="25-transición-hacia-mlops">2.5. Transición hacia MLOps</h3>
+    <p>Los notebooks siguen siendo herramientas de aprendizaje y
+    experimentación. Sin embargo, esta organización se parece a un
+    sistema real:</p>
+    <pre class="text"><code>pipeline de datos → pipeline de entrenamiento → pipeline de inferencia</code></pre>
+    <p>Más adelante, el código estable puede moverse de los notebooks a
+    funciones y scripts automatizados.</p>
+    <hr />
+    <h2 id="3-estructura-del-proyecto">3. Estructura del proyecto</h2>
+    <pre class="text"><code>project/
 ├── data/
 │   ├── raw/
 │   │   └── breast_cancer.csv
@@ -602,58 +438,59 @@ funciones y scripts automatizados.</p>
     ├── cv_model_comparison.csv
     ├── test_metrics.json
     └── batch_predictions.csv</code></pre>
-<h3 id="datos-artefactos-y-reportes">Datos, artefactos y reportes</h3>
-<ul>
-<li><strong>Datos:</strong> observaciones utilizadas por el
-proyecto.</li>
-<li><strong>Artefactos:</strong> objetos necesarios para reproducir o
-utilizar el modelo.</li>
-<li><strong>Reportes:</strong> resultados que permiten analizar el
-experimento.</li>
-</ul>
-<p>No todos los archivos tienen el mismo propósito.
-<code>champion_model.joblib</code> permite predecir;
-<code>test_metrics.json</code> permite comunicar resultados.</p>
-<hr />
-<h2 id="4-notebook-1-profiling-y-separación-de-datos">4. Notebook 1:
-profiling y separación de datos</h2>
-<h3 id="objetivo">Objetivo</h3>
-<p>Cargar la fuente original, revisar su calidad y crear una división
-reproducible entre entrenamiento y prueba.</p>
-<h3 id="carga-desde-csv">Carga desde CSV</h3>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+    <h3 id="datos-artefactos-y-reportes">Datos, artefactos y
+    reportes</h3>
+    <ul>
+    <li><strong>Datos:</strong> observaciones utilizadas por el
+    proyecto.</li>
+    <li><strong>Artefactos:</strong> objetos necesarios para reproducir
+    o utilizar el modelo.</li>
+    <li><strong>Reportes:</strong> resultados que permiten analizar el
+    experimento.</li>
+    </ul>
+    <p>No todos los archivos tienen el mismo propósito.
+    <code>champion_model.joblib</code> permite predecir;
+    <code>test_metrics.json</code> permite comunicar resultados.</p>
+    <hr />
+    <h2 id="4-notebook-1-profiling-y-separación-de-datos">4. Notebook 1:
+    profiling y separación de datos</h2>
+    <h3 id="objetivo">Objetivo</h3>
+    <p>Cargar la fuente original, revisar su calidad y crear una
+    división reproducible entre entrenamiento y prueba.</p>
+    <h3 id="carga-desde-csv">Carga desde CSV</h3>
+    <div class="sourceCode" id="cb5"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>PROJECT_DIR <span class="op">=</span> Path.cwd()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>DATA_PATH <span class="op">=</span> PROJECT_DIR <span class="op">/</span> <span class="st">&quot;data&quot;</span> <span class="op">/</span> <span class="st">&quot;raw&quot;</span> <span class="op">/</span> <span class="st">&quot;breast_cancer.csv&quot;</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(DATA_PATH)</span></code></pre></div>
-<p><code>Path.cwd()</code> devuelve el directorio de trabajo actual. No
-necesariamente es la carpeta donde está guardado el notebook; es la
-carpeta desde la que se inició Jupyter.</p>
-<p>Si los notebooks están dentro de <code>notebooks/</code>, podemos
-normalizar la ruta:</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>PROJECT_DIR <span class="op">=</span> Path.cwd()</span>
+    <p><code>Path.cwd()</code> devuelve el directorio de trabajo actual.
+    No necesariamente es la carpeta donde está guardado el notebook; es
+    la carpeta desde la que se inició Jupyter.</p>
+    <p>Si los notebooks están dentro de <code>notebooks/</code>, podemos
+    normalizar la ruta:</p>
+    <div class="sourceCode" id="cb6"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>PROJECT_DIR <span class="op">=</span> Path.cwd()</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> PROJECT_DIR.name <span class="op">==</span> <span class="st">&quot;notebooks&quot;</span>:</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    PROJECT_DIR <span class="op">=</span> PROJECT_DIR.parent</span></code></pre></div>
-<h3 id="profiling-básico">Profiling básico</h3>
-<p>Antes de modelar revisamos:</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Forma:&quot;</span>, df.shape)</span>
+    <h3 id="profiling-básico">Profiling básico</h3>
+    <p>Antes de modelar revisamos:</p>
+    <div class="sourceCode" id="cb7"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Forma:&quot;</span>, df.shape)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Duplicados:&quot;</span>, df.duplicated().<span class="bu">sum</span>())</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Valores faltantes:&quot;</span>, df.isna().<span class="bu">sum</span>().<span class="bu">sum</span>())</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Tipos de datos:&quot;</span>)</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.dtypes)</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Distribución de clases:&quot;</span>)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&quot;target&quot;</span>].value_counts())</span></code></pre></div>
-<p>El profiling no es todavía un análisis profundo. Es una verificación
-inicial de que la fuente puede procesarse.</p>
-<h3 id="split">Split</h3>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+    <p>El profiling no es todavía un análisis profundo. Es una
+    verificación inicial de que la fuente puede procesarse.</p>
+    <h3 id="split">Split</h3>
+    <div class="sourceCode" id="cb8"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>train_df, test_df <span class="op">=</span> train_test_split(</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    df,</span>
@@ -661,60 +498,61 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a hr
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    stratify<span class="op">=</span>df[<span class="st">&quot;target&quot;</span>],</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span>,</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<h4 id="por-qué-stratify">¿Por qué <code>stratify</code>?</h4>
-<p>Mantiene aproximadamente la misma proporción de clases en
-<code>train</code> y <code>test</code>.</p>
-<h4 id="por-qué-random_state">¿Por qué <code>random_state</code>?</h4>
-<p>Permite repetir exactamente la misma partición. Sin una semilla, dos
-ejecuciones pueden producir conjuntos diferentes y métricas
-distintas.</p>
-<h3 id="salidas">Salidas</h3>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>train_df.to_csv(<span class="st">&quot;data/processed/train.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+    <h4 id="por-qué-stratify">¿Por qué <code>stratify</code>?</h4>
+    <p>Mantiene aproximadamente la misma proporción de clases en
+    <code>train</code> y <code>test</code>.</p>
+    <h4 id="por-qué-random_state">¿Por qué
+    <code>random_state</code>?</h4>
+    <p>Permite repetir exactamente la misma partición. Sin una semilla,
+    dos ejecuciones pueden producir conjuntos diferentes y métricas
+    distintas.</p>
+    <h3 id="salidas">Salidas</h3>
+    <div class="sourceCode" id="cb9"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>train_df.to_csv(<span class="st">&quot;data/processed/train.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>test_df.to_csv(<span class="st">&quot;data/processed/test.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
-<p>También guardamos un contrato:</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>contract <span class="op">=</span> {</span>
+    <p>También guardamos un contrato:</p>
+    <div class="sourceCode" id="cb10"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>contract <span class="op">=</span> {</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;target&quot;</span>: <span class="st">&quot;target&quot;</span>,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;features&quot;</span>: df.drop(columns<span class="op">=</span><span class="st">&quot;target&quot;</span>).columns.tolist(),</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;random_state&quot;</span>: <span class="dv">42</span>,</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;test_size&quot;</span>: <span class="fl">0.20</span>,</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;target_names&quot;</span>: [<span class="st">&quot;malignant&quot;</span>, <span class="st">&quot;benign&quot;</span>],</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>El contrato documenta el esquema que las etapas posteriores deben
-respetar.</p>
-<hr />
-<h2 id="5-notebook-2-análisis-exploratorio-de-datos">5. Notebook 2:
-análisis exploratorio de datos</h2>
-<h3 id="regla-principal">Regla principal</h3>
-<blockquote>
-<p>El EDA se realiza únicamente sobre entrenamiento.</p>
-</blockquote>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>train_df <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/processed/train.csv&quot;</span>)</span>
+    <p>El contrato documenta el esquema que las etapas posteriores deben
+    respetar.</p>
+    <hr />
+    <h2 id="5-notebook-2-análisis-exploratorio-de-datos">5. Notebook 2:
+    análisis exploratorio de datos</h2>
+    <h3 id="regla-principal">Regla principal</h3>
+    <blockquote>
+    <p>El EDA se realiza únicamente sobre entrenamiento.</p>
+    </blockquote>
+    <div class="sourceCode" id="cb11"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>train_df <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/processed/train.csv&quot;</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> train_df.drop(columns<span class="op">=</span><span class="st">&quot;target&quot;</span>)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> train_df[<span class="st">&quot;target&quot;</span>]</span></code></pre></div>
-<h3 id="qué-buscamos">Qué buscamos</h3>
-<ul>
-<li>distribución de clases;</li>
-<li>escalas y distribuciones de las variables;</li>
-<li>valores extremos;</li>
-<li>correlaciones;</li>
-<li>relaciones potenciales con la variable objetivo.</li>
-</ul>
-<p>Ejemplo:</p>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+    <h3 id="qué-buscamos">Qué buscamos</h3>
+    <ul>
+    <li>distribución de clases;</li>
+    <li>escalas y distribuciones de las variables;</li>
+    <li>valores extremos;</li>
+    <li>correlaciones;</li>
+    <li>relaciones potenciales con la variable objetivo.</li>
+    </ul>
+    <p>Ejemplo:</p>
+    <div class="sourceCode" id="cb12"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>y_train.value_counts().sort_index().plot.bar()</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">&quot;Distribución de clases en entrenamiento&quot;</span>)</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Clase&quot;</span>)</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Número de observaciones&quot;</span>)</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<p>Correlación con la variable objetivo:</p>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>correlations <span class="op">=</span> (</span>
+    <p>Correlación con la variable objetivo:</p>
+    <div class="sourceCode" id="cb13"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>correlations <span class="op">=</span> (</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    train_df.corr(numeric_only<span class="op">=</span><span class="va">True</span>)[<span class="st">&quot;target&quot;</span>]</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    .drop(<span class="st">&quot;target&quot;</span>)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">abs</span>()</span>
@@ -722,46 +560,46 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a h
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>correlations.head(<span class="dv">10</span>)</span></code></pre></div>
-<h3 id="el-eda-debe-producir-decisiones">El EDA debe producir
-decisiones</h3>
-<p>Una gráfica no es el resultado final del EDA. Debemos convertir
-observaciones en decisiones:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Hallazgo</th>
-<th>Decisión posible</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Escalas muy diferentes</td>
-<td>Estandarizar para KNN y regresión logística</td>
-</tr>
-<tr class="even">
-<td>Valores faltantes</td>
-<td>Incorporar imputación al pipeline</td>
-</tr>
-<tr class="odd">
-<td>Clases desbalanceadas</td>
-<td>Usar split estratificado y métricas apropiadas</td>
-</tr>
-<tr class="even">
-<td>Variables correlacionadas</td>
-<td>Ser cautelosos al interpretar coeficientes</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="6-notebook-3-procesamiento-y-feature-engineering">6. Notebook 3:
-procesamiento y feature engineering</h2>
-<h3 id="transformaciones-reproducibles">Transformaciones
-reproducibles</h3>
-<p>El procesamiento no debe consistir en modificar manualmente el
-<code>DataFrame</code> y olvidar cómo se hizo. Debe representarse
-mediante objetos reproducibles.</p>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+    <h3 id="el-eda-debe-producir-decisiones">El EDA debe producir
+    decisiones</h3>
+    <p>Una gráfica no es el resultado final del EDA. Debemos convertir
+    observaciones en decisiones:</p>
+    <table>
+    <thead>
+    <tr class="header">
+    <th>Hallazgo</th>
+    <th>Decisión posible</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd">
+    <td>Escalas muy diferentes</td>
+    <td>Estandarizar para KNN y regresión logística</td>
+    </tr>
+    <tr class="even">
+    <td>Valores faltantes</td>
+    <td>Incorporar imputación al pipeline</td>
+    </tr>
+    <tr class="odd">
+    <td>Clases desbalanceadas</td>
+    <td>Usar split estratificado y métricas apropiadas</td>
+    </tr>
+    <tr class="even">
+    <td>Variables correlacionadas</td>
+    <td>Ser cautelosos al interpretar coeficientes</td>
+    </tr>
+    </tbody>
+    </table>
+    <hr />
+    <h2 id="6-notebook-3-procesamiento-y-feature-engineering">6.
+    Notebook 3: procesamiento y feature engineering</h2>
+    <h3 id="transformaciones-reproducibles">Transformaciones
+    reproducibles</h3>
+    <p>El procesamiento no debe consistir en modificar manualmente el
+    <code>DataFrame</code> y olvidar cómo se hizo. Debe representarse
+    mediante objetos reproducibles.</p>
+    <div class="sourceCode" id="cb14"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -769,77 +607,77 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a h
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;imputer&quot;</span>, SimpleImputer(strategy<span class="op">=</span><span class="st">&quot;median&quot;</span>)),</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;scaler&quot;</span>, StandardScaler()),</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div>
-<p>Para un árbol no necesitamos estandarización:</p>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>numeric_tree <span class="op">=</span> Pipeline([</span>
+    <p>Para un árbol no necesitamos estandarización:</p>
+    <div class="sourceCode" id="cb15"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>numeric_tree <span class="op">=</span> Pipeline([</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;imputer&quot;</span>, SimpleImputer(strategy<span class="op">=</span><span class="st">&quot;median&quot;</span>)),</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div>
-<h3 id="columntransformer"><code>ColumnTransformer</code></h3>
-<p><code>ColumnTransformer</code> permite aplicar transformaciones
-distintas según el tipo de variable:</p>
-<div class="sourceCode" id="cb16"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+    <h3 id="columntransformer"><code>ColumnTransformer</code></h3>
+    <p><code>ColumnTransformer</code> permite aplicar transformaciones
+    distintas según el tipo de variable:</p>
+    <div class="sourceCode" id="cb16"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>scaled_preprocessor <span class="op">=</span> ColumnTransformer([</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;numeric&quot;</span>, numeric_scaled, feature_columns),</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div>
-<p>Aunque el dataset actual solo tenga variables numéricas, esta
-estructura puede extenderse a variables categóricas.</p>
-<h3 id="por-qué-no-ejecutar-fit_transform-todavía">¿Por qué no ejecutar
-<code>fit_transform</code> todavía?</h3>
-<p>El preprocesador aprende información de los datos:</p>
-<ul>
-<li>la mediana para imputar;</li>
-<li>la media y desviación para estandarizar;</li>
-<li>categorías conocidas en un encoder.</li>
-</ul>
-<p>Si ajustamos esas transformaciones antes de la validación cruzada,
-cada fold recibe información de los otros folds. Esto es <strong>data
-leakage</strong>.</p>
-<hr />
-<h2 id="7-notebook-4-entrenamiento-y-selección">7. Notebook 4:
-entrenamiento y selección</h2>
-<h3 id="el-pipeline-completo">El pipeline completo</h3>
-<p>El modelo debe contener procesamiento y estimador:</p>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+    <p>Aunque el dataset actual solo tenga variables numéricas, esta
+    estructura puede extenderse a variables categóricas.</p>
+    <h3 id="por-qué-no-ejecutar-fit_transform-todavía">¿Por qué no
+    ejecutar <code>fit_transform</code> todavía?</h3>
+    <p>El preprocesador aprende información de los datos:</p>
+    <ul>
+    <li>la mediana para imputar;</li>
+    <li>la media y desviación para estandarizar;</li>
+    <li>categorías conocidas en un encoder.</li>
+    </ul>
+    <p>Si ajustamos esas transformaciones antes de la validación
+    cruzada, cada fold recibe información de los otros folds. Esto es
+    <strong>data leakage</strong>.</p>
+    <hr />
+    <h2 id="7-notebook-4-entrenamiento-y-selección">7. Notebook 4:
+    entrenamiento y selección</h2>
+    <h3 id="el-pipeline-completo">El pipeline completo</h3>
+    <p>El modelo debe contener procesamiento y estimador:</p>
+    <div class="sourceCode" id="cb17"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>logistic_pipeline <span class="op">=</span> Pipeline([</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;preprocessing&quot;</span>, scaled_preprocessor),</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;classifier&quot;</span>, LogisticRegression(max_iter<span class="op">=</span><span class="dv">5000</span>)),</span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div>
-<p>Cuando ejecutamos:</p>
-<div class="sourceCode" id="cb18"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>logistic_pipeline.fit(X_train, y_train)</span></code></pre></div>
-<p>ocurren dos cosas:</p>
-<ol type="1">
-<li>el preprocesador aprende sus parámetros usando
-<code>X_train</code>;</li>
-<li>el clasificador se entrena con los datos transformados.</li>
-</ol>
-<p>Durante <code>predict</code>, el mismo objeto aplica exactamente las
-mismas transformaciones.</p>
-<h3 id="validación-cruzada">Validación cruzada</h3>
-<div class="sourceCode" id="cb19"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> StratifiedKFold</span>
+    <p>Cuando ejecutamos:</p>
+    <div class="sourceCode" id="cb18"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>logistic_pipeline.fit(X_train, y_train)</span></code></pre></div>
+    <p>ocurren dos cosas:</p>
+    <ol type="1">
+    <li>el preprocesador aprende sus parámetros usando
+    <code>X_train</code>;</li>
+    <li>el clasificador se entrena con los datos transformados.</li>
+    </ol>
+    <p>Durante <code>predict</code>, el mismo objeto aplica exactamente
+    las mismas transformaciones.</p>
+    <h3 id="validación-cruzada">Validación cruzada</h3>
+    <div class="sourceCode" id="cb19"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> StratifiedKFold</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> StratifiedKFold(</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    n_splits<span class="op">=</span><span class="dv">5</span>,</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    shuffle<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span>,</span>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>En validación cruzada, cada fold cumple temporalmente el papel de
-validación:</p>
-<pre class="text"><code>fold 1: validación | folds 2–5: entrenamiento
+    <p>En validación cruzada, cada fold cumple temporalmente el papel de
+    validación:</p>
+    <pre class="text"><code>fold 1: validación | folds 2–5: entrenamiento
 fold 2: validación | folds 1, 3–5: entrenamiento
 ...</code></pre>
-<p>Por eso no necesitamos un conjunto de validación fijo cuando
-utilizamos <code>GridSearchCV</code>.</p>
-<h3 id="optimización-de-hiperparámetros">Optimización de
-hiperparámetros</h3>
-<div class="sourceCode" id="cb21"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+    <p>Por eso no necesitamos un conjunto de validación fijo cuando
+    utilizamos <code>GridSearchCV</code>.</p>
+    <h3 id="optimización-de-hiperparámetros">Optimización de
+    hiperparámetros</h3>
+    <div class="sourceCode" id="cb21"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;classifier__C&quot;</span>: [<span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>],</span>
@@ -854,28 +692,28 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a h
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>search.fit(X_train, y_train)</span></code></pre></div>
-<p>El nombre <code>classifier__C</code> significa:</p>
-<pre class="text"><code>paso del pipeline __ hiperparámetro del objeto</code></pre>
-<h3 id="selección-del-campeón">Selección del campeón</h3>
-<p>Podemos comparar árbol, regresión logística y KNN, pero la selección
-debe hacerse con los resultados de validación cruzada:</p>
-<div class="sourceCode" id="cb23"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>champion_name <span class="op">=</span> comparison.loc[<span class="dv">0</span>, <span class="st">&quot;model&quot;</span>]</span>
+    <p>El nombre <code>classifier__C</code> significa:</p>
+    <pre class="text"><code>paso del pipeline __ hiperparámetro del objeto</code></pre>
+    <h3 id="selección-del-campeón">Selección del campeón</h3>
+    <p>Podemos comparar árbol, regresión logística y KNN, pero la
+    selección debe hacerse con los resultados de validación cruzada:</p>
+    <div class="sourceCode" id="cb23"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>champion_name <span class="op">=</span> comparison.loc[<span class="dv">0</span>, <span class="st">&quot;model&quot;</span>]</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>champion <span class="op">=</span> searches[champion_name].best_estimator_</span></code></pre></div>
-<p>En este momento todavía no hemos usado test.</p>
-<hr />
-<h2 id="8-notebook-5-evaluación-final">8. Notebook 5: evaluación
-final</h2>
-<h3 id="abrir-test-una-sola-vez">Abrir test una sola vez</h3>
-<div class="sourceCode" id="cb24"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>test_df <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/processed/test.csv&quot;</span>)</span>
+    <p>En este momento todavía no hemos usado test.</p>
+    <hr />
+    <h2 id="8-notebook-5-evaluación-final">8. Notebook 5: evaluación
+    final</h2>
+    <h3 id="abrir-test-una-sola-vez">Abrir test una sola vez</h3>
+    <div class="sourceCode" id="cb24"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>test_df <span class="op">=</span> pd.read_csv(<span class="st">&quot;data/processed/test.csv&quot;</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> test_df[contract[<span class="st">&quot;features&quot;</span>]]</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> test_df[contract[<span class="st">&quot;target&quot;</span>]]</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> champion.predict(X_test)</span></code></pre></div>
-<h3 id="métricas">Métricas</h3>
-<div class="sourceCode" id="cb25"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> (</span>
+    <h3 id="métricas">Métricas</h3>
+    <div class="sourceCode" id="cb25"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> (</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    accuracy_score,</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    classification_report,</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    ConfusionMatrixDisplay,</span>
@@ -884,56 +722,57 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a h
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Accuracy:&quot;</span>, accuracy_score(y_test, y_pred))</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_pred))</span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_predictions(y_test, y_pred)</span></code></pre></div>
-<p>La matriz de confusión muestra qué tipos de error comete el modelo.
-En un problema médico, confundir un caso maligno con benigno puede tener
-consecuencias diferentes a confundir un caso benigno con maligno. Por
-eso accuracy no siempre es suficiente.</p>
-<h3 id="una-distinción-importante">Una distinción importante</h3>
-<p>Evaluar varios modelos en test y escoger el mejor convierte
-indirectamente test en un conjunto de validación.</p>
-<p>La secuencia correcta es:</p>
-<pre class="text"><code>comparar con CV → elegir campeón → evaluar campeón en test</code></pre>
-<hr />
-<h2 id="9-notebook-6-inferencia-y-despliegue">9. Notebook 6: inferencia
-y despliegue</h2>
-<h3 id="guardar-el-pipeline-completo">Guardar el pipeline completo</h3>
-<div class="sourceCode" id="cb27"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> joblib</span>
+    <p>La matriz de confusión muestra qué tipos de error comete el
+    modelo. En un problema médico, confundir un caso maligno con benigno
+    puede tener consecuencias diferentes a confundir un caso benigno con
+    maligno. Por eso accuracy no siempre es suficiente.</p>
+    <h3 id="una-distinción-importante">Una distinción importante</h3>
+    <p>Evaluar varios modelos en test y escoger el mejor convierte
+    indirectamente test en un conjunto de validación.</p>
+    <p>La secuencia correcta es:</p>
+    <pre class="text"><code>comparar con CV → elegir campeón → evaluar campeón en test</code></pre>
+    <hr />
+    <h2 id="9-notebook-6-inferencia-y-despliegue">9. Notebook 6:
+    inferencia y despliegue</h2>
+    <h3 id="guardar-el-pipeline-completo">Guardar el pipeline
+    completo</h3>
+    <div class="sourceCode" id="cb27"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> joblib</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>joblib.dump(champion, <span class="st">&quot;artifacts/champion_model.joblib&quot;</span>)</span></code></pre></div>
-<p>No guardamos solamente el clasificador. El artefacto debe contener
-también:</p>
-<ul>
-<li>imputación;</li>
-<li>escalamiento;</li>
-<li>orden y selección de columnas;</li>
-<li>modelo final.</li>
-</ul>
-<h3 id="volver-a-cargar">Volver a cargar</h3>
-<div class="sourceCode" id="cb28"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> joblib.load(<span class="st">&quot;artifacts/champion_model.joblib&quot;</span>)</span>
+    <p>No guardamos solamente el clasificador. El artefacto debe
+    contener también:</p>
+    <ul>
+    <li>imputación;</li>
+    <li>escalamiento;</li>
+    <li>orden y selección de columnas;</li>
+    <li>modelo final.</li>
+    </ul>
+    <h3 id="volver-a-cargar">Volver a cargar</h3>
+    <div class="sourceCode" id="cb28"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> joblib.load(<span class="st">&quot;artifacts/champion_model.joblib&quot;</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> model.predict(new_data)</span></code></pre></div>
-<h3 id="validar-el-esquema">Validar el esquema</h3>
-<div class="sourceCode" id="cb29"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> validate_input(records, feature_columns):</span>
+    <h3 id="validar-el-esquema">Validar el esquema</h3>
+    <div class="sourceCode" id="cb29"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> validate_input(records, feature_columns):</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    missing <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">set</span>(feature_columns) <span class="op">-</span> <span class="bu">set</span>(records.columns))</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> missing:</span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f&quot;Faltan columnas: </span><span class="sc">{</span>missing<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> records[feature_columns]</span></code></pre></div>
-<p>La validación es importante porque el modelo puede recibir:</p>
-<ul>
-<li>columnas faltantes;</li>
-<li>columnas adicionales;</li>
-<li>columnas desordenadas;</li>
-<li>tipos incorrectos;</li>
-<li>distribuciones diferentes a las observadas durante
-entrenamiento.</li>
-</ul>
-<h3 id="predicción-por-lotes">Predicción por lotes</h3>
-<div class="sourceCode" id="cb30"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict(records):</span>
+    <p>La validación es importante porque el modelo puede recibir:</p>
+    <ul>
+    <li>columnas faltantes;</li>
+    <li>columnas adicionales;</li>
+    <li>columnas desordenadas;</li>
+    <li>tipos incorrectos;</li>
+    <li>distribuciones diferentes a las observadas durante
+    entrenamiento.</li>
+    </ul>
+    <h3 id="predicción-por-lotes">Predicción por lotes</h3>
+    <div class="sourceCode" id="cb30"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict(records):</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> validate_input(records, feature_columns)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> model.predict(X)</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    probabilities <span class="op">=</span> model.predict_proba(X)</span>
@@ -943,140 +782,141 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a h
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;probability_class_0&quot;</span>: probabilities[:, <span class="dv">0</span>],</span>
 <span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;probability_class_1&quot;</span>: probabilities[:, <span class="dv">1</span>],</span>
 <span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    })</span></code></pre></div>
-<p>Este núcleo puede utilizarse después desde una API, aplicación web o
-proceso batch.</p>
-<hr />
-<h2 id="10-artefactos-entre-etapas">10. Artefactos entre etapas</h2>
-<table>
-<thead>
-<tr class="header">
-<th>Artefacto</th>
-<th>Lo produce</th>
-<th>Lo consume</th>
-<th>Propósito</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>train.csv</code></td>
-<td>Datos</td>
-<td>EDA y entrenamiento</td>
-<td>Datos disponibles para aprender</td>
-</tr>
-<tr class="even">
-<td><code>test.csv</code></td>
-<td>Datos</td>
-<td>Evaluación</td>
-<td>Estimación final de generalización</td>
-</tr>
-<tr class="odd">
-<td><code>data_contract.json</code></td>
-<td>Datos</td>
-<td>Todas las etapas posteriores</td>
-<td>Esquema y metadatos</td>
-</tr>
-<tr class="even">
-<td><code>preprocessors.joblib</code></td>
-<td>Procesamiento</td>
-<td>Entrenamiento</td>
-<td>Transformaciones definidas</td>
-</tr>
-<tr class="odd">
-<td><code>champion_model.joblib</code></td>
-<td>Entrenamiento</td>
-<td>Evaluación e inferencia</td>
-<td>Pipeline entrenado</td>
-</tr>
-<tr class="even">
-<td><code>training_metadata.json</code></td>
-<td>Entrenamiento</td>
-<td>Evaluación</td>
-<td>Modelo, métrica e hiperparámetros</td>
-</tr>
-<tr class="odd">
-<td><code>cv_model_comparison.csv</code></td>
-<td>Entrenamiento</td>
-<td>Reporte</td>
-<td>Evidencia para seleccionar el campeón</td>
-</tr>
-<tr class="even">
-<td><code>test_metrics.json</code></td>
-<td>Evaluación</td>
-<td>Reporte</td>
-<td>Desempeño final</td>
-</tr>
-<tr class="odd">
-<td><code>batch_predictions.csv</code></td>
-<td>Inferencia</td>
-<td>Usuario o sistema posterior</td>
-<td>Predicciones producidas</td>
-</tr>
-</tbody>
-</table>
-<p>Esta tabla funciona como un contrato de integración entre
-notebooks.</p>
-<hr />
-<h2 id="11-errores-comunes">11. Errores comunes</h2>
-<h3 id="explorar-test">Explorar test</h3>
-<div class="sourceCode" id="cb31"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Incorrecto</span></span>
+    <p>Este núcleo puede utilizarse después desde una API, aplicación
+    web o proceso batch.</p>
+    <hr />
+    <h2 id="10-artefactos-entre-etapas">10. Artefactos entre etapas</h2>
+    <table>
+    <thead>
+    <tr class="header">
+    <th>Artefacto</th>
+    <th>Lo produce</th>
+    <th>Lo consume</th>
+    <th>Propósito</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd">
+    <td><code>train.csv</code></td>
+    <td>Datos</td>
+    <td>EDA y entrenamiento</td>
+    <td>Datos disponibles para aprender</td>
+    </tr>
+    <tr class="even">
+    <td><code>test.csv</code></td>
+    <td>Datos</td>
+    <td>Evaluación</td>
+    <td>Estimación final de generalización</td>
+    </tr>
+    <tr class="odd">
+    <td><code>data_contract.json</code></td>
+    <td>Datos</td>
+    <td>Todas las etapas posteriores</td>
+    <td>Esquema y metadatos</td>
+    </tr>
+    <tr class="even">
+    <td><code>preprocessors.joblib</code></td>
+    <td>Procesamiento</td>
+    <td>Entrenamiento</td>
+    <td>Transformaciones definidas</td>
+    </tr>
+    <tr class="odd">
+    <td><code>champion_model.joblib</code></td>
+    <td>Entrenamiento</td>
+    <td>Evaluación e inferencia</td>
+    <td>Pipeline entrenado</td>
+    </tr>
+    <tr class="even">
+    <td><code>training_metadata.json</code></td>
+    <td>Entrenamiento</td>
+    <td>Evaluación</td>
+    <td>Modelo, métrica e hiperparámetros</td>
+    </tr>
+    <tr class="odd">
+    <td><code>cv_model_comparison.csv</code></td>
+    <td>Entrenamiento</td>
+    <td>Reporte</td>
+    <td>Evidencia para seleccionar el campeón</td>
+    </tr>
+    <tr class="even">
+    <td><code>test_metrics.json</code></td>
+    <td>Evaluación</td>
+    <td>Reporte</td>
+    <td>Desempeño final</td>
+    </tr>
+    <tr class="odd">
+    <td><code>batch_predictions.csv</code></td>
+    <td>Inferencia</td>
+    <td>Usuario o sistema posterior</td>
+    <td>Predicciones producidas</td>
+    </tr>
+    </tbody>
+    </table>
+    <p>Esta tabla funciona como un contrato de integración entre
+    notebooks.</p>
+    <hr />
+    <h2 id="11-errores-comunes">11. Errores comunes</h2>
+    <h3 id="explorar-test">Explorar test</h3>
+    <div class="sourceCode" id="cb31"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Incorrecto</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>test_df.describe()</span></code></pre></div>
-<p>Aunque no entrenemos directamente con test, usarlo para tomar
-decisiones introduce información que no tendríamos sobre datos
-futuros.</p>
-<h3 id="escalar-antes-del-split-o-de-la-validación-cruzada">Escalar
-antes del split o de la validación cruzada</h3>
-<div class="sourceCode" id="cb32"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Incorrecto</span></span>
+    <p>Aunque no entrenemos directamente con test, usarlo para tomar
+    decisiones introduce información que no tendríamos sobre datos
+    futuros.</p>
+    <h3 id="escalar-antes-del-split-o-de-la-validación-cruzada">Escalar
+    antes del split o de la validación cruzada</h3>
+    <div class="sourceCode" id="cb32"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Incorrecto</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>X_scaled <span class="op">=</span> scaler.fit_transform(X)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test <span class="op">=</span> train_test_split(X_scaled)</span></code></pre></div>
-<p>El scaler aprendió usando también test.</p>
-<h3 id="guardar-solo-el-clasificador">Guardar solo el clasificador</h3>
-<div class="sourceCode" id="cb33"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Insuficiente</span></span>
+    <p>El scaler aprendió usando también test.</p>
+    <h3 id="guardar-solo-el-clasificador">Guardar solo el
+    clasificador</h3>
+    <div class="sourceCode" id="cb33"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Insuficiente</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>joblib.dump(logistic_model, <span class="st">&quot;model.joblib&quot;</span>)</span></code></pre></div>
-<p>Si el modelo necesita escalamiento, la aplicación tendría que
-reconstruir manualmente el mismo procesamiento.</p>
-<h3 id="escoger-el-modelo-por-test">Escoger el modelo por test</h3>
-<div class="sourceCode" id="cb34"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Incorrecto</span></span>
+    <p>Si el modelo necesita escalamiento, la aplicación tendría que
+    reconstruir manualmente el mismo procesamiento.</p>
+    <h3 id="escoger-el-modelo-por-test">Escoger el modelo por test</h3>
+    <div class="sourceCode" id="cb34"><pre
+    class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Incorrecto</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>best_model <span class="op">=</span> <span class="bu">max</span>(models, key<span class="op">=</span><span class="kw">lambda</span> model: model.score(X_test, y_test))</span></code></pre></div>
-<p>La selección debe ocurrir con validación cruzada.</p>
-<h3 id="depender-del-estado-invisible-del-notebook">Depender del estado
-invisible del notebook</h3>
-<p>Una celda puede funcionar solo porque ejecutamos previamente otra
-celda fuera de orden. Cada notebook debe declarar sus entradas y cargar
-sus artefactos explícitamente.</p>
-<hr />
-<h2 id="12-por-qué-notebooks-ahora-y-scripts-después">12. ¿Por qué
-notebooks ahora y scripts después?</h2>
-<p>Los notebooks son adecuados para:</p>
-<ul>
-<li>aprender;</li>
-<li>explorar datos;</li>
-<li>visualizar resultados;</li>
-<li>documentar decisiones;</li>
-<li>experimentar de forma interactiva.</li>
-</ul>
-<p>Los scripts y módulos son mejores para:</p>
-<ul>
-<li>ejecutar automáticamente;</li>
-<li>probar funciones;</li>
-<li>reutilizar código;</li>
-<li>programar pipelines;</li>
-<li>desplegar en producción.</li>
-</ul>
-<p>La evolución natural es:</p>
-<pre class="mermaid"><code>flowchart LR
+    <p>La selección debe ocurrir con validación cruzada.</p>
+    <h3 id="depender-del-estado-invisible-del-notebook">Depender del
+    estado invisible del notebook</h3>
+    <p>Una celda puede funcionar solo porque ejecutamos previamente otra
+    celda fuera de orden. Cada notebook debe declarar sus entradas y
+    cargar sus artefactos explícitamente.</p>
+    <hr />
+    <h2 id="12-por-qué-notebooks-ahora-y-scripts-después">12. ¿Por qué
+    notebooks ahora y scripts después?</h2>
+    <p>Los notebooks son adecuados para:</p>
+    <ul>
+    <li>aprender;</li>
+    <li>explorar datos;</li>
+    <li>visualizar resultados;</li>
+    <li>documentar decisiones;</li>
+    <li>experimentar de forma interactiva.</li>
+    </ul>
+    <p>Los scripts y módulos son mejores para:</p>
+    <ul>
+    <li>ejecutar automáticamente;</li>
+    <li>probar funciones;</li>
+    <li>reutilizar código;</li>
+    <li>programar pipelines;</li>
+    <li>desplegar en producción.</li>
+    </ul>
+    <p>La evolución natural es:</p>
+    <pre class="mermaid"><code>flowchart LR
     A[Notebook exploratorio] --&gt; B[Funciones reutilizables]
     B --&gt; C[Scripts de ejecución]
     C --&gt; D[Pipeline automatizado]
     D --&gt; E[Servicio de inferencia]</code></pre>
-<p>El notebook no desaparece: conserva la explicación y el análisis. El
-código estable se mueve a <code>src/</code> y los comandos de ejecución
-a <code>scripts/</code>.</p>
-<p>Ejemplo futuro:</p>
-<pre class="text"><code>project/
+    <p>El notebook no desaparece: conserva la explicación y el análisis.
+    El código estable se mueve a <code>src/</code> y los comandos de
+    ejecución a <code>scripts/</code>.</p>
+    <p>Ejemplo futuro:</p>
+    <pre class="text"><code>project/
 ├── src/
 │   ├── data.py
 │   ├── features.py
@@ -1089,68 +929,75 @@ a <code>scripts/</code>.</p>
 └── notebooks/
     ├── eda.ipynb
     └── model_analysis.ipynb</code></pre>
-<p><code>src/train.py</code> contiene la lógica reutilizable.
-<code>scripts/train_model.py</code> recibe parámetros, llama esas
-funciones y permite ejecutar el entrenamiento desde consola.</p>
-<hr />
-<h2 id="13-el-challenge-para-estudiantes">13. El challenge para
-estudiantes</h2>
-<p>El challenge reproduce el mismo flujo con un dataset diferente:</p>
-<ol type="1">
-<li><p><code>01_data_challenge.ipynb</code></p>
-<ul>
-<li>carga <code>wine.csv</code>;</li>
-<li>realiza profiling y EDA;</li>
-<li>crea <code>train.csv</code>, <code>test.csv</code> y el
-contrato.</li>
-</ul></li>
-<li><p><code>02_training_challenge.ipynb</code></p>
-<ul>
-<li>construye pipelines;</li>
-<li>compara árbol, regresión logística y KNN;</li>
-<li>optimiza hiperparámetros;</li>
-<li>guarda el campeón.</li>
-</ul></li>
-<li><p><code>03_evaluation_deployment_challenge.ipynb</code></p>
-<ul>
-<li>carga el campeón;</li>
-<li>evalúa test;</li>
-<li>implementa una función de inferencia;</li>
-<li>genera predicciones por lotes.</li>
-</ul></li>
-</ol>
-<p>La división obliga a que los estudiantes comuniquen las etapas
-mediante archivos y no mediante variables que existen únicamente en la
-memoria del notebook.</p>
-<hr />
-<h2 id="14-ideas-clave-para-recordar">14. Ideas clave para recordar</h2>
-<ol type="1">
-<li>El objetivo no es entrenar un modelo aislado, sino construir un
-proceso reproducible.</li>
-<li>El EDA y las decisiones de diseño se hacen con entrenamiento.</li>
-<li>Las transformaciones aprendidas deben permanecer dentro del
-pipeline.</li>
-<li>La validación cruzada sirve para comparar y seleccionar.</li>
-<li>Test sirve para la evaluación final, no para tomar decisiones.</li>
-<li>El artefacto desplegable debe incluir procesamiento y modelo.</li>
-<li>Dividir notebooks hace explícitas las entradas, salidas y
-responsabilidades.</li>
-<li>Esta estructura es un puente entre experimentación y MLOps.</li>
-</ol>
-<hr />
-<h2 id="preguntas-para-discutir-en-clase">Preguntas para discutir en
-clase</h2>
-<ol type="1">
-<li>¿Qué ocurriría si cada notebook volviera a crear un split
-diferente?</li>
-<li>¿Por qué el EDA sobre test puede considerarse una fuga de
-información?</li>
-<li>¿Qué parámetros aprende un <code>StandardScaler</code>?</li>
-<li>¿Qué ventaja tiene guardar un <code>Pipeline</code> completo?</li>
-<li>¿Cuál es la diferencia entre validación cruzada y conjunto de
-test?</li>
-<li>¿Qué parte de este proyecto moveríamos primero a un script?</li>
-<li>¿Qué debería monitorizarse después de desplegar el modelo?</li>
-</ol>
+    <p><code>src/train.py</code> contiene la lógica reutilizable.
+    <code>scripts/train_model.py</code> recibe parámetros, llama esas
+    funciones y permite ejecutar el entrenamiento desde consola.</p>
+    <hr />
+    <h2 id="13-el-challenge-para-estudiantes">13. El challenge para
+    estudiantes</h2>
+    <p>El challenge reproduce el mismo flujo con un dataset
+    diferente:</p>
+    <ol type="1">
+    <li><p><code>01_data_challenge.ipynb</code></p>
+    <ul>
+    <li>carga <code>wine.csv</code>;</li>
+    <li>realiza profiling y EDA;</li>
+    <li>crea <code>train.csv</code>, <code>test.csv</code> y el
+    contrato.</li>
+    </ul></li>
+    <li><p><code>02_training_challenge.ipynb</code></p>
+    <ul>
+    <li>construye pipelines;</li>
+    <li>compara árbol, regresión logística y KNN;</li>
+    <li>optimiza hiperparámetros;</li>
+    <li>guarda el campeón.</li>
+    </ul></li>
+    <li><p><code>03_evaluation_deployment_challenge.ipynb</code></p>
+    <ul>
+    <li>carga el campeón;</li>
+    <li>evalúa test;</li>
+    <li>implementa una función de inferencia;</li>
+    <li>genera predicciones por lotes.</li>
+    </ul></li>
+    </ol>
+    <p>La división obliga a que los estudiantes comuniquen las etapas
+    mediante archivos y no mediante variables que existen únicamente en
+    la memoria del notebook.</p>
+    <hr />
+    <h2 id="14-ideas-clave-para-recordar">14. Ideas clave para
+    recordar</h2>
+    <ol type="1">
+    <li>El objetivo no es entrenar un modelo aislado, sino construir un
+    proceso reproducible.</li>
+    <li>El EDA y las decisiones de diseño se hacen con
+    entrenamiento.</li>
+    <li>Las transformaciones aprendidas deben permanecer dentro del
+    pipeline.</li>
+    <li>La validación cruzada sirve para comparar y seleccionar.</li>
+    <li>Test sirve para la evaluación final, no para tomar
+    decisiones.</li>
+    <li>El artefacto desplegable debe incluir procesamiento y
+    modelo.</li>
+    <li>Dividir notebooks hace explícitas las entradas, salidas y
+    responsabilidades.</li>
+    <li>Esta estructura es un puente entre experimentación y MLOps.</li>
+    </ol>
+    <hr />
+    <h2 id="preguntas-para-discutir-en-clase">Preguntas para discutir en
+    clase</h2>
+    <ol type="1">
+    <li>¿Qué ocurriría si cada notebook volviera a crear un split
+    diferente?</li>
+    <li>¿Por qué el EDA sobre test puede considerarse una fuga de
+    información?</li>
+    <li>¿Qué parámetros aprende un <code>StandardScaler</code>?</li>
+    <li>¿Qué ventaja tiene guardar un <code>Pipeline</code>
+    completo?</li>
+    <li>¿Cuál es la diferencia entre validación cruzada y conjunto de
+    test?</li>
+    <li>¿Qué parte de este proyecto moveríamos primero a un script?</li>
+    <li>¿Qué debería monitorizarse después de desplegar el modelo?</li>
+    </ol>
+  </main>
 </body>
 </html>

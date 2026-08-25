@@ -22,7 +22,7 @@ una primera mirada a regresión lineal, que retomaremos más adelante.
 
 class: smaller
 
-# Aprendizaje: panorama general
+### Aprendizaje: panorama general
 
 .bold[Aprender] es el proceso de mejorar el desempeño de un agente a
 partir de la experiencia (RL, la clase pasada, fue un ejemplo).
@@ -84,7 +84,7 @@ class: middle, center, smaller
 
 class: smaller
 
-# Preguntas clave al construir un agente que aprende
+### Preguntas clave al construir un agente que aprende
 
 - ¿Cuál es el diseño del agente que va a implementar el desempeño
   deseado?
@@ -97,7 +97,7 @@ class: smaller
 
 class: smaller
 
-# Tipos de aprendizaje
+### Tipos de aprendizaje
 
 <div style="
   font-family: Arial, Helvetica, sans-serif;
@@ -233,7 +233,7 @@ class: smaller
 
 class: smaller
 
-## Aprendizaje supervisado
+### Aprendizaje supervisado
 
 .width-100[![El perceptrón, un hito temprano del aprendizaje de máquina](figures/clase6/fig_supervised.png)]
 
@@ -275,12 +275,12 @@ class: middle, center, smaller
 
 class: smaller
 
-# Preguntas básicas
+### Preguntas básicas
 
 - ¿Qué espacio de hipótesis $H$ elegir?
 - ¿Cómo medir el grado de ajuste?
-- ¿Cómo equilibrar ajuste vs. complejidad? — la .bold[navaja de
-  Occam].
+- ¿Cómo equilibrar ajuste vs. complejidad? — la navaja de
+  Occam.
 - ¿Cómo encontramos una buena $h$?
 - ¿Cómo sabemos si una buena $h$ va a predecir bien sobre datos
   nuevos?
@@ -300,14 +300,6 @@ class: middle, center, smaller
 ### Validación cruzada
 
 .width-100[![Puntos de datos sin ajustar](figures/clase6/fig_crossvalidation.png)]
-
----
-
-class: middle, center, smaller
-
-.width-45[![Robot clasificando correo en inbox vs. spam](figures/clase6/fig_09.png)]
-
-# Clasificación
 
 ---
 
