@@ -639,9 +639,6 @@ class: smaller
 ]
 ]
 
-- A la .bold[izquierda]: $x$ influye en $c$ únicamente a través de $a$, así que su derivada es el .bold[producto] de las derivadas a lo largo del camino. Lo mismo para $y$ a través de $b$.
-- A la .bold[derecha]: si escribimos el cálculo como un grafo cuyos nodos son operaciones elementales —sumar, multiplicar, activar—, entonces sabemos derivar .bold[cada nodo por separado], sin importar lo grande que sea la red.
-
 .alert[Backpropagation = recorrer ese grafo **de la salida hacia la
 entrada** multiplicando derivadas locales. Ni más, ni menos.]
 
@@ -674,11 +671,6 @@ class: middle, smaller
 - En cada capa intermedia está el .bold[jacobiano]: la capa transforma un vector en otro vector, y su derivada es una .italic[matriz].
 - Propagar el error hacia atrás es .bold[encadenar esas matrices], capa por capa, hasta llegar a los pesos.
 
-.alert[Backpropagation no es un algoritmo nuevo de optimización: es la
-regla de la cadena aplicada eficientemente para calcular el gradiente.
-Quien actualiza los pesos sigue siendo el descenso por gradiente de la
-Parte 1.]
-
 ???
 
 La palabra "eficientemente" del recuadro es la que carga el peso. Se podría
@@ -698,16 +690,10 @@ class: middle, smaller
 
 .center.width-100[![Una DNN como grafo de cómputo: capas Linear, ReLU, Softmax y Cross Entropy](figures/clase7/Figura25_NNGraph.PNG)]
 
-Así es como una red profunda existe realmente dentro de PyTorch: una
+Así es como una red profunda existe realmente: una
 cadena de bloques —.bold[Linear], .bold[ReLU], .bold[Linear], ...,
-.bold[Softmax]— que termina en la .bold[entropía cruzada] de la Parte 2.
-Los bloques azules son los .italic[datos] y el .italic[objetivo], los rojos
-son los .italic[parámetros] que entran a cada capa lineal, y el naranja es
-la .italic[función de costo].
+.bold[Softmax]— que termina en la .bold[entropía cruzada].
 
-.alert[Las flechas de la cadena marcan el *forward*; el *backward* recorre
-exactamente la misma cadena en sentido contrario, desde el bloque naranja
-hasta los rojos. **Todo lo visto hoy cabe en este solo diagrama.**]
 
 ???
 
