@@ -537,11 +537,11 @@ opción por defecto.]
 
 ---
 
-class: middle
+class: smaller
 
 # Entrenamiento: backpropagation
 
-.center.width-80[![Pipeline de capas y propagación del error hacia atrás](figures/clase7/Figura19_DNN%20y%20Backpropagation.PNG)]
+.center.width-90[![Pipeline de capas y propagación del error hacia atrás](figures/clase7/Figura19_DNN%20y%20Backpropagation.PNG)]
 
 ---
 class: middle
