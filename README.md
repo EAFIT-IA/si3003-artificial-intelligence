@@ -60,6 +60,10 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - [notebooks](notebooks/lecture6)
 
 
+  ### Lecture 07 - Modelos lineales y Redes Neuronales 
+- `slides_pdf/clase7.pdf` — Linear Models and DL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase7.md)
+- [notebooks](notebooks/lecture7)
+
 
 ## Resources
 
