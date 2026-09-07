@@ -341,6 +341,83 @@ donde vamos ahora.
 
 ---
 
+class: smaller
+
+# La función de costo para clasificar: entropía cruzada
+
+El perceptrón tiene modelo y regla de aprendizaje, pero le falta la pieza
+central de la receta: .bold[una función de costo que podamos minimizar].
+Su umbral duro responde $0$ o $1$, y eso no es derivable.
+
+El arreglo es hacer que el clasificador devuelva una .bold[probabilidad]
+$h\_\theta(\mathbf{x})$ entre $0$ y $1$ en lugar de una etiqueta —de eso se
+encarga la sigmoide, que veremos en la Parte 3—. Con una probabilidad a la
+salida sí podemos escribir un costo, y no es el error cuadrático: lo que
+queremos castigar no es la distancia sino la .italic[confianza equivocada].
+Esa función es la .bold[entropía cruzada] (*cross-entropy*, o *log loss*):
+
+.center.width-80[![Entropía cruzada binaria y su gradiente](figures/clase7/Figura26_Eq%20CrossEntropy.PNG)]
+
+- $h\_\theta(x^{(i)})$ es la probabilidad predicha para el ejemplo $i$, $y^{(i)}$ vale $0$ o $1$, y $\theta$ son los pesos —la $\mathbf{w}$ de siempre—.
+- Por cada ejemplo sobrevive .bold[un solo] término: si $y^{(i)}=1$ queda $-\log h\_\theta(x^{(i)})$; si $y^{(i)}=0$ queda $-\log(1 - h\_\theta(x^{(i)}))$.
+
+.alert[Miren la segunda ecuación: el gradiente vuelve a tener la forma
+**error × entrada**, la misma de la regresión lineal y la misma de la regla
+del perceptrón. Cambia la función de costo; la maquinaria de entrenamiento
+no cambia.]
+
+???
+
+Aquí conviene volver al slide de "Métodos de aprendizaje de máquina": lo
+que estamos haciendo es rellenar la casilla $\mathcal{L}$ para el caso de
+clasificación. La casilla $f$ la completaremos en la Parte 3, cuando la
+sigmoide reemplace al umbral duro — pero el costo de este slide ya no
+cambia a partir de ahí.
+
+La pregunta obligada es por qué no error cuadrático. Dos razones, y la
+segunda es la fuerte: (a) acota el castigo —equivocarse con toda la
+confianza cuesta a lo sumo 1—, y (b) combinado con la sigmoide produce una
+función de costo .bold[no convexa], llena de mínimos locales. Con entropía
+cruzada la función vuelve a ser convexa, y además el gradiente se
+simplifica hasta la expresión de la segunda ecuación.
+
+---
+
+class: middle, smaller
+
+# Entropía cruzada: cómo se comporta
+
+.grid[
+.kol-1-2[
+.center.width-100[![Costo de entropía cruzada en función de la probabilidad predicha](figures/clase7/Figura26b_CrossEntropy.PNG)]
+]
+.kol-1-2[
+Léanla curva por curva:
+
+- .bold[Azul ($y=1$)]: si el modelo predice una probabilidad cercana a $1$, el costo es casi $0$; a medida que la probabilidad baja hacia $0$, el costo .bold[crece sin límite].
+- .bold[Verde ($y=0$)]: exactamente el espejo.
+- Las dos se cruzan en $p=0.5$, con costo $\log 2 \approx 0.69$: el precio de .italic[no saber nada].
+]
+]
+
+.alert[La asíntota es lo importante: equivocarse **con confianza** cuesta
+infinito. Eso es lo que empuja al modelo no solo a acertar la clase, sino a
+estar seguro cuando acierta.]
+
+???
+
+Este $0.69$ es un número práctico que vale la pena que se lleven: cuando
+entrenen y la pérdida se quede estancada en $0.69$, el modelo no está
+aprendiendo nada —está devolviendo $0.5$ para todo—. Es el primer
+diagnóstico que uno hace al mirar una curva de entrenamiento.
+
+Y noten que la gráfica no depende de la arquitectura: es la misma para una
+regresión logística que para una red de cien capas. Por eso presentamos la
+entropía cruzada aquí, en la parte de clasificadores lineales, y la
+reutilizaremos sin cambios en la Parte 3.
+
+---
+
 class: middle, center, divider-slide
 
 ## Parte 3 — Redes Neuronales y DNN
@@ -544,17 +621,105 @@ class: smaller
 .center.width-90[![Pipeline de capas y propagación del error hacia atrás](figures/clase7/Figura19_DNN%20y%20Backpropagation.PNG)]
 
 ---
-class: middle
+
+class: smaller
+
+# Backpropagation es la regla de la cadena
+
+.grid[
+.kol-1-2[
+.center.width-90[![Grafo de cómputo y regla de la cadena aplicada a dos caminos](figures/clase7/Figura23_BachpropagationGraph.png)]
+
+.center[.italic[Cada arista es una derivada parcial local.]]
+]
+.kol-1-2[
+.center.width-90[![Una expresión aritmética representada como grafo de operaciones elementales](figures/clase7/Figura23b_BackpropagationGraph.PNG)]
+
+.center[.italic[Toda expresión —y toda red— es un grafo de operaciones elementales.]]
+]
+]
+
+- A la .bold[izquierda]: $x$ influye en $c$ únicamente a través de $a$, así que su derivada es el .bold[producto] de las derivadas a lo largo del camino. Lo mismo para $y$ a través de $b$.
+- A la .bold[derecha]: si escribimos el cálculo como un grafo cuyos nodos son operaciones elementales —sumar, multiplicar, activar—, entonces sabemos derivar .bold[cada nodo por separado], sin importar lo grande que sea la red.
+
+.alert[Backpropagation = recorrer ese grafo **de la salida hacia la
+entrada** multiplicando derivadas locales. Ni más, ni menos.]
+
+???
+
+Vale la pena insistir en el "únicamente" del primer punto: la regla de la
+cadena en forma de producto simple funciona porque hay un solo camino. Si
+una variable influyera en la salida por .bold[dos] caminos distintos,
+habría que .italic[sumar] las contribuciones de ambos — y eso es
+exactamente lo que ocurre en una red, donde cada neurona alimenta a todas
+las de la capa siguiente.
+
+El grafo de la derecha es la idea que hace posible a PyTorch y TensorFlow:
+si el framework sabe derivar cada operación elemental y recuerda cómo se
+conectaron durante el *forward*, puede derivar automáticamente cualquier
+red que se les ocurra. Eso es la diferenciación automática.
+
+---
+
+class: middle, smaller
 
 1. Recibir una nueva observación $\mathbf{x} = [x\_1 \dots x\_d]$ y su objetivo $y^\*$.
 2. .bold[Propagación hacia adelante] (*feed forward*): para cada unidad $g\_j$ en cada capa $1 \dots L$, calcular $g\_j$ a partir de las unidades $f\_k$ de la capa anterior.
 3. Obtener la predicción $y$ y el error $(y - y^\*)$.
 4. .bold[Propagar el error hacia atrás] (*back-propagate*): para cada unidad $g\_j$, desde la capa $L$ hasta la $1$, repartir la responsabilidad del error y actualizar los pesos.
 
+.center.width-80[![Gradiente de una función escalar y jacobiano de una función vectorial](figures/clase7/Figura24_gradiente.PNG)]
+
+- Al final del grafo está el .bold[gradiente]: la función de costo devuelve un .bold[escalar], y su derivada respecto a las entradas es un .italic[vector].
+- En cada capa intermedia está el .bold[jacobiano]: la capa transforma un vector en otro vector, y su derivada es una .italic[matriz].
+- Propagar el error hacia atrás es .bold[encadenar esas matrices], capa por capa, hasta llegar a los pesos.
+
 .alert[Backpropagation no es un algoritmo nuevo de optimización: es la
 regla de la cadena aplicada eficientemente para calcular el gradiente.
 Quien actualiza los pesos sigue siendo el descenso por gradiente de la
 Parte 1.]
+
+???
+
+La palabra "eficientemente" del recuadro es la que carga el peso. Se podría
+calcular cada derivada por separado, pero eso repetiría el mismo trabajo
+miles de veces. Backpropagation reutiliza lo ya calculado: cada capa recibe
+de la capa siguiente el gradiente acumulado y solo tiene que multiplicarlo
+por su jacobiano local.
+
+Por eso el *forward pass* guarda sus resultados intermedios: el *backward*
+los necesita para armar esos jacobianos.
+
+---
+
+class: middle, smaller
+
+# La red completa, vista como un grafo
+
+.center.width-100[![Una DNN como grafo de cómputo: capas Linear, ReLU, Softmax y Cross Entropy](figures/clase7/Figura25_NNGraph.PNG)]
+
+Así es como una red profunda existe realmente dentro de PyTorch: una
+cadena de bloques —.bold[Linear], .bold[ReLU], .bold[Linear], ...,
+.bold[Softmax]— que termina en la .bold[entropía cruzada] de la Parte 2.
+Los bloques azules son los .italic[datos] y el .italic[objetivo], los rojos
+son los .italic[parámetros] que entran a cada capa lineal, y el naranja es
+la .italic[función de costo].
+
+.alert[Las flechas de la cadena marcan el *forward*; el *backward* recorre
+exactamente la misma cadena en sentido contrario, desde el bloque naranja
+hasta los rojos. **Todo lo visto hoy cabe en este solo diagrama.**]
+
+???
+
+Este slide cierra el círculo del día: el bloque naranja de la derecha es
+literalmente la función de la que hablamos en la Parte 2, y los bloques
+Linear son las neuronas de la Parte 1. Nada de lo que hay en el grafo es
+nuevo a estas alturas.
+
+Conviene señalar también que el objetivo (*Target*) solo entra al final:
+la red nunca ve la etiqueta durante el *forward*. La etiqueta aparece
+únicamente para calcular el costo, y de ahí en adelante todo es
+propagación hacia atrás.
 
 ---
 
@@ -612,10 +777,11 @@ class: smaller
 - La .bold[regresión lineal] es el caso más simple: $\hat{y} = \mathbf{w}^T\mathbf{x}$, costo cuadrático medio, y dos formas de resolverla — descenso por gradiente o ecuación normal.
 - El .bold[clasificador lineal] reutiliza el mismo producto punto pero le aplica un .italic[umbral]: define un hiperplano que separa el espacio en dos clases.
 - La .bold[regla del perceptrón] converge a un separador perfecto .italic[solo si] los datos son linealmente separables — una limitación seria en la práctica.
+- Para clasificar, la función de costo es la .bold[entropía cruzada]: castiga sin límite la confianza equivocada, y su gradiente conserva la forma .italic[error × entrada].
 - La .bold[sigmoide] suaviza el umbral (da probabilidades y es derivable) y .bold[softmax] la generaliza a $K$ clases.
 - Una .bold[red neuronal] apila estas unidades en capas; las capas ocultas .italic[aprenden las características] que antes había que diseñar a mano.
 - La .bold[no linealidad] $g$ es indispensable: sin ella, apilar capas lineales sigue dando una función lineal.
-- .bold[Backpropagation] es la regla de la cadena aplicada eficientemente para obtener el gradiente; quien entrena sigue siendo el descenso por gradiente.
+- .bold[Backpropagation] es la regla de la cadena aplicada eficientemente sobre el .italic[grafo de cómputo] de la red: se encadenan los jacobianos de cada capa desde la salida hacia la entrada. Quien entrena sigue siendo el descenso por gradiente.
 - Con suficientes neuronas, una red de dos capas es un .bold[aproximador universal] — con el riesgo asociado de .italic[sobreajuste].
 
 ---
