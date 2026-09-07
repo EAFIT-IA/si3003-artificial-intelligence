@@ -97,8 +97,7 @@ Todo método de aprendizaje supervisado se reduce a dos objetos:
 
 .alert[**Aprender** = elegir los parámetros de $f$ que minimizan
 $\mathcal{L}$ sobre los datos de entrenamiento. Todo lo que veremos hoy
-—regresión, perceptrón, redes profundas— cambia *quién es $f$* y *quién
-es $\mathcal{L}$*, pero nunca cambia esta receta.]
+cambia *quién es $f$* y *quién es $\mathcal{L}$*, pero nunca cambia esta receta.]
 
 ???
 
@@ -177,9 +176,7 @@ Hay dos caminos para llegar al mismo $\mathbf{w}$ óptimo:
 - .bold[Descenso por el gradiente]: iterativo. Damos pasos de tamaño $\alpha$ (la .italic[tasa de aprendizaje]) en la dirección contraria al gradiente, hasta converger. Escala bien a muchos datos y a muchas dimensiones.
 - .bold[Ecuación normal]: solución cerrada. Un solo cálculo da la respuesta exacta, pero requiere invertir $\mathbf{X}^T\mathbf{X}$ — costoso cuando $d$ es grande.
 
-.alert[El descenso por el gradiente es lo que sobrevive al resto de la
-clase: en redes neuronales la ecuación normal no existe, pero el
-gradiente sí.]
+.alert[En redes neuronales la ecuación normal no existe, pero el gradiente sí.]
 
 ???
 
@@ -231,7 +228,7 @@ En el espacio vectorial de entrada:
 - El otro lado corresponde a $y=0$.
 ]
 .kol-1-2[
-.center.width-70[![Perceptrón de umbral e hiperplano en el espacio de entrada](figures/clase7/Figura7_Umbral%20del%20perceptron.PNG)]
+.center.width-80[![Perceptrón de umbral e hiperplano en el espacio de entrada](figures/clase7/Figura7_Umbral%20del%20perceptron.PNG)]
 ]
 ]
 
@@ -394,7 +391,7 @@ neurocientífica.
 
 class: middle, smaller
 
-# Repaso: de la regresión logística a la red neuronal
+# De la regresión logística a la red neuronal
 
 .center.width-50[![Regresión logística vs. red neuronal artificial](figures/clase7/Figura12_Regresion%20Logistica%20y%20Redes%20Neuronales.PNG)]
 
@@ -423,7 +420,7 @@ Y si la activación es:
 - .bold[Negativa], la salida es $-1$.
 ]
 .kol-2-5[
-.center.width-70[![Neurona artificial con pesos, suma y umbral](figures/clase7/Figura13_Introduction%20Review.png)]
+.center.width-80[![Neurona artificial con pesos, suma y umbral](figures/clase7/Figura13_Introduction%20Review.png)]
 ]
 ]
 
@@ -434,7 +431,7 @@ vamos a apilar.]
 
 class: smaller
 
-# Repaso: la función sigmoide
+# La función sigmoide
 
 El umbral duro tiene un problema: es abrupto y no es derivable, así que
 no podemos entrenarlo con gradientes. Lo reemplazamos por una transición
@@ -459,12 +456,15 @@ más adelante, backpropagation.
 
 class: smaller
 
-# Repaso: clasificación lineal multiclase
+# Clasificación lineal multiclase
 
 ¿Y si hay más de dos clases? Ya no basta un hiperplano: usamos .bold[un
 vector de pesos por clase] y nos quedamos con el de mayor puntaje.
 
 .center.width-70[![Clasificación lineal multiclase y activaciones softmax](figures/clase7/Figura15_Clasificacion%20Lineal%20Multiclase.png)]
+
+----
+class: smaller
 
 - Un vector de pesos para cada clase: $w\_y$.
 - Puntaje (activación) de la clase $y$: $w\_y \cdot f(x)$.
@@ -537,11 +537,14 @@ opción por defecto.]
 
 ---
 
-class: smaller
+class: middle
 
 # Entrenamiento: backpropagation
 
-.center.width-70[![Pipeline de capas y propagación del error hacia atrás](figures/clase7/Figura19_DNN%20y%20Backpropagation.PNG)]
+.center.width-80[![Pipeline de capas y propagación del error hacia atrás](figures/clase7/Figura19_DNN%20y%20Backpropagation.PNG)]
+
+---
+class: middle
 
 1. Recibir una nueva observación $\mathbf{x} = [x\_1 \dots x\_d]$ y su objetivo $y^\*$.
 2. .bold[Propagación hacia adelante] (*feed forward*): para cada unidad $g\_j$ en cada capa $1 \dots L$, calcular $g\_j$ a partir de las unidades $f\_k$ de la capa anterior.
@@ -572,17 +575,7 @@ class: smaller
 
 # Aproximadores universales y consideraciones prácticas
 
-.center.width-70[![Teorema de aproximación universal y consideraciones prácticas](figures/clase7/Figura21_Consideraciones%20Practicas.png)]
-
-.bold[Teorema (Aproximadores universales de funciones).] Una red neuronal
-de dos capas con un número suficiente de neuronas puede aproximar
-cualquier función continua con la precisión que se desee.
-
-.bold[Consideraciones prácticas]
-
-- Puede verse como .italic[aprender las características].
-- Un número grande de neuronas trae .bold[riesgo de sobreajuste]
-  (*overfitting*) — de ahí la .italic[parada temprana] (*early stopping*).
+.center.width-80[![Teorema de aproximación universal y consideraciones prácticas](figures/clase7/Figura21_Consideraciones%20Practicas.png)]
 
 .footnote[Ejercicio interactivo: [playground.tensorflow.org](http://playground.tensorflow.org)]
 
