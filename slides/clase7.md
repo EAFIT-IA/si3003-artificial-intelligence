@@ -417,14 +417,6 @@ entropía cruzada aquí, en la parte de clasificadores lineales, y la
 reutilizaremos sin cambios en la Parte 3.
 
 ---
-class: smaller
-
-# Cross-Entropy Multiclase
-
-.center.width-100[![Cross-Entropy Multiclase](figures/clase7/Figura27_Cross-Entropy%20Multiclase.jpg)]
-
----
-
 class: middle, center, divider-slide
 
 ## Parte 3 — Redes Neuronales y DNN
@@ -580,6 +572,13 @@ aprenda la propia red, en sus capas intermedias. Eso es lo que viene.
 
 ---
 
+class: smaller
+
+# Cross-Entropy Multiclase
+
+.center.width-100[![Cross-Entropy Multiclase](figures/clase7/Figura27_Cross-Entropy%20Multiclase.jpg)]
+
+---
 class: smaller
 
 # Deep Neural Network (DNN)
