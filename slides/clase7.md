@@ -274,11 +274,11 @@ class: smaller
 Si la etiqueta real $y$ difiere de la predicción $h\_{\mathbf{w}}(\mathbf{x})$, hubo un error y hay que ajustar los pesos:
 
 - Si $\mathbf{w} \cdot \mathbf{x} < 0$ pero la salida debía ser $y=1$ — un .bold[falso negativo]:
-    - .italic[Aumentar] los pesos de las entradas positivas.
-    - .italic[Disminuir] los pesos de las entradas negativas.
+    - .bold[Aumentar] los pesos de las entradas positivas.
+    - .bold[Disminuir] los pesos de las entradas negativas.
 - Si $\mathbf{w} \cdot \mathbf{x} > 0$ pero la salida debía ser $y=0$ — un .bold[falso positivo]:
-    - .italic[Disminuir] los pesos de las entradas positivas.
-    - .italic[Aumentar] los pesos de las entradas negativas.
+    - .bold[Disminuir] los pesos de las entradas positivas.
+    - .bold[Aumentar] los pesos de las entradas negativas.
 
 La .bold[regla de aprendizaje del perceptrón] hace exactamente eso en una sola línea:
 
