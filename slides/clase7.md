@@ -417,6 +417,13 @@ entropía cruzada aquí, en la parte de clasificadores lineales, y la
 reutilizaremos sin cambios en la Parte 3.
 
 ---
+class: smaller
+
+# Cross-Entropy Multiclase
+
+.center.width-100[![Cross-Entropy Multiclase](figures/clase7/Figura27_Cross-Entropy%20Multiclase.jpg)]
+
+---
 
 class: middle, center, divider-slide
 
@@ -619,6 +626,13 @@ class: smaller
 # Entrenamiento: backpropagation
 
 .center.width-90[![Pipeline de capas y propagación del error hacia atrás](figures/clase7/Figura19_DNN%20y%20Backpropagation.PNG)]
+
+---
+class: smaller
+
+# El gradiente
+
+.center.width-100[![Gradiente](figures/clase7/Figura28_Gradiente.jpeg)]
 
 ---
 
