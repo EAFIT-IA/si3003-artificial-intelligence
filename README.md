@@ -64,6 +64,11 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - `slides_pdf/clase7.pdf` — Linear Models and DL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase7.md)
 - [notebooks](notebooks/lecture7)
 
+  ### Lecture 08 - Redes Neuronales Convolucionales - CNN 
+- `slides_pdf/clase8.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase8.md)
+- [notebooks](notebooks/lecture8)
+
+
 
 ## Resources
 
