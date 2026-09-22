@@ -68,6 +68,9 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - `slides_pdf/clase8.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase8.md)
 - [notebooks](notebooks/lecture8)
 
+  ### Lecture 09 - Transformes y NLP
+- `slides_pdf/clase9.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase9.md)
+- [notebooks](notebooks/lecture9)
 
 
 ## Resources
