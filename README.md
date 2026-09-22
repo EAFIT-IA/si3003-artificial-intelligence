@@ -51,24 +51,24 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - `slides_pdf/clase4.pdf` — MDPs. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase4.md)
 - [notebooks](notebooks/lecture4)
 
-  ### Lecture 05 — Reinforcement Learning 
+### Lecture 05 — Reinforcement Learning 
 - `slides_pdf/clase5.pdf` — RL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase5.md)
 - [notebooks](notebooks/lecture5)
 
-  ### Lecture 06 — Machine Learning
+### Lecture 06 — Machine Learning
 - `slides_pdf/clase6.pdf` — ML. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase6.md)
 - [notebooks](notebooks/lecture6)
 
 
-  ### Lecture 07 - Modelos lineales y Redes Neuronales 
+### Lecture 07 - Modelos lineales y Redes Neuronales 
 - `slides_pdf/clase7.pdf` — Linear Models and DL. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase7.md)
 - [notebooks](notebooks/lecture7)
 
-  ### Lecture 08 - Redes Neuronales Convolucionales - CNN 
+### Lecture 08 - Redes Neuronales Convolucionales - CNN 
 - `slides_pdf/clase8.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase8.md)
 - [notebooks](notebooks/lecture8)
 
-  ### Lecture 09 - Transformes y NLP
+### Lecture 09 - Transformes y NLP
 - `slides_pdf/clase9.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase9.md)
 - [notebooks](notebooks/lecture9)
 
