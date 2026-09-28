@@ -23,43 +23,43 @@ vistazo.
 
 ---
 
-### Hoy
+class: middle, center
 
-.grid[
-.kol-1-2[
-1. **Modelos de Lenguaje**
-    - Qué es un LLM: predicción del siguiente token
-    - Entrenamiento e inferencia autoregresiva
-    - El problema del contexto
-    - RAG vs. Fine-Tuning vs. Prompt Engineering
-2. **RAG**
-    - La idea desde primeros principios
-    - ¿Por qué chunking?
-    - Tipos de búsqueda: vectorial, keyword e híbrida
-3. **Embeddings**
-    - Hipótesis distribucional y similitud del coseno
-    - BERT y embeddings de oraciones
-    - Sentence-BERT
-    - Bases de datos vectoriales
-    - ANN: NSW y HNSW
-]
-.kol-1-2[
-.center.width-90[![Arquitectura RAG: retriever no paramétrico + generador paramétrico](figures/clase10/figure01.PNG)]
+.width-90[![Arquitectura RAG: retriever no paramétrico + generador paramétrico](figures/clase10/figure01.PNG)]
 
 .caption[Lewis et al., *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks* (2020).]
-]
-]
 
 ???
 
-Vale la pena anunciar el hilo desde el principio: la primera parte es
-repaso rápido de LLM para motivar el problema, la segunda es la
-arquitectura RAG a nivel de bloques, y la tercera abre cada bloque
-—especialmente el retriever, que es donde está toda la ingeniería real.
+Esta es la figura del paper original de RAG (Lewis et al., 2020). No
+hace falta explicarla ahora — la dejamos abierta como mapa: al final de
+la clase todos sus bloques van a tener nombre.
 
-La figura de la derecha es del paper original de RAG (Lewis et al.,
-2020). No hace falta explicarla ahora; al final de la clase todos sus
-bloques van a tener nombre.
+Lo único que conviene señalar de entrada es la partición: a la izquierda
+un .bold[retriever] no paramétrico (una base de datos que se puede
+cambiar sin reentrenar nada) y a la derecha un .bold[generador]
+paramétrico (el LLM). Todo el curso de hoy es sobre la mitad izquierda.
+
+---
+
+class: middle
+
+# Agenda
+
+<br>
+
+## 1. Modelos de Lenguaje
+
+## 2. RAG
+
+## 3. Embeddings
+
+???
+
+Tres bloques: primero un repaso rápido de LLM para motivar el problema,
+después la arquitectura RAG a nivel de bloques, y al final abrimos cada
+bloque —especialmente el retriever, que es donde está toda la ingeniería
+real.
 
 ---
 
@@ -73,8 +73,6 @@ class: smaller
 
 # LLMs
 
-.grid[
-.kol-1-2[
 Un modelo de lenguaje es un .bold[modelo probabilístico] que asigna
 probabilidades a secuencias de palabras.
 
@@ -82,32 +80,55 @@ probabilidades a secuencias de palabras.
 predice cuál es el siguiente token más probable — y repite este proceso
 para generar la respuesta completa.
 
-## Entrenamiento
+<br>
+
+.grid[
+.kol-1-2[
+.bold[Entrenamiento]
 
 Se entrena en enormes corpus de texto (Wikipedia, libros, web). El
 modelo aprende .bold[patrones estadísticos] del lenguaje.
-
-## Inferencia
+]
+.kol-1-2[
+.bold[Inferencia]
 
 Dado un prompt, genera tokens uno a uno hasta completar la respuesta. Es
 .bold[autoregresivo] — cada token depende de los anteriores.
-]
-.kol-1-2[
-.center.width-80[![Transformer decoder-only: del prompt a la distribución sobre el siguiente token](figures/clase10/figure02.PNG)]
 ]
 ]
 
 ???
 
-Lo importante de esta lámina es el mecanismo, no la arquitectura: el
-modelo produce una distribución de probabilidad sobre todo el
-vocabulario, se muestrea un token, se vuelve a meter a la entrada, y se
-repite. No hay ninguna "base de datos de hechos" adentro — solo pesos
-que codifican estadística del lenguaje.
+Lo importante es el mecanismo, no la arquitectura: el modelo produce una
+distribución de probabilidad sobre todo el vocabulario, se muestrea un
+token, se vuelve a meter a la entrada, y se repite. No hay ninguna "base
+de datos de hechos" adentro — solo pesos que codifican estadística del
+lenguaje.
 
-De ahí sale directamente el problema de la siguiente lámina: si el
+De ahí sale directamente el problema que veremos en dos láminas: si el
 conocimiento vive en los pesos, para cambiar lo que el modelo sabe hay
 que reentrenarlo... o darle el dato en el prompt.
+
+---
+
+class: middle, center
+
+.width-60[![Transformer decoder-only: del prompt a la distribución sobre el siguiente token](figures/clase10/figure02.PNG)]
+
+???
+
+Recorrer el diagrama de abajo hacia arriba: los tokens de entrada se
+convierten en embeddings, se les suma la codificación posicional, pasan
+por N capas decoder-only (self-attention enmascarada + red feed-forward),
+y la capa lineal final más un softmax producen la distribución sobre el
+vocabulario.
+
+La máscara es el detalle clave del *decoder-only*: cada posición solo
+puede mirar hacia atrás. Por eso el modelo sirve para generar.
+
+En entrenamiento se compara el token predicho contra el real y se
+propaga la pérdida (el circuito rojo). En inferencia no hay pérdida: se
+muestrea el token y se vuelve a alimentar al modelo.
 
 ---
 
@@ -190,27 +211,27 @@ class: smaller
 No podemos meter documentos completos en cada query — hay dos razones
 principales.
 
+<br>
+
 .grid[
 .kol-1-2[
-## Ventana de contexto
+.bold[Ventana de contexto]
 
 Los LLMs tienen un límite de tokens por request. Un documento de 100
 páginas no cabe. Los chunks resuelven esto.
-
-## Calidad del retrieval
+]
+.kol-1-2[
+.bold[Calidad del retrieval]
 
 Un chunk que habla de un solo tema genera un vector más representativo.
 Documentos largos mezclan temas y degradan la búsqueda.
 ]
-.kol-1-2[
-.center.width-90[![Tamaño de chunk y su problema asociado](figures/clase10/figure05.PNG)]
+]
 
 <br>
 
 .bold[Chunking semántico] respeta párrafos y oraciones — produce chunks
 con significado cohesivo.
-]
-]
 
 ???
 
@@ -219,8 +240,24 @@ en la ventana de contexto, seguiría conviniendo partirlo. Un embedding
 es *un solo vector* — si el texto mezcla cinco temas, el vector queda en
 el promedio de los cinco y no se parece a ninguno.
 
+---
+
+class: middle, center
+
+# Tamaño del chunk
+
+.width-70[![Tamaño de chunk y su problema asociado](figures/clase10/figure05.PNG)]
+
+???
+
 El rango de 400–600 caracteres es una heurística de arranque, no una
 ley. Lo que sí es regla: hay que medirlo sobre tus propios datos.
+
+Los dos extremos fallan por razones opuestas. Muy pequeño: el chunk
+pierde el contexto que lo hace interpretable ("...y por eso se rechaza
+la solicitud" sin decir cuál solicitud). Muy grande: el vector es el
+promedio de demasiados temas y deja de parecerse a cualquier query
+concreta.
 
 ---
 
@@ -228,16 +265,18 @@ class: smaller
 
 # Tipos de Búsqueda
 
+<br>
+
 .grid[
 .kol-1-2[
-## Vectorial
+.bold[Vectorial]
 
 Busca por .bold[similitud semántica]. Entiende sinónimos y contexto.
 
 ⚠ Puede devolver resultados relacionados pero no exactos
 ]
 .kol-1-2[
-## Keyword (BM25)
+.bold[Keyword (BM25)]
 
 Coincidencias .bold[exactas] de términos. Ideal para nombres propios y
 siglas.
@@ -249,15 +288,15 @@ siglas.
 <br>
 
 .grid[
-.kol-1-6[&nbsp;]
-.kol-2-3[
-## Híbrida ← producción
+.kol-1-4[&nbsp;]
+.kol-1-2[
+.bold[Híbrida ← producción]
 
 Combina vectorial + keyword. Reordena por scores combinados.
 
 ✅ Mejor recall y precision en conjunto
 ]
-.kol-1-6[&nbsp;]
+.kol-1-4[&nbsp;]
 ]
 
 .footnote[.bold[Ejemplo:] buscar *"política de vacaciones"* con búsqueda vectorial puede devolver *"días de descanso"* (semánticamente similar pero sin la palabra exacta). BM25 lo perdería. Híbrida encuentra ambos.]
@@ -300,12 +339,10 @@ relaciona cada token con todos los demás de la oración.
 ]
 .kol-1-2[
 .center.width-90[![Similitud del coseno y vectores de palabras en el espacio](figures/clase10/figure06.PNG)]
+
+.caption[Rango: $-1$ (opuestos) → $1$ (idénticos); $0$ = ortogonales (sin relación).]
 ]
 ]
-
-$$\cos(A,B) = \frac{A \cdot B}{\lVert A \rVert \, \lVert B \rVert} \quad \in [-1, 1]$$
-
-.footnote[Rango: $-1$ (opuestos) → $1$ (idénticos); $0$ = ortogonales (sin relación).]
 
 ???
 
