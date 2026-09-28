@@ -72,7 +72,7 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 - `slides_pdf/clase9.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase9.md)
 - [notebooks](notebooks/Lecture9)
 
-### Lecture 09 - RAG
+### Lecture 10 - RAG
 - `slides_pdf/clase10.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase10.md)
 - [notebooks](notebooks/Lecture10)
 
