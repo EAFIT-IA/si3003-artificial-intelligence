@@ -55,17 +55,17 @@ Dispone de 300 fotografías de objetos cotidianos, etiquetadas en tres clases. �
 
 ## Parte B. Uso de herramientas (60 %)
 
-Use el notebook [taller_codigo_ml_nim.ipynb](taller_codigo_ml_nim.ipynb). El código base está proporcionado: solo debe ejecutarlo, modificar valores sencillos y analizar los resultados. No debe implementar algoritmos desde cero.
+Use el notebook [taller_codigo_ml_nim.ipynb](taller_codigo_ml_nim.ipynb). El notebook proporciona las particiones, la conexión a NVIDIA y espacios marcados con `TODO`. Debe completar llamadas sencillas a las bibliotecas, ejecutar los experimentos y analizar sus resultados. No debe implementar algoritmos desde cero.
 
 **Requisitos:** Python o Google Colab, scikit-learn, el paquete `openai`, conexión a internet y una API key de NVIDIA con acceso al modelo indicado. No requiere GPU. La clave se ingresa de forma oculta; no debe escribirla en el notebook ni incluirla en la entrega.
 
 ### 7. Entrenar un clasificador con scikit-learn (30 %)
 
-Usará `iris`, un conjunto pequeño incluido en scikit-learn. Las particiones y el código de entrenamiento ya están preparados.
+Usará `iris`, un conjunto pequeño incluido en scikit-learn. Las particiones están preparadas; debe completar el uso del clasificador.
 
-1. Ejecute el ejemplo con `max_depth=2`. Identifique las cuatro características de entrada y las tres clases de salida.
+1. Complete la creación del árbol, su entrenamiento con `fit`, las predicciones con `predict` y la evaluación con `accuracy_score`. Use primero `max_depth=2`. Identifique las cuatro características de entrada y las tres clases de salida.
 2. Cambie la profundidad a `max_depth=5` y ejecute nuevamente la celda de entrenamiento. Registre la exactitud de entrenamiento y validación de ambos modelos en la tabla proporcionada.
-3. Elija uno según validación y evalúelo en prueba con la celda preparada. En empate, prefiera el árbol de profundidad 2. No cambie la partición de datos.
+3. Elija uno según validación y complete las llamadas para predecir y evaluar en prueba. En empate, prefiera el árbol de profundidad 2. No cambie la partición de datos.
 4. En máximo 5 líneas, explique si aumentar la profundidad mejoró los resultados. ¿Obtener 100 % en entrenamiento garantiza acertar en datos nuevos?
 
 **Entregue:** tabla con los dos experimentos, resultado de prueba y explicación. Se evalúa el uso correcto de la herramienta y la interpretación, no obtener un puntaje específico.
@@ -74,9 +74,9 @@ Usará `iris`, un conjunto pequeño incluido en scikit-learn. Las particiones y 
 
 El notebook incluye la conexión y una función lista para enviar consultas. Use el modelo indicado por el docente, disponible en [NVIDIA Build](https://build.nvidia.com/). No debe entrenarlo ni implementar atención.
 
-1. Ejecute la conexión y consulte: «¿Qué es el sobreajuste?».
-2. Modifique solo el texto de la consulta: solicite una explicación para un estudiante que empieza, un ejemplo con árboles de decisión y una respuesta de máximo 100 palabras. Compare claridad, contenido y cumplimiento de instrucciones.
-3. Envíe esta afirmación: «Un árbol con 100 % de exactitud en entrenamiento siempre será el mejor en datos nuevos. ¿Es correcta? Justifica tu respuesta». Contraste la respuesta con lo estudiado y con sus resultados del ejercicio 7.
+1. Ejecute la conexión preparada. Escriba una pregunta propia sobre las sesiones 6–9, complete la llamada a `consultar` y muestre la respuesta con `print`.
+2. Escriba el código para enviar una versión mejorada de su pregunta: solicite una explicación para un estudiante que empieza, un ejemplo concreto y una respuesta de máximo 100 palabras. Compare claridad, contenido y cumplimiento de instrucciones.
+3. Escriba y ejecute el código para consultar esta afirmación: «Un árbol con 100 % de exactitud en entrenamiento siempre será el mejor en datos nuevos. ¿Es correcta? Justifica tu respuesta». Contraste la respuesta con lo estudiado y con sus resultados del ejercicio 7.
 4. En máximo 5 líneas, explique qué cambió al mejorar la consulta y por qué una respuesta convincente del LLM necesita verificación. Aclare si al hacer estas consultas entrenó el modelo o solo lo utilizó para inferencia.
 
 **Entregue:** las tres consultas, sus respuestas visibles en el notebook y el análisis. No se exige cambiar parámetros de generación, construir un chatbot ni usar LangChain.
