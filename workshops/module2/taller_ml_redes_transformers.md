@@ -3,7 +3,7 @@
 **Curso:** SI3003 — Inteligencia Artificial  
 **Sesiones:** 6, 7, 8 y 9  
 **Modalidad:** individual; respuestas breves y código en Python  
-**Tiempo estimado:** 90–120 minutos  
+**Tiempo estimado:** 110–150 minutos  
 **Objetivo:** analizar decisiones de aprendizaje y generación de texto mediante ejemplos pequeños, entrenar un clasificador con scikit-learn y consultar un LLM mediante NVIDIA NIM.
 
 ## Parte A. Preguntas conceptuales (40 %)
@@ -105,7 +105,7 @@ Use el notebook [taller_codigo_ml_nim.ipynb](taller_codigo_ml_nim.ipynb). El not
 
 **Requisitos:** Python o Google Colab, scikit-learn, el paquete `openai`, conexión a internet y una API key de NVIDIA con acceso al modelo indicado. No requiere GPU. La clave se ingresa de forma oculta; no debe escribirla en el notebook ni incluirla en la entrega.
 
-### 7. Entrenar un clasificador con scikit-learn (30 %)
+### 7. Entrenar un clasificador con scikit-learn (20 %)
 
 Usará `iris`, un conjunto pequeño incluido en scikit-learn. Las particiones están preparadas; debe completar el uso del clasificador.
 
@@ -116,7 +116,7 @@ Usará `iris`, un conjunto pequeño incluido en scikit-learn. Las particiones es
 
 **Entregue:** tabla con los dos experimentos, resultado de prueba y explicación. Se evalúa el uso correcto de la herramienta y la interpretación, no obtener un puntaje específico.
 
-### 8. Consultar un LLM con NVIDIA NIM (30 %)
+### 8. Consultar un LLM con NVIDIA NIM (20 %)
 
 El notebook incluye la conexión y una función lista para enviar consultas. Use el modelo indicado por el docente, disponible en [NVIDIA Build](https://build.nvidia.com/). No debe entrenarlo ni implementar atención.
 
@@ -127,8 +127,31 @@ El notebook incluye la conexión y una función lista para enviar consultas. Use
 
 **Entregue:** las tres consultas, sus respuestas visibles en el notebook y el análisis. No se exige cambiar parámetros de generación, construir un chatbot ni usar LangChain.
 
+### 9. Retomar el clasificador con datos propios (20 %)
+
+Use el modelo y el dataset que construyó en el [taller de transfer learning de la sesión 8](../../notebooks/lecture8/transfer_learning/taller_transfer_learning_datos_propios_keras3.ipynb). Reutilice su notebook y sus resultados; no debe descargar nuevamente todo el dataset ni implementar otra arquitectura.
+
+1. **Datos y adaptación:** indique sus tres clases, el número de imágenes por clase y el modelo preentrenado utilizado. Explique qué parte permaneció congelada al principio y qué parte entrenó para su problema.
+2. **Antes y después del ajuste:** registre la exactitud de validación del entrenamiento de la cabeza y la del fine-tuning. Indique cuántas capas decidió descongelar y las tasas de aprendizaje de ambas fases. Explique si el ajuste ayudó, empeoró o no cambió el resultado. No se exige una mejora.
+3. **Imágenes nuevas:** tome o descargue seis fotografías que no estén en ninguno de sus conjuntos anteriores, dos por clase. Revise que no sean duplicados ni variantes casi idénticas de imágenes del dataset. Use su modelo final para predecir sus clases y complete la tabla:
+
+| Imagen | Clase real | Clase predicha | Probabilidad de la clase predicha | ¿Acertó? |
+|---|---|---|---:|---|
+| 1 | | | | |
+| 2 | | | | |
+| 3 | | | | |
+| 4 | | | | |
+| 5 | | | | |
+| 6 | | | | |
+
+4. **Análisis:** seleccione dos imágenes y explique sus resultados considerando fondo, iluminación, encuadre o similitud entre clases. Proponga una mejora concreta en los datos. Si todas fueron correctas, analice las dos de menor confianza. ¿Por qué seis aciertos no bastarían para afirmar que el modelo siempre generaliza?
+
+**Entregue:** su notebook de transfer learning ejecutado (o una copia con esta sección añadida), las seis imágenes visibles y la tabla. Reutilice el código de carga y preprocesamiento de la sesión 8. Conserve el orden de clases del entrenamiento al interpretar las predicciones. Estas imágenes sirven para una comprobación cualitativa final: no las incorpore al entrenamiento ni ajuste el modelo después de ver sus resultados.
+
+**Si no conservó el modelo:** recupere su notebook y dataset para ejecutar nuevamente el flujo ya trabajado; esto requiere tiempo adicional. El tiempo estimado del taller supone que conserva el trabajo anterior.
+
 ## Entrega y criterios
 
-- Un PDF con las seis respuestas conceptuales y el notebook ejecutado con los dos ejercicios y sus interpretaciones.
-- Distribución sugerida: preguntas 1–6, 40 % en total; scikit-learn, 30 %; NVIDIA NIM, 30 %.
+- Un PDF con las seis respuestas conceptuales y el notebook de sklearn/NIM ejecutado y el notebook de transfer learning con la actividad 9.
+- Distribución sugerida: preguntas 1–6, 40 % en total; scikit-learn, 20 %; NVIDIA NIM, 20 %; transfer learning, 20 %.
 - Se valoran cálculos correctos, uso de validación para elegir el modelo, ejecución de consultas y análisis crítico de los resultados.
