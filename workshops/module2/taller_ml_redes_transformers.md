@@ -3,12 +3,12 @@
 **Curso:** SI3003 — Inteligencia Artificial  
 **Sesiones:** 6, 7, 8 y 9  
 **Modalidad:** individual; respuestas breves y código en Python  
-**Tiempo estimado:** 60–90 minutos  
-**Objetivo:** usar scikit-learn para entrenar un clasificador sencillo y consultar un LLM mediante la API de NVIDIA NIM.
+**Tiempo estimado:** 90–120 minutos  
+**Objetivo:** analizar decisiones de aprendizaje y generación de texto mediante ejemplos pequeños, entrenar un clasificador con scikit-learn y consultar un LLM mediante NVIDIA NIM.
 
 ## Parte A. Preguntas conceptuales (40 %)
 
-Responda cada pregunta en máximo 5 líneas, salvo los cálculos solicitados. No es necesario entrenar modelos para esta parte.
+Responda cada inciso conceptual en máximo 3 líneas y muestre los cálculos solicitados. Puede utilizar calculadora. No es necesario entrenar modelos para esta parte.
 
 ### 1. Generalización y evaluación
 
@@ -17,19 +17,33 @@ Un árbol obtiene 100 % de exactitud en entrenamiento y 72 % en validación. Otr
 - ¿Cuál elegiría inicialmente y qué sugieren estos resultados sobre el sobreajuste?
 - Un compañero propone probar distintas profundidades sobre el conjunto de prueba y entregar la mejor. ¿Qué problema tiene esa estrategia?
 
-### 2. Árboles y entropía
+### 2. Árboles: elegir una división
 
-Un nodo contiene 4 ejemplos positivos y 4 negativos. Un atributo produce dos ramas: una con los 4 positivos y otra con los 4 negativos.
+Un nodo contiene 4 ejemplos positivos y 4 negativos. Se consideran dos atributos:
 
-Use $H(p)=-p\log_2p-(1-p)\log_2(1-p)$, con $0\log_2 0=0$.
+| Atributo | Rama izquierda | Rama derecha |
+|---|---|---|
+| A | 3 positivos, 1 negativo | 1 positivo, 3 negativos |
+| B | 2 positivos, 2 negativos | 2 positivos, 2 negativos |
 
-- Calcule la entropía inicial, la entropía ponderada después de dividir y la ganancia de información.
-- ¿Una división perfecta en entrenamiento garantiza buen desempeño en datos nuevos? Justifique.
+Use $H(p)=-p\log_2p-(1-p)\log_2(1-p)$ y ganancia = entropía inicial − entropía ponderada de las ramas. Puede usar $H(0.75)\approx0.811$ bits.
 
-### 3. Redes neuronales
+1. Calcule la entropía inicial y la ganancia de cada atributo. ¿Cuál elegiría el árbol y por qué?
+2. Un tercer atributo es un identificador único y separa los ocho ejemplos en ocho hojas puras. ¿Qué ganancia obtendría? ¿Por qué podría generalizar peor, aunque su ganancia sea mayor?
 
-- ¿Por qué una red neuronal necesita funciones de activación no lineales como ReLU?
-- ¿Qué parámetros se ajustan durante el entrenamiento de una red neuronal?
+### 3. Redes: predicciones y pérdida
+
+Un clasificador distingue tres clases de imágenes: gato, perro y ave. Para una imagen cuya etiqueta real es **perro**, dos modelos producen:
+
+| Modelo | $P(\text{gato})$ | $P(\text{perro})$ | $P(\text{ave})$ |
+|---|---:|---:|---:|
+| A | 0.35 | 0.40 | 0.25 |
+| B | 0.05 | 0.90 | 0.05 |
+
+1. Elija la clase de mayor probabilidad para cada modelo. ¿Su exactitud sobre esta única imagen es diferente?
+2. Calcule la entropía cruzada $L=-\ln P(\text{clase real})$ para cada uno. ¿Qué diferencia detecta la pérdida que no muestra la exactitud en este ejemplo?
+3. Para otra imagen de **perro**, un modelo asigna $P(\text{perro})=0.01$. Calcule la pérdida y explique qué ocurre cuando el modelo se equivoca con mucha confianza.
+4. Durante el entrenamiento, ¿se modifican las etiquetas o los pesos y sesgos? ¿Por qué apilar capas sin activaciones no lineales limita lo que puede aprender la red?
 
 ### 4. CNN: tamaño de salida y filtros
 
@@ -48,10 +62,42 @@ donde $W$ es el tamaño de entrada en una dimensión, $K$ el tamaño del filtro,
 
 Dispone de 300 fotografías de objetos cotidianos, etiquetadas en tres clases. ¿Entrenaría una CNN desde cero o reutilizaría una red preentrenada? Justifique su elección.
 
-### 6. Modelos de lenguaje
+### 6. Completar texto con probabilidades de tokens
 
-- ¿Qué intenta predecir un modelo de lenguaje en cada paso cuando genera texto?
-- ¿Por qué puede responder de forma diferente a «explica sobreajuste» y «explica sobreajuste para un principiante con un ejemplo»?
+Considere el contexto **«El estudiante»**. Para simplificar, cada palabra mostrada corresponde a un token y cada tabla contiene todas las opciones de ese paso. Las probabilidades son hipotéticas: no provienen de una consulta a un modelo real.
+
+**Primer token:**
+
+| Token siguiente | Probabilidad |
+|---|---:|
+| aprende | 0.50 |
+| estudia | 0.30 |
+| duerme | 0.20 |
+
+**Segundo token, si el primero fue «aprende»:**
+
+| Token siguiente | Probabilidad |
+|---|---:|
+| IA | 0.40 |
+| Python | 0.35 |
+| rápido | 0.25 |
+
+**Segundo token, si el primero fue «estudia»:**
+
+| Token siguiente | Probabilidad |
+|---|---:|
+| IA | 0.90 |
+| Python | 0.08 |
+| matemáticas | 0.02 |
+
+1. Complete el texto con **dos tokens** usando selección voraz (*greedy*): en cada paso elija el token de mayor probabilidad. Muestre sus dos elecciones.
+2. Calcule y compare las probabilidades de estas dos continuaciones:
+   - «El estudiante aprende IA».
+   - «El estudiante estudia IA».
+
+   Use $P(t_1,t_2\mid c)=P(t_1\mid c)\,P(t_2\mid c,t_1)$, donde $c$ es el contexto. ¿La selección voraz produjo la más probable de estas dos continuaciones? Justifique.
+3. En vez de elegir siempre el máximo, se sortea el primer token según la primera tabla. ¿Podría aparecer «duerme»? ¿Repetir la consulta obligatoriamente produciría el mismo texto? Explique.
+4. ¿Por qué la distribución del segundo token depende del token elegido en el primer paso? ¿Tener mayor probabilidad garantiza que una afirmación generada sea verdadera?
 
 ## Parte B. Uso de herramientas (60 %)
 
