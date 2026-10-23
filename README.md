@@ -74,11 +74,11 @@ Every project has **explicit, verifiable correctness criteria**: public test cas
 
 ### Lecture 10 - RAG
 - `slides_pdf/clase10.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase10.md)
-- [notebooks](notebooks/Lecture10)
+- [notebooks](notebooks/lecture10)
 
 - ### Lecture 11- Agents
 - `slides_pdf/clase12.pdf` — Convolutional Neural Networks. [Ver clase &#8594;](https://eafit-ia.github.io/si3003-artificial-intelligence/slides/?p=clase12.md)
-- [notebooks](notebooks/Lecture12)
+- [notebooks](notebooks/Lecture11)
 
 
 ## Resources
