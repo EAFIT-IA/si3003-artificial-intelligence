@@ -71,7 +71,7 @@ Describan al menos un error o limitación observado y una posible mejora. Si los
 
 ## 5. Entregables
 
-Entreguen un enlace a un repositorio o una carpeta compartida con:
+Entreguen un enlace a un repositorio con:
 
 1. **Notebook o código ejecutable**, con las dependencias y configuración necesarias. Puede ejecutarse en Google Colab o localmente. Una interfaz gráfica es opcional.
 2. **Documentos o datos de ejemplo** necesarios para ejecutar el prototipo, o enlaces e instrucciones claras para obtenerlos.
